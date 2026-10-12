@@ -17,36 +17,34 @@
 
         <div class="collapse navbar-collapse" id="mainNavbar">
             <ul class="navbar-nav ms-auto gap-lg-3">
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('welcome') ? 'active' : '' }}"
+                        href="{{ route('welcome') }}">
+                        Welcome
+                    </a>
+                </li>
 
-                <ul class="navbar-nav ms-auto gap-lg-3">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('welcome') ? 'active' : '' }}"
-                            href="{{ route('welcome') }}">
-                            Welcome
-                        </a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin-home') ? 'active' : '' }}"
+                        href="{{ route('admin-home') }}">
+                        Admin
+                    </a>
+                </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('admin-home') ? 'active' : '' }}"
-                            href="{{ route('admin-home') }}">
-                            Admin
-                        </a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('host-home') ? 'active' : '' }}"
+                        href="{{ route('host-home') }}">
+                        Host
+                    </a>
+                </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('host-home') ? 'active' : '' }}"
-                            href="{{ route('host-home') }}">
-                            Host
-                        </a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('guest-home') ? 'active' : '' }}"
+                        href="{{ route('guest-home') }}">
+                        Guest
+                    </a>
+                </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('guest-home') ? 'active' : '' }}"
-                            href="{{ route('guest-home') }}">
-                            Guest
-                        </a>
-                    </li>
-                </ul>
             </ul>
         </div>
     </div>
