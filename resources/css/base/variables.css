@@ -1,0 +1,24 @@
+:root {
+    /* Brand */
+    --sg-primary: #B86E50;
+    --sg-primary-hover: #96543D;
+    --sg-secondary: #EDE1D2;
+
+    /* Background */
+    --sg-background: #FAF8F5;
+    --sg-surface: #FFFFFF;
+
+    /* Testo */
+    --sg-text: #302B28;
+    --sg-text-muted: #81766F;
+
+    /* Bordi */
+    --sg-border: #E8DED5;
+
+    /* UI */
+    --sg-radius: 12px;
+    --sg-radius-lg: 18px;
+
+    /* Ombre */
+    --sg-shadow: 0 4px 16px rgba(48, 43, 40, 0.06);
+}

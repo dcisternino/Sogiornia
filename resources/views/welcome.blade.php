@@ -1,23 +1,22 @@
-<!DOCTYPE html>
-<html lang="it">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Utilizzo di Bootstrap -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <title>{{$title}}</title>
-</head>
+@section('title', 'Welcome')
 
-<body>
+@section('content')
 
-    <nav>
-        <a href="{{ route('welcome') }}">Welcome</a>
-        <a href="{{ route('admin-home') }}">Admin</a>
-        <a href="{{ route('host-home') }}">Host</a>
-        <a href="{{ route('guest-home') }}">Guest</a>
-    </nav>
-    <h1>Welcome Page</h1>
-</body>
+<div class="container py-5">
+    <section class="text-center">
+        <h1>Benvenuto su Sogiornia</h1>
 
-</html>
+        <p class="text-muted-custom mt-3">
+            Tutte le informazioni per un soggiorno perfetto,
+            in un unico posto.
+        </p>
+
+        <a href="{{ route('host-home') }}" class="sg-btn-primary d-inline-block mt-3">
+            Accedi come Host
+        </a>
+    </section>
+</div>
+
+@endsection

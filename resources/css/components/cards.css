@@ -1,0 +1,7 @@
+.sg-card {
+    background-color: var(--sg-surface);
+    border: 1px solid var(--sg-border);
+    border-radius: var(--sg-radius-lg);
+    padding: 24px;
+    box-shadow: var(--sg-shadow);
+}

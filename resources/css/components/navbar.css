@@ -1,0 +1,34 @@
+.navbar {
+    background-color: var(--sg-surface);
+    border-bottom: 1px solid var(--sg-border);
+    padding: 16px 0;
+}
+
+.navbar-brand {
+    color: var(--sg-primary);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.navbar-brand:hover {
+    color: var(--sg-primary-hover);
+}
+
+.navbar .nav-link {
+    color: var(--sg-text);
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: var(--sg-primary);
+}
+
+.navbar-toggler {
+    border-color: var(--sg-border);
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.2rem rgba(184, 110, 80, 0.15);
+}

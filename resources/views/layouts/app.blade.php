@@ -13,6 +13,7 @@
 <body>
 
     <main>
+        <x-navbar />
         @yield('content')
     </main>
 

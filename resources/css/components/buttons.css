@@ -1,0 +1,15 @@
+.sg-btn-primary {
+    background-color: var(--sg-primary);
+    color: #FFFFFF;
+    border: 1px solid var(--sg-primary);
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+.sg-btn-primary:hover {
+    background-color: var(--sg-primary-hover);
+    border-color: var(--sg-primary-hover);
+    color: #FFFFFF;
+}
