@@ -1,22 +1,12 @@
-<!DOCTYPE html>
-<html lang="it">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Utilizzo di Bootstrap -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <title>{{$title}}</title>
-</head>
+@section('title', 'Guest Home')
 
-<body>
-    <nav>
-        <a href="{{ route('welcome') }}">Welcome</a>
-        <a href="{{ route('admin-home') }}">Admin</a>
-        <a href="{{ route('host-home') }}">Host</a>
-        <a href="{{ route('guest-home') }}">Guest</a>
-    </nav>
-    <h1 class="">Home Page Guest</h1>
-</body>
+@section('content')
 
-</html>
+<div class="container py-5">
+    <h1>Dashboard Guest</h1>
+    <p>Benvenuto nella dashboard Guest di Sogiornia.</p>
+</div>
+
+@endsection
