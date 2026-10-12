@@ -1,12 +1,12 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 @section('title', 'Guest Home')
 
 @section('content')
 
 <div class="container py-5">
-    <h1>Dashboard Guest</h1>
-    <p>Benvenuto nella dashboard Guest di Sogiornia.</p>
+    <h1>Benvenuto su Sogiornia</h1>
+    <p>Qui troverai tutte le informazioni utili per il tuo soggiorno.</p>
 </div>
 
 @endsection
