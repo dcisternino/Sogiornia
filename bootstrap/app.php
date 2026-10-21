@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureHostCanWrite;
 use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Middleware\ProtectGuestGuide;
 use Illuminate\Foundation\Application;
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Registra i controlli sui ruoli e la riservatezza delle guide ospite.
         $middleware->alias([
             'role' => EnsureUserHasRole::class,
+            'host.write' => EnsureHostCanWrite::class,
             'guide.privacy' => ProtectGuestGuide::class,
         ]);
         $middleware->redirectGuestsTo(fn () => route('login'));

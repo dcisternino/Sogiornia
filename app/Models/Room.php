@@ -3,25 +3,26 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /** Collega una stanza alla struttura e alle sezioni della sua guida. */
 #[Fillable(['name', 'description'])]
-#[Hidden(['guide_token'])]
 class Room extends Model
 {
     use HasFactory;
 
-    protected static function booted(): void
+    protected function casts(): array
     {
-        static::creating(function (Room $room): void {
-            $room->guide_token = Str::random(64);
-        });
+        return ['archived_at' => 'datetime', 'guide_enabled' => 'boolean'];
+    }
+
+    public function stays(): HasMany
+    {
+        return $this->hasMany(Stay::class);
     }
 
     public function property(): BelongsTo

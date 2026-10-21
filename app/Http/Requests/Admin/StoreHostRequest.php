@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests\Admin;
 
-use App\Rules\PasswordLength;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\Password;
 
-/** Consente soltanto agli amministratori di creare credenziali host valide. */
+/** Consente soltanto agli amministratori di invitare host con nome ed email validi. */
 class StoreHostRequest extends FormRequest
 {
     public function authorize(): bool
@@ -28,7 +26,6 @@ class StoreHostRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'confirmed', 'max:255', new PasswordLength, Password::min(12)->mixedCase()->numbers()],
         ];
     }
 

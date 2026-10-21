@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="@yield('description', 'Sogiornia: la guida digitale per accogliere i tuoi ospiti con cura.')">
-    <meta name="referrer" content="same-origin">
+    <meta name="referrer" content="@yield('referrer', 'same-origin')">
     <title>@yield('title', 'La tua ospitalità, sempre presente') | {{ config('app.name', 'Sogiornia') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

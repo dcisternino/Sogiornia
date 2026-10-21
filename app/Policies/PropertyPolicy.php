@@ -15,6 +15,6 @@ class PropertyPolicy
 
     public function update(User $user, Property $property): bool
     {
-        return $this->view($user, $property);
+        return $user->canWrite() && $this->view($user, $property);
     }
 }

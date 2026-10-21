@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('city');
             $table->string('address')->nullable();
             $table->text('welcome_message')->nullable();
+            $table->timestamp('archived_at')->nullable();
+            $table->boolean('guide_enabled')->default(true);
             $table->timestamps();
         });
     }

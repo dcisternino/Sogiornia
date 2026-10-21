@@ -35,6 +35,8 @@ a:hover { color: #703d2b; }
 .guide-card:hover { border-color: var(--sg-primary); box-shadow: 0 7px 22px #96543d14; }
 .guide-card h2 { color: inherit; }
 .section-content { line-height: 1.9; }
+.section-image { display: block; max-width: 100%; width: auto; max-height: 550px; object-fit: contain; border-radius: 12px; }
+.lifecycle-controls summary { cursor: pointer; }
 .room-label { display: inline-block; background: #eee5d8; border-radius: 8px; padding: 5px 12px; font-size: .8rem; }
 .login-note { padding: 20px; border-left: 2px solid var(--sg-primary); background: #f0eadd; border-radius: 0 12px 12px 0; }
 .login-note span { color: var(--sg-primary); margin-right: 10px; }

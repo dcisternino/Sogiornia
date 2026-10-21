@@ -12,7 +12,7 @@ class PropertyRequest extends FormRequest
     {
         $property = $this->route('property');
 
-        return ($this->user()?->isHost() ?? false)
+        return ($this->user()?->canWrite() ?? false)
             && ($property === null || Gate::allows('update', $property));
     }
 

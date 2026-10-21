@@ -33,6 +33,17 @@ class SectionRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:100', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('sections')->where('property_id', $property->id)->ignore($sectionId)],
             'content' => ['required', 'string', 'max:20000'],
+            'image' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120', 'dimensions:max_width=4000,max_height=4000'],
+            'remove_image' => ['sometimes', 'boolean'],
+            'image_alt' => ['nullable', 'string', 'max:255'],
+            'link_url' => ['nullable', 'url:http,https', 'max:2048'],
+            'link_label' => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:40', 'regex:/^\\+?[0-9][0-9 ()-]{2,39}$/'],
         ];
+    }
+
+    public function messages(): array
+    {
+        return ['phone.regex' => 'Inserisci un numero telefonico valido, con eventuale prefisso + e separatori.'];
     }
 }

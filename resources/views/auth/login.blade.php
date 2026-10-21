@@ -26,7 +26,8 @@
                     </div>
                     <button class="btn btn-primary w-100" type="submit">Entra in Sogiornia <span aria-hidden="true">→</span></button>
                 </form>
-                <p class="small text-muted-custom mt-4 mb-0">Non hai ancora un account o hai dimenticato la password? Contatta l'amministratore del servizio.</p>
+                <p class="small mt-4"><a href="{{ route('password.request') }}">Hai dimenticato la password o è scaduto l'invito?</a></p>
+                <p class="small text-muted-custom mb-0">Non hai un account? Richiedi un invito all'amministratore.</p>
             </div>
         </div>
     </div>

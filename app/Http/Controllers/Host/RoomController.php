@@ -33,7 +33,7 @@ class RoomController extends Controller
             $room->sections()->sync((array) $request->validated('sections', []));
         });
 
-        return redirect()->route('host.properties.show', $property)->with('status', 'Stanza creata. Il link della guida è pronto.');
+        return redirect()->route('host.properties.show', $property)->with('status', 'Stanza creata. Crea un soggiorno per generare il link ospite.');
     }
 
     public function edit(Property $property, int $room): View

@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreHostRequest;
 use App\Models\User;
+use App\Services\HostInvitationSender;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 
 /** Permette all'amministratore di elencare e creare account host. */
 class HostController extends Controller
@@ -24,12 +26,14 @@ class HostController extends Controller
         return view('pages.admin.hosts.create');
     }
 
-    public function store(StoreHostRequest $request): RedirectResponse
+    public function store(StoreHostRequest $request, HostInvitationSender $sender): RedirectResponse
     {
-        $host = new User($request->safe()->only(['name', 'email', 'password']));
+        $host = new User($request->safe()->only(['name', 'email']));
+        $host->password = Str::random(48);
+        $host->invited_at = now();
         $host->role = User::ROLE_HOST;
         $host->save();
 
-        return redirect()->route('admin-home')->with('status', 'Host creato. Comunica le credenziali all’host tramite un canale riservato.');
+        return redirect()->route('admin-home')->with('status', $sender->send($host));
     }
 }

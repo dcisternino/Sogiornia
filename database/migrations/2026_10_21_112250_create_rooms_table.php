@@ -14,7 +14,8 @@ return new class extends Migration
             $table->foreignId('property_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('guide_token', 64)->unique();
+            $table->timestamp('archived_at')->nullable();
+            $table->boolean('guide_enabled')->default(true);
             $table->timestamps();
             $table->unique(['property_id', 'name']);
         });

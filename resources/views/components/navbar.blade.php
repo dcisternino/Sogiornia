@@ -15,6 +15,7 @@
                 @else
                     <li class="nav-item"><span class="nav-link small">{{ auth()->user()->name }}</span></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">La mia dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('profile.edit') }}">Il mio profilo</a></li>
                     <li class="nav-item">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

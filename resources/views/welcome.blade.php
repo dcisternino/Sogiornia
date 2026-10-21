@@ -65,14 +65,14 @@
     </div>
 </section>
 
-{{-- Percorso operativo dalla struttura al link della stanza. --}}
+{{-- Percorso operativo dalla struttura al link del soggiorno. --}}
 <section id="come-funziona" class="section-space">
     <div class="container">
         <div class="text-center mb-5"><span class="eyebrow">POCO DA IMPARARE. TANTO DA CONDIVIDERE.</span><h2 class="section-title mt-3">La tua guida prende forma<br>in tre semplici passi.</h2></div>
         <div class="row g-5">
             <div class="col-md-4"><div class="step-number">01</div><h3 class="h4 mt-4">Racconta la tua struttura</h3><p class="text-muted-custom">Aggiungi la struttura, il messaggio di benvenuto e le informazioni utili ai tuoi ospiti.</p></div>
             <div class="col-md-4"><div class="step-number">02</div><h3 class="h4 mt-4">Prepara ogni stanza</h3><p class="text-muted-custom">Crea le stanze e seleziona, per ciascuna, le sezioni che desideri rendere visibili.</p></div>
-            <div class="col-md-4"><div class="step-number">03</div><h3 class="h4 mt-4">Condividi l'accoglienza</h3><p class="text-muted-custom">Invia il link riservato della stanza. Se serve, puoi rigenerarlo e revocare quello precedente.</p></div>
+            <div class="col-md-4"><div class="step-number">03</div><h3 class="h4 mt-4">Condividi l'accoglienza</h3><p class="text-muted-custom">Crea il soggiorno e condividi il suo link riservato. Scade alla partenza e puoi revocarlo prima.</p></div>
         </div>
     </div>
 </section>
@@ -90,7 +90,7 @@
                         <li><span aria-hidden="true">✓</span> Gestione di strutture e stanze</li>
                         <li><span aria-hidden="true">✓</span> Sezioni configurabili per ogni stanza</li>
                         <li><span aria-hidden="true">✓</span> Guide accessibili dal browser, senza app</li>
-                        <li><span aria-hidden="true">✓</span> Link per stanza rigenerabili dall'host</li>
+                        <li><span aria-hidden="true">✓</span> Link per soggiorno con scadenza e revoca</li>
                     </ul>
                 </div>
                 <div class="col-lg-4 offset-lg-1">
@@ -112,10 +112,10 @@
     <div class="row g-5">
         <div class="col-lg-4"><span class="eyebrow">PRIMA DI INIZIARE</span><h2 class="h2 mt-3">Qualche domanda?</h2></div>
         <div class="col-lg-8">
-            <details class="faq-item"><summary>Gli ospiti devono installare un'app?</summary><p>No. La guida si apre dal link della stanza direttamente nel browser del telefono.</p></details>
+            <details class="faq-item"><summary>Gli ospiti devono installare un'app?</summary><p>No. La guida si apre dal link del soggiorno direttamente nel browser del telefono.</p></details>
             <details class="faq-item"><summary>Posso mostrare informazioni diverse per stanza?</summary><p>Sì. Scrivi le sezioni della struttura e scegli quali abilitare in ogni stanza. Puoi cambiare la selezione quando vuoi.</p></details>
-            <details class="faq-item"><summary>Chi può vedere la guida?</summary><p>Chi possiede il link riservato della stanza. Condividilo soltanto con i tuoi ospiti; puoi rigenerarlo per rendere inutilizzabile quello precedente.</p></details>
-            <details class="faq-item"><summary>Come ottengo il mio account host?</summary><p>L'amministratore crea il tuo account e ti comunica le credenziali. In questa prima versione non è prevista la registrazione autonoma.</p></details>
+            <details class="faq-item"><summary>Chi può vedere la guida?</summary><p>Chi possiede il link riservato del soggiorno, durante il periodo di validità. Il link scade alla partenza e può essere revocato prima.</p></details>
+            <details class="faq-item"><summary>Come ottengo il mio account host?</summary><p>L'amministratore ti invita via email. Apri il link e scegli personalmente la tua password. Se il link scade puoi richiederne uno nuovo.</p></details>
         </div>
     </div>
 </section>

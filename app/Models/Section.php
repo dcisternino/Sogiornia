@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /** Conserva un contenuto informativo riutilizzabile nelle stanze della struttura. */
-#[Fillable(['title', 'slug', 'content'])]
+#[Fillable(['title', 'slug', 'content', 'image_alt', 'link_url', 'link_label', 'phone'])]
 class Section extends Model
 {
     use HasFactory;

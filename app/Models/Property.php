@@ -19,6 +19,11 @@ class Property extends Model
         return $this->belongsTo(User::class);
     }
 
+    protected function casts(): array
+    {
+        return ['archived_at' => 'datetime', 'guide_enabled' => 'boolean'];
+    }
+
     public function rooms(): HasMany
     {
         return $this->hasMany(Room::class);

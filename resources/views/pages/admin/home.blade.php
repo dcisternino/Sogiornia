@@ -1,35 +1,40 @@
 @extends('layouts.app')
-
 @section('title', 'Dashboard amministratore')
 
-{{-- Riepilogo degli account host e accesso alla loro creazione. --}}
+{{-- Gestione degli inviti e dello stato operativo degli host. --}}
 @section('content')
 <div class="container py-5">
-    <div class="page-heading">
-        <div><span class="eyebrow">AREA AMMINISTRATORE</span><h1 class="mt-2">Chi accoglie, parte da qui.</h1><p class="text-muted-custom">Gestisci gli account host che utilizzano Sogiornia.</p></div>
-        <a class="btn btn-primary" href="{{ route('admin.hosts.create') }}">+ Crea un host</a>
-    </div>
-    <div class="stat-card mb-4"><span class="text-muted-custom">Host registrati</span><strong>{{ $hostCount }}</strong></div>
-
-    {{-- Elenco paginato degli host senza esposizione delle credenziali. --}}
-    <div class="sg-card">
-        <h2 class="h4 mb-4">I tuoi host</h2>
-        @if ($hosts->isEmpty())
-            <div class="empty-state"><span aria-hidden="true">✦</span><h3 class="h5 mt-3">Il primo benvenuto lo dai tu.</h3><p class="text-muted-custom">Crea il primo account host e condividi le credenziali in modo riservato.</p><a class="btn btn-primary" href="{{ route('admin.hosts.create') }}">Crea il primo host</a></div>
-        @else
-            <div class="table-responsive">
-                <table class="table align-middle">
-                    <caption class="visually-hidden">Account host registrati su Sogiornia</caption>
-                    <thead><tr><th scope="col">Host</th><th scope="col">Email di accesso</th><th scope="col">Strutture</th><th scope="col">Creato il</th></tr></thead>
-                    <tbody>
-                        @foreach ($hosts as $host)
-                            <tr><th scope="row">{{ $host->name }}</th><td class="text-break">{{ $host->email }}</td><td>{{ $host->properties_count }}</td><td>{{ $host->created_at->format('d/m/Y') }}</td></tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            {{ $hosts->links() }}
-        @endif
+    <div class="page-heading"><div><span class="eyebrow">AREA AMMINISTRATORE</span><h1 class="mt-2">Gli host di Sogiornia</h1><p class="text-muted-custom">{{ $hostCount }} account registrati.</p></div><a class="btn btn-primary" href="{{ route('admin.hosts.create') }}">+ Invita un host</a></div>
+    @if (in_array(config('mail.default'), ['log', 'array'], true))
+        <div class="alert alert-warning">L'invio email reale non è ancora configurato. Gli inviti restano disponibili per la verifica in sviluppo: configura il mittente e il servizio SMTP prima di invitare utenti reali.</div>
+    @endif
+    <div class="sg-card table-responsive">
+        <table class="table align-middle">
+            <caption>Gli host disattivati possono accedere in sola lettura; i loro soggiorni esistenti restano validi.</caption>
+            <thead><tr><th>Host</th><th>Email</th><th>Stato</th><th>Strutture</th><th>Azioni</th></tr></thead>
+            <tbody>
+                @forelse ($hosts as $host)
+                    <tr>
+                        <th scope="row">{{ $host->name }}</th><td class="text-break">{{ $host->email }}</td>
+                        <td>{{ $host->is_active ? 'Attivo' : 'Sola lettura' }}<br><small class="text-muted-custom">{{ $host->hasPendingInvitation() ? 'Invito da accettare' : 'Account pronto' }}</small></td>
+                        <td>{{ $host->properties_count }}</td>
+                        <td>
+                            @if ($host->hasPendingInvitation())
+                                <form class="mb-2" method="POST" action="{{ route('admin.hosts.invitation', $host) }}">@csrf<button class="btn btn-sm btn-outline-secondary" type="submit">Reinvia invito</button></form>
+                            @endif
+                            <form method="POST" action="{{ route('admin.hosts.status', $host) }}" data-confirm="{{ $host->is_active ? 'Impostare questo host in sola lettura? I soggiorni in corso resteranno accessibili.' : 'Riattivare questo host?' }}">
+                                @csrf @method('PATCH')
+                                <input type="hidden" name="is_active" value="{{ $host->is_active ? '0' : '1' }}">
+                                <button class="btn btn-sm {{ $host->is_active ? 'btn-outline-danger' : 'btn-outline-secondary' }}" type="submit">{{ $host->is_active ? 'Disattiva' : 'Riattiva' }}</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="5">Nessun host registrato. Inizia con un invito.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+        {{ $hosts->links() }}
     </div>
 </div>
 @endsection

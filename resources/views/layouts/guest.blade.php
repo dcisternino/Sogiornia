@@ -1,4 +1,5 @@
 @extends('layouts.base')
+@section('referrer', 'no-referrer')
 
 {{-- Guida essenziale senza navigazione verso le aree di gestione. --}}
 @section('body')

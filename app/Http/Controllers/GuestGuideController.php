@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Room;
+use App\Models\Stay;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
@@ -38,9 +38,11 @@ class GuestGuideController extends Controller
             ];
         }
 
-        $room = Room::query()->where('guide_token', $token)
-            ->with(['property', 'sections' => fn ($query) => $query->orderBy('title')->orderBy('id')])
+        $stay = Stay::query()->where('guide_token', $token)
+            ->with(['room.property', 'room.sections' => fn ($query) => $query->orderBy('title')->orderBy('id')])
             ->firstOrFail();
+        abort_unless($stay->isAccessible(), 404);
+        $room = $stay->room;
 
         return [
             'propertyName' => $room->property->name,
@@ -48,7 +50,15 @@ class GuestGuideController extends Controller
             'roomName' => $room->name,
             'token' => $token,
             'sections' => $room->sections->where('property_id', $room->property_id)->mapWithKeys(fn ($section) => [
-                $section->slug => ['title' => $section->title, 'content' => $section->content],
+                $section->slug => [
+                    'title' => $section->title,
+                    'content' => $section->content,
+                    'image_url' => $section->image_path ? route('guide.image', ['token' => $token, 'section' => $section->slug]) : null,
+                    'image_alt' => $section->image_alt,
+                    'link_url' => $section->link_url,
+                    'link_label' => $section->link_label,
+                    'phone' => $section->phone,
+                ],
             ])->all(),
         ];
     }

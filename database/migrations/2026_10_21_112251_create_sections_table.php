@@ -15,6 +15,11 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug', 100);
             $table->mediumText('content');
+            $table->string('image_path')->nullable();
+            $table->string('image_alt')->nullable();
+            $table->string('link_url', 2048)->nullable();
+            $table->string('link_label')->nullable();
+            $table->string('phone', 40)->nullable();
             $table->timestamps();
             $table->unique(['property_id', 'slug']);
         });

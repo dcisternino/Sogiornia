@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\AccountPasswordReset;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -37,12 +38,30 @@ class User extends Authenticatable
         return $this->role === self::ROLE_HOST;
     }
 
+    public function canWrite(): bool
+    {
+        return $this->isAdmin() || ($this->isHost() && $this->is_active);
+    }
+
+    public function hasPendingInvitation(): bool
+    {
+        return $this->invited_at !== null && $this->invitation_accepted_at === null;
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new AccountPasswordReset($token));
+    }
+
     /** @return array<string, string> */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
+            'invited_at' => 'datetime',
+            'invitation_accepted_at' => 'datetime',
         ];
     }
 }
