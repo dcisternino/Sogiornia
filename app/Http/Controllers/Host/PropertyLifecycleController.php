@@ -36,6 +36,6 @@ class PropertyLifecycleController extends Controller
         $property->delete();
         Storage::disk('local')->delete($paths);
 
-        return redirect()->route('host-home')->with('status', 'Struttura eliminata con stanze, soggiorni e sezioni.');
+        return redirect()->route('host.properties.index')->with('status', 'Struttura eliminata con stanze, soggiorni e sezioni.');
     }
 }

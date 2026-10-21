@@ -11,7 +11,7 @@ class EnsureHostCanWrite
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()?->isHost() && ! $request->user()->is_active) {
+        if ($request->user()?->isHost() && ! $request->user()->canWrite()) {
             abort_if(! $request->isMethodSafe() || $request->routeIs('host.*.create', 'host.*.edit'), 403, 'Account in sola lettura: contatta l’amministratore.');
         }
 

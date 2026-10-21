@@ -3,8 +3,8 @@
 
 {{-- Struttura, stato delle guide e contenuti dell'host proprietario. --}}
 @section('content')
-<div class="container py-5">
-    <a href="{{ route('host-home') }}">← Le mie strutture</a>
+<div class="container py-5 workspace">
+    <a href="{{ route('host.properties.index') }}">← Le mie strutture</a>
     <div class="page-heading mt-4">
         <div><span class="eyebrow">{{ $property->city }}</span><h1>{{ $property->name }}</h1><p class="text-muted-custom">{{ $property->address }}</p>
             <span class="badge badge-soft">{{ $property->archived_at ? 'Archiviata' : 'Attiva' }} · {{ $property->guide_enabled ? 'Guide abilitate' : 'Guide sospese' }}</span>
@@ -13,30 +13,11 @@
     </div>
     <x-lifecycle :record="$property" :update-url="route('host.properties.lifecycle', $property)" :destroy-url="route('host.properties.destroy', $property)" />
     <div class="onboarding-note my-4">Archiviare o sospendere struttura o stanza blocca temporaneamente le guide senza cancellare i contenuti. Disattivare l'account host, invece, lascia validi i soggiorni esistenti.</div>
-
-    {{-- Catalogo delle sezioni informative riutilizzabili nelle stanze. --}}
-    <section class="my-5" aria-labelledby="sections-title">
-        <div class="page-heading compact"><h2 id="sections-title">Sezioni informative</h2>@if (auth()->user()->canWrite())<a class="btn btn-outline-secondary" href="{{ route('host.sections.create', $property) }}">+ Nuova sezione</a>@endif</div>
-        <div class="sg-card">
-            @forelse ($sections as $section)
-                <div class="section-row">
-                    <div><h3 class="h6 mb-1">{{ $section->title }}</h3><span class="small text-muted-custom">{{ $section->slug }}</span></div>
-                    @if (auth()->user()->canWrite())
-                        <div class="d-flex gap-2">
-                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('host.sections.edit', [$property, $section]) }}">Modifica<span class="visually-hidden"> {{ $section->title }}</span></a>
-                            <form method="POST" action="{{ route('host.sections.destroy', [$property, $section]) }}" data-confirm="Eliminare questa sezione da tutte le guide?">@csrf @method('DELETE')<button class="btn btn-sm btn-outline-danger" type="submit">Elimina<span class="visually-hidden"> {{ $section->title }}</span></button></form>
-                        </div>
-                    @endif
-                </div>
-            @empty
-                <p class="text-muted-custom mb-0">Nessuna sezione. Puoi iniziare dai modelli Wi-Fi, check-in, regole, contatti e territorio.</p>
-            @endforelse
-            {{ $sections->withQueryString()->links() }}
-        </div>
-    </section>
+    {{-- Collegamenti rapidi alle due attività principali della struttura. --}}
+    <nav class="nav nav-pills workspace-tabs mb-4" aria-label="Gestione struttura"><a class="nav-link" href="#stanze">Stanze e soggiorni</a><a class="nav-link" href="#sezioni">Sezioni della guida</a></nav>
 
     {{-- Stanze, visibilità dei contenuti e accesso ai soggiorni. --}}
-    <section aria-labelledby="rooms-title">
+    <section id="stanze" aria-labelledby="rooms-title">
         <div class="page-heading compact"><h2 id="rooms-title">Le stanze</h2>@if (auth()->user()->canWrite())<a class="btn btn-primary" href="{{ route('host.rooms.create', $property) }}">+ Nuova stanza</a>@endif</div>
         <div class="row g-4">
             @forelse ($rooms as $room)
@@ -56,5 +37,27 @@
         </div>
         <div class="mt-4">{{ $rooms->withQueryString()->links() }}</div>
     </section>
+
+    {{-- Catalogo delle sezioni informative riutilizzabili nelle stanze. --}}
+    <section id="sezioni" class="my-5" aria-labelledby="sections-title">
+        <div class="page-heading compact"><h2 id="sections-title">Sezioni informative</h2>@if (auth()->user()->canWrite())<a class="btn btn-outline-secondary" href="{{ route('host.sections.create', $property) }}">+ Nuova sezione</a>@endif</div>
+        <div class="sg-card">
+            @forelse ($sections as $section)
+                <div class="section-row">
+                    <div><h3 class="h6 mb-1">{{ $section->title }}</h3><span class="small text-muted-custom">{{ $section->slug }}</span></div>
+                    @if (auth()->user()->canWrite())
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('host.sections.edit', [$property, $section]) }}">Modifica<span class="visually-hidden"> {{ $section->title }}</span></a>
+                            <form method="POST" action="{{ route('host.sections.destroy', [$property, $section]) }}" data-confirm="Eliminare questa sezione da tutte le guide?">@csrf @method('DELETE')<button class="btn btn-sm btn-outline-danger" type="submit">Elimina<span class="visually-hidden"> {{ $section->title }}</span></button></form>
+                        </div>
+                    @endif
+                </div>
+            @empty
+                <p class="text-muted-custom mb-0">Nessuna sezione. Puoi iniziare dai modelli Wi-Fi, check-in, regole, contatti e territorio.</p>
+            @endforelse
+            {{ $sections->withQueryString()->links() }}
+        </div>
+    </section>
+
 </div>
 @endsection

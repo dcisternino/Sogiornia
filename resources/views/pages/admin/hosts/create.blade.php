@@ -4,7 +4,7 @@
 {{-- L'amministratore indica solo nome ed email: la password viene scelta dall'host. --}}
 @section('content')
 <div class="container py-5 form-container">
-    <a class="back-link" href="{{ route('admin-home') }}">← Torna agli host</a>
+    <a class="back-link" href="{{ route('admin.hosts.index') }}">← Torna agli host</a>
     <h1 class="mt-4">Invita un nuovo host</h1>
     <p class="text-muted-custom">L'host riceverà un link personale valido per 60 minuti e sceglierà autonomamente la password. Puoi reinviare l'invito se scade.</p>
     <form class="sg-card p-4 p-md-5" method="POST" action="{{ route('admin.hosts.store') }}">

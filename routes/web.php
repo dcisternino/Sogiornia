@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\HostAccessController;
 use App\Http\Controllers\Admin\HostController;
 use App\Http\Controllers\Admin\HostInvitationController;
 use App\Http\Controllers\Admin\HostStatusController;
@@ -9,6 +11,8 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestGuideController;
 use App\Http\Controllers\GuestSectionImageController;
+use App\Http\Controllers\Host\BookingController;
+use App\Http\Controllers\Host\DashboardController as HostDashboardController;
 use App\Http\Controllers\Host\PropertyController;
 use App\Http\Controllers\Host\PropertyLifecycleController;
 use App\Http\Controllers\Host\RoomController;
@@ -68,12 +72,18 @@ Route::middleware('auth')->group(function (): void {
 
 // Riserva all'amministratore inviti e stato degli host.
 Route::middleware(['auth', 'role:admin'])->group(function (): void {
-    // Elenca gli host, compresi quelli disattivati.
-    Route::get('/admin-home', [HostController::class, 'index'])->name('admin-home');
+    // Riepiloga gli host attivi, disattivi e prossimi alla scadenza.
+    Route::get('/admin-home', AdminDashboardController::class)->name('admin-home');
+    // Elenca gli host con filtri sullo stato operativo.
+    Route::get('/admin/hosts', [HostController::class, 'index'])->name('admin.hosts.index');
     // Mostra il modulo di invito.
     Route::get('/admin/hosts/create', [HostController::class, 'create'])->name('admin.hosts.create');
     // Crea l'host e invia il link per scegliere la password.
     Route::post('/admin/hosts', [HostController::class, 'store'])->name('admin.hosts.store');
+    // Mostra dati, strutture, stanze e soggiorni del singolo host.
+    Route::get('/admin/hosts/{host}', [HostController::class, 'show'])->whereNumber('host')->name('admin.hosts.show');
+    // Imposta o rimuove la scadenza operativa dell'host.
+    Route::patch('/admin/hosts/{host}/access', [HostAccessController::class, 'update'])->whereNumber('host')->name('admin.hosts.access');
     // Reinvia un invito non ancora accettato.
     Route::post('/admin/hosts/{host}/invitation', [HostInvitationController::class, 'store'])->middleware('throttle:10,1')->name('admin.hosts.invitation');
     // Disattiva o riattiva l'host senza bloccare i soggiorni.
@@ -84,10 +94,14 @@ Route::middleware(['auth', 'role:admin'])->group(function (): void {
 Route::middleware(['auth', 'role:host', 'host.write'])
     ->where(['property' => '[0-9]+', 'room' => '[0-9]+', 'section' => '[0-9]+', 'stay' => '[0-9]+'])
     ->group(function (): void {
-        // Elenca anche le strutture archiviate per consentirne il ripristino.
-        Route::get('/host-home', [PropertyController::class, 'index'])->name('host-home');
+        // Mostra il calendario dei soggiorni attivi, programmati e passati.
+        Route::get('/host-home', HostDashboardController::class)->name('host-home');
+        // Prepara un soggiorno scegliendo una stanza delle proprie strutture.
+        Route::get('/host/stays/create', [BookingController::class, 'create'])->name('host.bookings.create');
+        // Associa il nuovo soggiorno a una stanza autorizzata.
+        Route::post('/host/stays', [BookingController::class, 'store'])->name('host.bookings.store');
         // Gestisce i dati principali delle strutture.
-        Route::resource('/host/properties', PropertyController::class)->except(['index', 'destroy'])->names('host.properties');
+        Route::resource('/host/properties', PropertyController::class)->except(['destroy'])->names('host.properties');
         // Gestisce i dati delle stanze e le sezioni abilitate.
         Route::resource('/host/properties/{property}/rooms', RoomController::class)->except(['index', 'show', 'destroy'])->names('host.rooms');
         // Gestisce i contenuti informativi arricchiti.

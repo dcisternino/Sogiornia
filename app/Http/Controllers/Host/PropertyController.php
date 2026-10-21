@@ -15,7 +15,7 @@ class PropertyController extends Controller
 {
     public function index(Request $request): View
     {
-        return view('pages.host.home', [
+        return view('pages.host.properties.index', [
             'properties' => $request->user()->properties()->withCount(['rooms', 'sections'])->orderByDesc('id')->paginate(12),
         ]);
     }

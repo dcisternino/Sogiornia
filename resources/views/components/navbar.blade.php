@@ -19,9 +19,14 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('welcome') }}#prezzi">Prezzi</a></li>
                 <li class="nav-item"><a class="btn btn-primary btn-sm px-4" href="{{ route('login') }}">Accedi <span aria-hidden="true">↗</span></a></li>
                 @else
-                <li class="nav-item"><span class="nav-link small">{{ auth()->user()->name }}</span></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">La mia dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('profile.edit') }}">Il mio profilo</a></li>
+                {{-- Menu distinto per ruolo con indicazione della pagina corrente. --}}
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin-home', 'host-home', 'host.bookings.*', 'host.stays.*') ? 'active' : '' }}" @if(request()->routeIs('admin-home', 'host-home', 'host.bookings.*', 'host.stays.*')) aria-current="page" @endif href="{{ route(auth()->user()->isAdmin() ? 'admin-home' : 'host-home') }}">Dashboard</a></li>
+                @if (auth()->user()->isAdmin())
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.hosts.*') ? 'active' : '' }}" @if(request()->routeIs('admin.hosts.*')) aria-current="page" @endif href="{{ route('admin.hosts.index') }}">Host</a></li>
+                @else
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('host.properties.*', 'host.rooms.*', 'host.sections.*') ? 'active' : '' }}" @if(request()->routeIs('host.properties.*', 'host.rooms.*', 'host.sections.*')) aria-current="page" @endif href="{{ route('host.properties.index') }}">Strutture</a></li>
+                @endif
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('profile.*') ? 'active' : '' }}" @if(request()->routeIs('profile.*')) aria-current="page" @endif href="{{ route('profile.edit') }}">Profilo</a></li>
                 <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

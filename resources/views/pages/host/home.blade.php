@@ -1,29 +1,29 @@
 @extends('layouts.app')
+@section('title', 'Dashboard host')
 
-@section('title', 'Le mie strutture')
-
-{{-- Dashboard limitata alle strutture appartenenti all'host autenticato. --}}
+{{-- Riepilogo operativo dei soggiorni nelle proprie strutture. --}}
 @section('content')
-<div class="container py-5">
+<div class="container py-5 workspace">
     <div class="page-heading">
-        <div><span class="eyebrow">IL TUO SPAZIO HOST</span><h1 class="mt-2">L'ospitalità comincia qui.</h1><p class="text-muted-custom">Ciao {{ auth()->user()->name }}, prenditi cura delle tue strutture e delle loro guide.</p></div>
-        @if (auth()->user()->canWrite())<a class="btn btn-primary" href="{{ route('host.properties.create') }}">+ Nuova struttura</a>@endif
+        <div><span class="eyebrow">IL TUO SPAZIO HOST</span><h1 class="mt-2">Tutto pronto per accogliere.</h1><p class="text-muted-custom">Ciao {{ auth()->user()->name }}, qui trovi i soggiorni e i loro link di accesso.</p></div>
+        @if(auth()->user()->canWrite())<a class="btn btn-primary" href="{{ route('host.bookings.create') }}">+ Nuovo soggiorno</a>@endif
     </div>
-    <div class="row g-4">
-        @forelse ($properties as $property)
-            <div class="col-md-6 col-xl-4">
-                <article class="sg-card h-100 d-flex flex-column">
-                    <span class="eyebrow">{{ $property->city }}</span><h2 class="h3 mt-3">{{ $property->name }}</h2>
-                    @if ($property->archived_at)<span class="badge badge-soft mb-3">Archiviata</span>@endif
-                    <p class="text-muted-custom">{{ $property->address ?: 'Indirizzo non inserito' }}</p>
-                    <div class="d-flex gap-2 mb-4"><span class="badge badge-soft">{{ $property->rooms_count }} {{ $property->rooms_count === 1 ? 'stanza' : 'stanze' }}</span><span class="badge badge-soft">{{ $property->sections_count }} {{ $property->sections_count === 1 ? 'sezione' : 'sezioni' }}</span></div>
-                    <a class="btn btn-outline-secondary mt-auto" href="{{ route('host.properties.show', $property) }}">Gestisci struttura <span aria-hidden="true">↗</span></a>
-                </article>
-            </div>
-        @empty
-            <div class="col-12"><div class="sg-card empty-state"><span aria-hidden="true">⌂</span><h2 class="h3 mt-3">Diamo una casa alla tua guida.</h2><p class="text-muted-custom">Inizia dalla struttura, aggiungi le informazioni e prepara le stanze per i tuoi ospiti.</p>@if (auth()->user()->canWrite())<a class="btn btn-primary" href="{{ route('host.properties.create') }}">Crea la prima struttura</a>@endif</div></div>
-        @endforelse
+    {{-- Indicatori navigabili per periodo del soggiorno. --}}
+    <div class="row g-3 mb-4">
+        @foreach(['active' => 'Soggiorni attivi', 'scheduled' => 'Programmati', 'past' => 'Passati'] as $key => $label)
+            <div class="col-md-4"><x-metric-card :label="$label" :value="$counts[$key]" :href="route('host-home', ['period' => $key])" :class="$period === $key ? 'metric-selected' : ''" /></div>
+        @endforeach
     </div>
-    <div class="mt-4">{{ $properties->links() }}</div>
+    <section class="sg-card">
+        <div class="d-flex flex-wrap justify-content-between gap-3 mb-3"><h2 class="h4 mb-0">Il calendario dei soggiorni</h2><a href="{{ route('host.properties.index') }}">Gestisci strutture e stanze ↗</a></div>
+        <nav class="nav nav-pills workspace-tabs mb-3" aria-label="Periodo dei soggiorni">
+            @foreach(['active' => 'Attivi', 'scheduled' => 'Programmati', 'past' => 'Passati'] as $key => $label)
+                <a class="nav-link {{ $period === $key ? 'active' : '' }}" @if($period === $key) aria-current="page" @endif href="{{ route('host-home', ['period' => $key]) }}">{{ $label }}</a>
+            @endforeach
+        </nav>
+        <p class="small text-muted-custom">I periodi dipendono dalle date di arrivo e partenza. La colonna “Stato guida” segnala anche link revocati o guide sospese.</p>
+        <x-stay-table :stays="$stays" :host-links="true" />
+        @if($stays->total() === 0 && auth()->user()->canWrite())<a class="btn btn-outline-secondary" href="{{ route('host.bookings.create') }}">Inserisci un soggiorno</a>@endif
+    </section>
 </div>
 @endsection

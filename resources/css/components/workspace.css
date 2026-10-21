@@ -1,0 +1,29 @@
+/* Gerarchia visiva e controlli operativi delle aree host e amministratore. */
+.workspace { max-width: 1240px; }
+.workspace .page-heading h1 { font-size: clamp(2rem, 4vw, 3rem); }
+.metric-card { position: relative; display: flex; flex-direction: column; gap: .55rem; height: 100%; border-top: 3px solid #dbc7ac; }
+.metric-card:hover:has(a), .metric-selected { border-color: #a65e40; background: #fffaf2; }
+.metric-value { font-size: 2.6rem; line-height: 1.1; color: #533a2d; }
+.metric-card a { margin-top: .3rem; font-size: .9rem; }
+.workspace-table th { font-weight: 600; }
+.workspace-table td, .workspace-table th { padding: 1rem .8rem; }
+.workspace-table thead th { color: #746657; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; background: #faf7f2; }
+.workspace-table tbody th { min-width: 150px; }
+.workspace-tabs { gap: .5rem; }
+.workspace-tabs .nav-link { color: #72513c; background: #f6f0e8; border-radius: 50px; padding: .65rem 1.1rem; }
+.workspace-tabs .nav-link.active { background: #72513c; color: white; }
+.status-active, .status-inactive { padding: .6em .8em; line-height: 1.3; white-space: normal; }
+.status-active { color: #385440; background: #e7efe5; }
+.status-inactive { color: #87472f; background: #f8e9df; }
+.account-details { display: grid; grid-template-columns: minmax(120px, 1fr) 2fr; gap: .7rem 1rem; margin-top: 1.5rem; }
+.account-details dt { color: #746657; font-weight: 500; }
+.account-details dd { margin: 0; }
+.navbar .nav-link.active { color: #87472f; font-weight: 700; text-decoration: underline; text-underline-offset: .45em; }
+@media (max-width: 575px) {
+    .workspace .sg-card { padding: 1.2rem; }
+    .workspace .page-heading { align-items: stretch; }
+    .workspace .page-heading > .btn { width: 100%; }
+    .account-details { grid-template-columns: 1fr; gap: .3rem; }
+    .account-details dd { margin-bottom: .6rem; }
+    .workspace-table { margin-inline: -.5rem; }
+}

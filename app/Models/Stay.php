@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,6 +33,18 @@ class Stay extends Model
     public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class);
+    }
+
+    /** Filtra il calendario senza confondere la revoca del link con le date del soggiorno. */
+    #[Scope]
+    protected function inPeriod(Builder $query, string $period): void
+    {
+        $instant = now();
+        match ($period) {
+            'past' => $query->where('ends_at', '<=', $instant),
+            'scheduled' => $query->where('starts_at', '>', $instant),
+            default => $query->where('starts_at', '<=', $instant)->where('ends_at', '>', $instant),
+        };
     }
 
     public function isAccessible(): bool

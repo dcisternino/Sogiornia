@@ -1,5 +1,5 @@
 {{-- Messaggi di conferma ed errori dei moduli. --}}
-@if (auth()->check() && auth()->user()->isHost() && ! auth()->user()->is_active)
+@if (auth()->check() && auth()->user()->isHost() && ! auth()->user()->canWrite())
     <div class="container pt-4"><div class="alert alert-warning" role="status">Il tuo account è in sola lettura: puoi consultare i dati e i soggiorni esistenti, ma non effettuare modifiche o creare nuovi soggiorni. Contatta l'amministratore per la riattivazione.</div></div>
 @endif
 @if (session('status'))

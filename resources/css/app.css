@@ -17,3 +17,6 @@
 
 /* Scheda mobile e dettagli della guida ospite. */
 @import './components/guest-guide.css';
+
+/* Dashboard e gestione delle strutture e degli account. */
+@import './components/workspace.css';

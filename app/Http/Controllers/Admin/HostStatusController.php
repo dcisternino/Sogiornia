@@ -17,6 +17,8 @@ class HostStatusController extends Controller
         $host->is_active = $data['is_active'];
         $host->save();
 
-        return back()->with('status', $host->is_active ? 'Host riattivato.' : 'Host in sola lettura. I soggiorni esistenti restano validi.');
+        return back()->with('status', $host->is_active
+            ? ($host->hasActiveAccess() ? 'Host riattivato.' : 'Account riabilitato, ma la scadenza è trascorsa: aggiorna la data per ripristinare le modifiche.')
+            : 'Host in sola lettura. I soggiorni esistenti restano validi.');
     }
 }
