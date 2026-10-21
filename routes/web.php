@@ -15,3 +15,7 @@ Route::get('host-home', [PageController::class, 'host_admin'])->name('host-home'
 
 /* Guest Pages */
 Route::get('guest-home', [PageController::class, 'guest_admin'])->name('guest-home');
+
+/* Guest Sections */
+Route::get('/guest/sections/{section}', [PageController::class, 'guestSection'])
+    ->name('guest.section');
