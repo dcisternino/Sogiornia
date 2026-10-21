@@ -1,0 +1,117 @@
+/* Guida ospite: scheda chiara e compatta ispirata al riferimento mobile. */
+.guest-experience {
+    min-height: 100svh;
+    padding: 16px 12px 28px;
+    background: #f4f0e8;
+}
+.guest-shell {
+    max-width: 520px;
+    margin-inline: auto;
+    background: #fffefa;
+    border: 1px solid #ede6db;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 12px 45px rgb(61 43 26 / 5%);
+}
+.guest-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 15px 20px 14px;
+}
+.guest-brand { display: inline-flex; flex-shrink: 1; min-width: 0; }
+.guest-brand img { display: block; width: 150px; max-width: 100%; height: auto; }
+.guest-guide-badge {
+    flex-shrink: 0;
+    color: #716454;
+    background: #f0ebdf;
+    border-radius: 30px;
+    padding: 7px 12px;
+    font-size: .67rem;
+    letter-spacing: .025em;
+}
+.guest-hero { margin-inline: 8px; background: #dfc5a3; }
+.guest-hero img { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; }
+.guest-content { padding: 32px 25px 12px; }
+.guest-kicker {
+    margin: 0 0 13px;
+    color: #96543d;
+    font-size: .61rem;
+    font-weight: 700;
+    line-height: 1.7;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+}
+.guest-intro h1, .guest-detail h1 {
+    color: #30251f;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(1.65rem, 7.1vw, 2.35rem);
+    font-weight: 600;
+    line-height: 1.13;
+    letter-spacing: -.035em;
+    margin: 0 0 17px;
+    overflow-wrap: anywhere;
+}
+.guest-room { color: #75695d; font-size: .77rem; line-height: 1.65; margin: 0 0 13px; overflow-wrap: anywhere; }
+.guest-welcome-message { color: #75695d; font-size: .84rem; line-height: 1.8; margin: 0 0 24px; }
+.guest-demo-note { color: #75695d; font-size: .67rem; margin: 0 0 22px; }
+.guest-sections { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 24px; }
+.guest-section-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 18px;
+    min-height: 123px;
+    border: 1px solid #e7d9c8;
+    border-radius: 15px;
+    padding: 19px 16px 17px;
+    color: #a05a3f;
+    background: #fffefa;
+    transition: border-color .2s, background-color .2s;
+}
+.guest-section-icon { display: block; width: 23px; height: 23px; flex-shrink: 0; }
+.guest-section-card h2 {
+    color: #71442f;
+    font-family: inherit;
+    font-size: .82rem;
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0;
+    padding-right: 14px;
+    overflow-wrap: anywhere;
+}
+.guest-section-arrow { position: absolute; right: 14px; bottom: 17px; color: #a05a3f; font-size: .8rem; }
+.guest-section-card:hover { color: #81452f; background: #f9f3e9; border-color: #b88365; }
+.guest-section-card:focus-visible { outline: 3px solid #96543d; outline-offset: 3px; }
+.guest-empty { grid-column: 1 / -1; padding: 22px; border: 1px solid #e7d9c8; border-radius: 15px; }
+.guest-empty h2 { font-family: Georgia, serif; font-size: 1.25rem; }
+.guest-empty p { margin: 12px 0 0; color: #75695d; font-size: .85rem; }
+.guest-footer { padding: 27px 24px 25px; text-align: center; color: #817566; font-size: .65rem; line-height: 1.9; }
+.guest-footer a { color: #8d523a; }
+.guest-detail { padding-top: 12px; }
+.guest-back-link { display: inline-block; color: #8d523a; font-size: .78rem; margin-bottom: 33px; }
+.guest-detail h1 { margin-bottom: 25px; }
+.guest-detail .section-content { color: #62574c; font-size: .93rem; line-height: 1.9; }
+.guest-detail-actions { display: flex; flex-direction: column; align-items: stretch; gap: 12px; margin-top: 26px; }
+.guest-detail-actions:empty { display: none; }
+@media (min-width: 768px) {
+    .guest-experience { padding-block: 40px; }
+    .guest-content { padding-inline: 35px; }
+    .guest-topbar { padding-inline: 28px; }
+    .guest-sections { gap: 15px; }
+    .guest-section-card { min-height: 136px; padding: 23px 21px 20px; }
+}
+@media (max-width: 359.98px) {
+    .guest-experience { padding-inline: 8px; }
+    .guest-content { padding-inline: 19px; }
+    .guest-topbar { padding-inline: 16px; gap: 8px; }
+    .guest-brand img { width: 132px; }
+    .guest-guide-badge { font-size: .61rem; padding: 6px 9px; }
+    .guest-section-card { padding-inline: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .guest-section-card { transition: none; }
+}

@@ -31,6 +31,7 @@ class GuestGuideController extends Controller
         if ($token === null) {
             return [
                 'propertyName' => 'Casa Marina · Demo',
+                'propertyCity' => 'Bari',
                 'welcomeMessage' => 'Un assaggio della guida che puoi creare per i tuoi ospiti.',
                 'roomName' => null,
                 'token' => null,
@@ -46,6 +47,7 @@ class GuestGuideController extends Controller
 
         return [
             'propertyName' => $room->property->name,
+            'propertyCity' => $room->property->city,
             'welcomeMessage' => $room->property->welcome_message,
             'roomName' => $room->name,
             'token' => $token,

@@ -14,3 +14,6 @@
 
 /* Composizione della landing page e anteprima illustrativa della guida. */
 @import './components/landing.css';
+
+/* Scheda mobile e dettagli della guida ospite. */
+@import './components/guest-guide.css';

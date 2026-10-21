@@ -2,29 +2,44 @@
 
 @section('title', $propertyName)
 
-{{-- Intestazione della struttura e della stanza selezionata dal link. --}}
+{{-- Immagine di benvenuto ispirata al simbolo Sogiornia. --}}
 @section('content')
-<div class="container py-5 guide-container">
-    <header class="mb-5">
-        <span class="eyebrow">LA TUA GUIDA AL SOGGIORNO</span>
-        <h1 class="display-5 mt-3">{{ $propertyName }}</h1>
-        @if ($roomName)<p class="room-label">{{ $roomName }}</p>@endif
-        <p class="lead text-muted-custom preserve-lines">{{ $welcomeMessage }}</p>
-        @unless ($token)<span class="badge badge-soft">Guida dimostrativa · dati di esempio</span>@endunless
-    </header>
+    <div class="guest-hero">
+        <img src="{{ asset('image/guest-welcome.webp') }}" alt="" width="1774" height="887" fetchpriority="high" decoding="async">
+    </div>
 
-    {{-- Elenco delle sole sezioni consentite, con collegamenti alla guida corrente. --}}
-    <section aria-label="Informazioni per il soggiorno" class="row g-3">
-        @forelse ($sections as $slug => $section)
-            <div class="col-12 col-md-6">
-                <a href="{{ $token ? route('guide.show', ['token' => $token, 'section' => $slug]) : route('guest.section', ['section' => $slug]) }}" class="sg-card guide-card d-flex align-items-center justify-content-between h-100">
-                    <h2 class="h5 mb-0">{{ $section['title'] }}</h2>
-                    <span aria-hidden="true">↗</span>
+    <div class="guest-content">
+        {{-- Benvenuto e dati reali della struttura e della stanza. --}}
+        <header class="guest-intro">
+            <p class="guest-kicker">Benvenuto a {{ $propertyName }}</p>
+            <h1>Il tuo soggiorno,<br>con un tocco in più.</h1>
+            @if ($roomName || $propertyCity)
+                <p class="guest-room">
+                    @if ($roomName)<span>{{ $roomName }}</span>@endif
+                    @if ($roomName && $propertyCity)<span aria-hidden="true"> · </span>@endif
+                    @if ($propertyCity)<span>{{ $propertyCity }}</span>@endif
+                </p>
+            @endif
+            @if (filled($welcomeMessage))
+                <p class="guest-welcome-message preserve-lines">{{ $welcomeMessage }}</p>
+            @endif
+            @unless ($token)<p class="guest-demo-note">Guida dimostrativa · dati di esempio</p>@endunless
+        </header>
+
+        {{-- Schede delle sole sezioni consentite, in due colonne anche su telefono. --}}
+        <section class="guest-sections" aria-label="Informazioni per il soggiorno">
+            @forelse ($sections as $slug => $section)
+                <a href="{{ $token ? route('guide.show', ['token' => $token, 'section' => $slug]) : route('guest.section', ['section' => $slug]) }}" class="guest-section-card">
+                    <x-guest-section-icon :slug="$slug" />
+                    <h2>{{ $section['title'] }}</h2>
+                    <span class="guest-section-arrow" aria-hidden="true">↗</span>
                 </a>
-            </div>
-        @empty
-            <div class="col-12"><div class="sg-card"><h2 class="h5">La tua guida si sta preparando</h2><p class="mb-0 text-muted-custom">L'host non ha ancora abilitato informazioni per questa stanza. Contattalo per assistenza.</p></div></div>
-        @endforelse
-    </section>
-</div>
+            @empty
+                <div class="guest-empty">
+                    <h2>La tua guida si sta preparando</h2>
+                    <p>L'host non ha ancora abilitato informazioni per questa stanza. Contattalo per assistenza.</p>
+                </div>
+            @endforelse
+        </section>
+    </div>
 @endsection
