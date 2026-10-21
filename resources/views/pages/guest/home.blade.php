@@ -5,7 +5,7 @@
 {{-- Immagine di benvenuto ispirata al simbolo Sogiornia. --}}
 @section('content')
     <div class="guest-hero">
-        <img src="{{ asset('image/guest-welcome.webp') }}" alt="" width="1774" height="887" fetchpriority="high" decoding="async">
+        <img src="{{ $roomImageUrl ?: asset('image/guest-welcome.webp') }}" alt="{{ $roomImageUrl ? 'Foto di '.$roomName : '' }}" width="1774" height="887" fetchpriority="high" decoding="async">
     </div>
 
     <div class="guest-content">

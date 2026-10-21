@@ -34,13 +34,14 @@ class GuestGuideController extends Controller
                 'propertyCity' => 'Bari',
                 'welcomeMessage' => 'Un assaggio della guida che puoi creare per i tuoi ospiti.',
                 'roomName' => null,
+                'roomImageUrl' => null,
                 'token' => null,
                 'sections' => $this->guestSections(),
             ];
         }
 
         $stay = Stay::query()->where('guide_token', $token)
-            ->with(['room.property', 'room.sections' => fn ($query) => $query->orderBy('title')->orderBy('id')])
+            ->with(['room.property', 'room.photo', 'room.sections' => fn ($query) => $query->orderBy('title')->orderBy('id')])
             ->firstOrFail();
         abort_unless($stay->isAccessible(), 404);
         $room = $stay->room;
@@ -50,6 +51,7 @@ class GuestGuideController extends Controller
             'propertyCity' => $room->property->city,
             'welcomeMessage' => $room->property->welcome_message,
             'roomName' => $room->name,
+            'roomImageUrl' => $room->photo ? route('guide.room-image', $token) : null,
             'token' => $token,
             'sections' => $room->sections->where('property_id', $room->property_id)->mapWithKeys(fn ($section) => [
                 $section->slug => [
@@ -74,6 +76,7 @@ class GuestGuideController extends Controller
             'regole' => ['title' => 'Regole della casa', 'content' => 'Rispetta il riposo degli altri ospiti e prenditi cura degli spazi.'],
             'numeri-utili' => ['title' => 'Numeri utili', 'content' => 'Emergenze: 112. Aggiungi qui i contatti utili della tua struttura.'],
             'ristoranti' => ['title' => 'Dove mangiare', 'content' => 'Condividi i tuoi posti del cuore e i consigli di chi vive il territorio.'],
+            'luoghi-da-visitare' => ['title' => 'Luoghi da visitare', 'content' => "Una passeggiata tra i vicoli di Bari Vecchia, il lungomare e una visita alla Basilica di San Nicola: qualche idea per scoprire la città con calma.\n\nQuesti sono consigli dimostrativi. Nella tua guida potrai inserire i tuoi luoghi preferiti, indicazioni e link alle mappe."],
         ];
     }
 }

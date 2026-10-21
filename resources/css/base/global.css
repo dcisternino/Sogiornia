@@ -1,5 +1,10 @@
 /* Stili condivisi da landing, moduli e dashboard. */
 body { margin: 0; min-height: 100vh; background-color: var(--sg-background); color: var(--sg-text); font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.65; }
+/* Il contenuto riempie le pagine corte e spinge il footer in fondo senza sovrapposizioni. */
+.app-layout { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; }
+.app-layout > main { flex: 1 0 auto; }
+.app-layout > .navbar, .app-layout > .site-footer { flex-shrink: 0; }
+.app-layout > .site-footer { margin-top: 0; }
 a { color: var(--sg-primary-hover); text-decoration: none; }
 a:hover { color: #703d2b; }
 :focus-visible { outline: 3px solid #96543d; outline-offset: 4px; }

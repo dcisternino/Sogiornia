@@ -1,5 +1,31 @@
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
+// Chiude conferme e riepiloghi degli errori dopo cinque secondi, lasciando gli errori sui campi.
+document.querySelectorAll('[data-auto-dismiss]').forEach((notice) => {
+    window.setTimeout(() => { notice.remove(); }, 5000);
+});
+document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return;
+    event.target.closest('[data-dismiss-notice]')?.closest('[data-auto-dismiss]')?.remove();
+});
+
+// Mostra la foto scelta senza inviarla prima del salvataggio del modulo.
+document.addEventListener('change', (event) => {
+    const input = event.target;
+    if (!(input instanceof HTMLInputElement) || !input.dataset.imagePreview) return;
+    const preview = document.getElementById(input.dataset.imagePreview);
+    if (!(preview instanceof HTMLImageElement)) return;
+    preview.dataset.originalSrc ??= preview.src;
+    if (preview.dataset.objectUrl) URL.revokeObjectURL(preview.dataset.objectUrl);
+    const image = input.files?.[0];
+    if (!image || !['image/jpeg', 'image/png', 'image/webp'].includes(image.type) || image.size > 5 * 1024 * 1024) {
+        preview.src = preview.dataset.originalSrc;
+        return;
+    }
+    preview.dataset.objectUrl = URL.createObjectURL(image);
+    preview.src = preview.dataset.objectUrl;
+});
+
 // Chiede conferma soltanto per eliminazioni e revoca dei link già condivisi.
 document.addEventListener('submit', (event) => {
     const form = event.target;
@@ -17,7 +43,7 @@ document.addEventListener('click', async (event) => {
     try {
         await navigator.clipboard.writeText(input.value);
         button.textContent = 'Copiato!';
-        window.setTimeout(() => { button.textContent = 'Copia'; }, 2000);
+        window.setTimeout(() => { button.textContent = 'Copia'; }, 5000);
     } catch {
         input.focus();
         input.select();

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Host;
 
 use App\Http\Controllers\Controller;
 use App\Models\Property;
+use App\Models\RoomPhoto;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -25,7 +27,14 @@ class PropertyLifecycleController extends Controller
         };
         $property->save();
 
-        return back()->with('status', 'Stato della struttura aggiornato. L’archiviazione o la sospensione interrompono l’accesso alle guide.');
+        $message = match ($data['action']) {
+            'archive' => 'Struttura archiviata: le sue guide non sono accessibili. Stanze e contenuti restano conservati.',
+            'restore' => 'Struttura ripristinata. Le guide tornano accessibili se abilitate e con soggiorno valido.',
+            'suspend' => 'Guide della struttura sospese. I contenuti sono conservati e puoi riattivarle quando vuoi.',
+            'resume' => 'Guide della struttura riattivate. Restano escluse le stanze archiviate o sospese.',
+        };
+
+        return back()->with('status', $message);
     }
 
     public function destroy(Request $request, Property $property): RedirectResponse
@@ -33,6 +42,7 @@ class PropertyLifecycleController extends Controller
         Gate::authorize('update', $property);
         $request->validate(['confirmation' => ['required', 'string', Rule::in([$property->name])]]);
         $paths = $property->sections()->whereNotNull('image_path')->pluck('image_path')->all();
+        $paths = [...$paths, ...RoomPhoto::query()->whereHas('room', fn (Builder $query) => $query->whereBelongsTo($property))->pluck('path')->all()];
         $property->delete();
         Storage::disk('local')->delete($paths);
 

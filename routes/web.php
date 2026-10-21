@@ -10,12 +10,14 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestGuideController;
+use App\Http\Controllers\GuestRoomImageController;
 use App\Http\Controllers\GuestSectionImageController;
 use App\Http\Controllers\Host\BookingController;
 use App\Http\Controllers\Host\DashboardController as HostDashboardController;
 use App\Http\Controllers\Host\PropertyController;
 use App\Http\Controllers\Host\PropertyLifecycleController;
 use App\Http\Controllers\Host\RoomController;
+use App\Http\Controllers\Host\RoomImageController;
 use App\Http\Controllers\Host\RoomLifecycleController;
 use App\Http\Controllers\Host\SectionController;
 use App\Http\Controllers\Host\SectionImageController;
@@ -36,6 +38,8 @@ Route::get('/guest/sections/{section}', [GuestGuideController::class, 'show'])->
 Route::middleware('guide.privacy')->where(['token' => '[A-Za-z0-9]{64}'])->group(function (): void {
     // Mostra la guida solo durante il periodo del soggiorno.
     Route::get('/g/{token}', [GuestGuideController::class, 'index'])->name('guide.index');
+    // Mostra la copertina della stanza soltanto con soggiorno valido.
+    Route::get('/g/{token}/room-image', [GuestRoomImageController::class, 'show'])->name('guide.room-image');
     // Mostra una sezione abilitata nella stanza.
     Route::get('/g/{token}/sections/{section}', [GuestGuideController::class, 'show'])->name('guide.show');
     // Serve l'immagine privata dopo gli stessi controlli della guida.
@@ -104,6 +108,8 @@ Route::middleware(['auth', 'role:host', 'host.write'])
         Route::resource('/host/properties', PropertyController::class)->except(['destroy'])->names('host.properties');
         // Gestisce i dati delle stanze e le sezioni abilitate.
         Route::resource('/host/properties/{property}/rooms', RoomController::class)->except(['index', 'show', 'destroy'])->names('host.rooms');
+        // Mostra la foto della stanza esclusivamente all'host proprietario.
+        Route::get('/host/properties/{property}/rooms/{room}/image', [RoomImageController::class, 'show'])->name('host.rooms.image');
         // Gestisce i contenuti informativi arricchiti.
         Route::resource('/host/properties/{property}/sections', SectionController::class)->except(['index', 'show'])->names('host.sections');
         // Mostra l'anteprima privata di un'immagine all'host proprietario.

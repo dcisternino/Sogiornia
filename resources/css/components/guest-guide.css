@@ -5,6 +5,9 @@
     background: #f4f0e8;
 }
 .guest-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100svh - 44px);
     max-width: 520px;
     margin-inline: auto;
     background: #fffefa;
@@ -89,7 +92,7 @@
 .guest-empty { grid-column: 1 / -1; padding: 22px; border: 1px solid #e7d9c8; border-radius: 15px; }
 .guest-empty h2 { font-family: Georgia, serif; font-size: 1.25rem; }
 .guest-empty p { margin: 12px 0 0; color: #75695d; font-size: .85rem; }
-.guest-footer { padding: 27px 24px 25px; text-align: center; color: #817566; font-size: .65rem; line-height: 1.9; }
+.guest-footer { margin-top: auto; padding: 27px 24px 25px; text-align: center; color: #817566; font-size: .65rem; line-height: 1.9; }
 .guest-footer a { color: #8d523a; }
 .guest-detail { padding-top: 12px; }
 .guest-back-link { display: inline-block; color: #8d523a; font-size: .78rem; margin-bottom: 33px; }
@@ -98,12 +101,22 @@
 .guest-detail-actions { display: flex; flex-direction: column; align-items: stretch; gap: 12px; margin-top: 26px; }
 .guest-detail-actions:empty { display: none; }
 @media (min-width: 768px) {
+    .guest-shell { min-height: calc(100svh - 80px); }
     .guest-experience { padding-block: 40px; }
     .guest-content { padding-inline: 35px; }
     .guest-topbar { padding-inline: 28px; }
     .guest-sections { gap: 15px; }
     .guest-section-card { min-height: 136px; padding: 23px 21px 20px; }
 }
+
+/* Bandiera italiana leggibile su ogni dispositivo e lingue future chiaramente indicate. */
+.guest-language { flex-shrink: 0; }
+.guest-language .guest-guide-badge { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+.flag-it { display: inline-block; width: 18px; height: 12px; border-radius: 2px; border: 1px solid #0001; background: linear-gradient(to right, #15945b 0 33.33%, #fff 33.33% 66.66%, #d84141 66.66%); vertical-align: middle; }
+.guest-language .dropdown-menu { min-width: 235px; font-size: .8rem; border-color: #e7d9c8; border-radius: 14px; padding-block: 10px; box-shadow: 0 8px 24px #3d2b1a12; }
+.guest-language .dropdown-item { display: flex; justify-content: space-between; gap: 15px; padding-block: 9px; }
+.guest-language .dropdown-item:disabled { color: #796f64; }
+.guest-language .dropdown-item small { font-size: .65rem; color: #8f8172; }
 @media (max-width: 359.98px) {
     .guest-experience { padding-inline: 8px; }
     .guest-content { padding-inline: 19px; }

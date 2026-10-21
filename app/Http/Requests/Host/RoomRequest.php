@@ -24,8 +24,21 @@ class RoomRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255', Rule::unique('rooms')->where('property_id', $property->id)->ignore($roomId)],
             'description' => ['nullable', 'string', 'max:3000'],
+            'image' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120', 'dimensions:max_width=4000,max_height=4000'],
+            'remove_image' => ['sometimes', 'boolean', 'prohibited_with:image'],
             'sections' => ['nullable', 'array', 'max:100'],
             'sections.*' => ['required', 'integer', 'distinct', Rule::exists('sections', 'id')->where('property_id', $property->id)],
+        ];
+    }
+
+    /** Restituisce indicazioni concrete per i problemi più frequenti del modulo. */
+    public function messages(): array
+    {
+        return [
+            'name.unique' => 'Questa struttura ha già una stanza con questo nome. Scegli un nome diverso.',
+            'image.max' => 'La foto supera 5 MB. Scegli un file più leggero e riprova.',
+            'image.mimes' => 'Carica una foto JPEG, PNG o WebP.',
+            'sections.*.exists' => 'Una delle sezioni selezionate non appartiene a questa struttura. Ricarica la pagina e seleziona le sezioni disponibili.',
         ];
     }
 }

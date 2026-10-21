@@ -9,7 +9,7 @@
     <title>@yield('title', 'La tua ospitalità, sempre presente') | {{ config('app.name', 'Sogiornia') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
+<body class="@yield('body-class')">
     <a class="visually-hidden-focusable skip-link" href="#main-content">Vai al contenuto</a>
     @yield('body')
 </body>

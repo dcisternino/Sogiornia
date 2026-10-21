@@ -38,7 +38,7 @@ class PropertyController extends Controller
 
         return view('pages.host.properties.show', [
             'property' => $property,
-            'rooms' => $property->rooms()->withCount('sections')->orderBy('name')->orderBy('id')->paginate(12, ['*'], 'rooms_page'),
+            'rooms' => $property->rooms()->with('photo')->withCount('sections')->orderBy('name')->orderBy('id')->paginate(12, ['*'], 'rooms_page'),
             'sections' => $property->sections()->orderBy('title')->orderBy('id')->paginate(15, ['*'], 'sections_page'),
         ]);
     }

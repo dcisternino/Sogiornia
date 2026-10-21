@@ -4,13 +4,16 @@
 
 {{-- Modulo condiviso per creazione e modifica della struttura. --}}
 @section('content')
-<div class="container py-5 form-container">
+<div class="container py-5 form-container workspace">
     <a class="back-link" href="{{ $property->exists ? route('host.properties.show', $property) : route('host.properties.index') }}">← Torna alle strutture</a>
     <span class="eyebrow d-block mt-4">IL LUOGO DEL TUO BENVENUTO</span>
     <h1 class="mt-2 mb-4">{{ $property->exists ? 'Modifica struttura' : 'Crea la tua struttura' }}</h1>
-    <form class="sg-card p-4 p-md-5" method="POST" action="{{ $property->exists ? route('host.properties.update', $property) : route('host.properties.store') }}">
+    <p class="text-muted-custom">Parti dalle informazioni principali. Potrai poi aggiungere sezioni informative e stanze.</p>
+    <x-setup-steps :property="$property" current="property" class="mb-4" />
+    <form class="sg-card editor-form" method="POST" action="{{ $property->exists ? route('host.properties.update', $property) : route('host.properties.store') }}">
         @csrf
         @if ($property->exists) @method('PUT') @endif
+        <h2 class="h5 mb-4">Come si chiama la tua struttura?</h2>
         <x-input name="name" label="Nome della struttura" :value="$property->name" maxlength="255" :required="true" placeholder="Es. Casa Marina" />
         <x-input name="city" label="Città" :value="$property->city" maxlength="255" :required="true" autocomplete="address-level2" />
         <x-input name="address" label="Indirizzo" :value="$property->address" maxlength="255" autocomplete="street-address" />

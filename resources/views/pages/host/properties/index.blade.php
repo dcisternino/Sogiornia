@@ -9,6 +9,8 @@
         <div><span class="eyebrow">STRUTTURE E STANZE</span><h1 class="mt-2">Le tue strutture</h1><p class="text-muted-custom">Scegli una struttura per gestire stanze, sezioni della guida e impostazioni.</p></div>
         @if (auth()->user()->canWrite())<a class="btn btn-primary" href="{{ route('host.properties.create') }}">+ Nuova struttura</a>@endif
     </div>
+    {{-- Spiegazione dei tre passaggi prima dell'elenco delle strutture. --}}
+    <div class="setup-tip mb-4"><strong>La tua guida, in tre passaggi</strong><p class="mb-0">1. Crea la struttura e il benvenuto. 2. Scrivi le sezioni informative. 3. Aggiungi le stanze e scegli foto e sezioni visibili. Il link ospite viene generato per ogni soggiorno dalla dashboard.</p></div>
     <div class="row g-4">
         @forelse ($properties as $property)
             <div class="col-md-6 col-xl-4">

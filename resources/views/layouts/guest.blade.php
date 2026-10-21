@@ -10,7 +10,7 @@
                 <a class="guest-brand" href="{{ $token ? route('guide.index', ['token' => $token]) : route('guest-home') }}" aria-label="Sogiornia — vai alla tua guida">
                     <img src="{{ asset('image/sogiornia-logo.png') }}" alt="Sogiornia" width="2172" height="724" decoding="async">
                 </a>
-                <span class="guest-guide-badge">La tua guida</span>
+                <x-guest-language-menu />
             </header>
 
             @yield('content')

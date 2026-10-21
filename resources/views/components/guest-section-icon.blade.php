@@ -7,11 +7,15 @@
         str_contains($slug, 'check'), str_contains($slug, 'arrivo') => 'home',
         str_contains($slug, 'regol'), str_contains($slug, 'casa') => 'rules',
         str_contains($slug, 'numer'), str_contains($slug, 'contatt'), str_contains($slug, 'telefon') => 'phone',
+        str_contains($slug, 'luogh'), str_contains($slug, 'visit') => 'pin',
         default => 'spark',
     };
 @endphp
 <svg {{ $attributes->merge(['class' => 'guest-section-icon']) }} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
     @switch($icon)
+        @case('pin')
+            <path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.4"/>
+            @break
         @case('wifi')
             <path d="M3 8.8a14 14 0 0 1 18 0M6 12a9.4 9.4 0 0 1 12 0M9.2 15.2a4.5 4.5 0 0 1 5.6 0"/>
             <circle cx="12" cy="18.3" r=".8" fill="currentColor" stroke="none"/>
