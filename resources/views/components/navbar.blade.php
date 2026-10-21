@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg sticky-top" aria-label="Navigazione principale">
     <div class="container">
         {{-- Logo completo con collegamento alla pagina iniziale. --}}
-        <a class="navbar-brand" href="{{ route('welcome') }}">
+        <a class="navbar-brand">
             <img
                 src="{{ asset('image/sogiornia-logo.png') }}"
                 alt="Sogiornia"
