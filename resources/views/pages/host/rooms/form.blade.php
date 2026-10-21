@@ -4,11 +4,10 @@
 {{-- Configurazione guidata della stanza, della copertina e dei contenuti visibili. --}}
 @section('content')
 <div class="container py-5 form-container workspace">
-    <a class="back-link" href="{{ route('host.properties.show', $property) }}#stanze">← Stanze di {{ $property->name }}</a>
+    <a class="back-link" href="{{ route('host.rooms.index', $property) }}">← Stanze di {{ $property->name }}</a>
     <span class="eyebrow d-block mt-4">UNA GUIDA SU MISURA</span>
     <h1 class="mt-2">{{ $room->exists ? 'Modifica '.$room->name : 'Aggiungi una stanza' }}</h1>
     <p class="text-muted-custom">Dai un nome alla stanza, scegli una foto e abilita le informazioni che vedranno i suoi ospiti.</p>
-    <x-setup-steps :property="$property" current="rooms" class="mb-4" />
     <form class="sg-card editor-form" method="POST" enctype="multipart/form-data" action="{{ $room->exists ? route('host.rooms.update', [$property, $room]) : route('host.rooms.store', $property) }}">
         @csrf
         @if ($room->exists) @method('PUT') @endif
@@ -39,18 +38,18 @@
             <div class="section-options">
                 @forelse ($sections as $section)
                     <div class="form-check section-choice">
-                        <input class="form-check-input" type="checkbox" name="sections[]" id="section-{{ $section->id }}" value="{{ $section->id }}" @checked(in_array($section->id, (array) (old('sections_present') ? old('sections', []) : $selectedSections)))>
-                        <label class="form-check-label" for="section-{{ $section->id }}"><strong>{{ $section->title }}</strong><span class="d-block small text-muted-custom">{{ Str::limit($section->content, 90) }}</span></label>
+                        <input class="form-check-input" type="checkbox" name="sections[]" id="section-{{ $section->id }}" value="{{ $section->id }}" @checked($section->isShared() || in_array($section->id, (array) (old('sections_present') ? old('sections', []) : $selectedSections))) @disabled($section->isShared())>
+                        <label class="form-check-label" for="section-{{ $section->id }}"><strong>{{ $section->title }}</strong>@if($section->isShared())<span class="badge badge-soft ms-2">Condivisa con tutte le stanze</span>@endif @unless($section->isActive())<span class="badge badge-soft">Disattivata</span>@endunless<span class="d-block small text-muted-custom">{{ Str::limit($section->content, 90) }}</span></label>
                     </div>
                 @empty
                     <div class="onboarding-note"><strong>Non ci sono ancora sezioni.</strong><p class="mb-0 mt-1">Salva la stanza, crea i contenuti dalla struttura e torna qui per selezionarli.</p></div>
                 @endforelse
             </div>
-            <p class="small text-muted-custom mt-3 mb-0">Se non selezioni nulla, la guida mostrerà solo il benvenuto. Il link si crea dalla dashboard inserendo un soggiorno.</p>
+            <p class="small text-muted-custom mt-3 mb-0">Le sezioni condivise si applicano automaticamente. Quelle disattivate restano nascoste anche se selezionate. Gestisci questi interruttori dalla <a href="{{ route('host.sections.index', $property) }}">pagina sezioni</a>.</p>
             @error('sections')<p class="text-danger small">{{ $message }}</p>@enderror
             @error('sections.*')<p class="text-danger small">{{ $message }}</p>@enderror
         </fieldset>
-        <div class="form-actions editor-actions"><button class="btn btn-primary" type="submit">{{ $room->exists ? 'Salva le modifiche' : 'Crea la stanza' }}</button><a class="btn btn-outline-secondary" href="{{ route('host.properties.show', $property) }}#stanze">Annulla</a></div>
+        <div class="form-actions editor-actions"><button class="btn btn-primary" type="submit">{{ $room->exists ? 'Salva le modifiche' : 'Crea la stanza' }}</button><a class="btn btn-outline-secondary" href="{{ route('host.rooms.index', $property) }}">Annulla</a></div>
     </form>
 </div>
 @endsection

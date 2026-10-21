@@ -42,6 +42,9 @@ class PropertyLifecycleController extends Controller
         Gate::authorize('update', $property);
         $request->validate(['confirmation' => ['required', 'string', Rule::in([$property->name])]]);
         $paths = $property->sections()->whereNotNull('image_path')->pluck('image_path')->all();
+        if ($property->profile?->image_path) {
+            $paths[] = $property->profile->image_path;
+        }
         $paths = [...$paths, ...RoomPhoto::query()->whereHas('room', fn (Builder $query) => $query->whereBelongsTo($property))->pluck('path')->all()];
         $property->delete();
         Storage::disk('local')->delete($paths);

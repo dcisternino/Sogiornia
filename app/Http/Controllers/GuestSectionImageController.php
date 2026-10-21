@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Section;
 use App\Models\Stay;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -13,7 +14,7 @@ class GuestSectionImageController extends Controller
     {
         $stay = Stay::query()->where('guide_token', $token)->with('room.property')->firstOrFail();
         abort_unless($stay->isAccessible(), 404);
-        $section = $stay->room->sections()->where('property_id', $stay->room->property_id)->where('slug', $section)->firstOrFail();
+        $section = Section::query()->visibleToRoom($stay->room)->where('slug', $section)->firstOrFail();
         abort_unless($section->image_path && Storage::disk('local')->exists($section->image_path), 404);
 
         return response()->file(Storage::disk('local')->path($section->image_path), [

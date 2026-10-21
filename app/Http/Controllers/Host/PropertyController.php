@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Host;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Host\PropertyRequest;
 use App\Models\Property;
+use App\Models\Room;
+use App\Models\Section;
+use App\Services\PropertyProfileStorage;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -16,7 +20,10 @@ class PropertyController extends Controller
     public function index(Request $request): View
     {
         return view('pages.host.properties.index', [
-            'properties' => $request->user()->properties()->withCount(['rooms', 'sections'])->orderByDesc('id')->paginate(12),
+            'properties' => $request->user()->properties()->with('profile')->withCount(['rooms', 'sections'])->orderByDesc('id')->paginate(12),
+            'activeProperties' => $request->user()->properties()->whereNull('archived_at')->count(),
+            'roomCount' => Room::query()->whereHas('property', fn (Builder $query) => $query->whereBelongsTo($request->user()))->count(),
+            'sectionCount' => Section::query()->whereHas('property', fn (Builder $query) => $query->whereBelongsTo($request->user()))->count(),
         ]);
     }
 
@@ -25,22 +32,19 @@ class PropertyController extends Controller
         return view('pages.host.properties.form', ['property' => new Property]);
     }
 
-    public function store(PropertyRequest $request): RedirectResponse
+    public function store(PropertyRequest $request, PropertyProfileStorage $profiles): RedirectResponse
     {
-        $property = $request->user()->properties()->create($request->validated());
+        $property = $request->user()->properties()->make($request->safe()->only(['name', 'city', 'address', 'welcome_message']));
+        $profiles->save($property, $request->validated('description'), $request->file('image'), false);
 
-        return redirect()->route('host.properties.show', $property)->with('status', 'Struttura creata. Aggiungi le sezioni e poi le stanze.');
+        return redirect()->route('host.properties.index')->with('status', 'Struttura creata. Ora puoi gestire stanze e sezioni dai pulsanti della struttura.');
     }
 
-    public function show(Property $property): View
+    public function show(Property $property): RedirectResponse
     {
         Gate::authorize('view', $property);
 
-        return view('pages.host.properties.show', [
-            'property' => $property,
-            'rooms' => $property->rooms()->with('photo')->withCount('sections')->orderBy('name')->orderBy('id')->paginate(12, ['*'], 'rooms_page'),
-            'sections' => $property->sections()->orderBy('title')->orderBy('id')->paginate(15, ['*'], 'sections_page'),
-        ]);
+        return redirect()->route('host.rooms.index', $property);
     }
 
     public function edit(Property $property): View
@@ -50,10 +54,11 @@ class PropertyController extends Controller
         return view('pages.host.properties.form', compact('property'));
     }
 
-    public function update(PropertyRequest $request, Property $property): RedirectResponse
+    public function update(PropertyRequest $request, Property $property, PropertyProfileStorage $profiles): RedirectResponse
     {
-        $property->update($request->validated());
+        $property->fill($request->safe()->only(['name', 'city', 'address', 'welcome_message']));
+        $profiles->save($property, $request->validated('description'), $request->file('image'), $request->boolean('remove_image'));
 
-        return redirect()->route('host.properties.show', $property)->with('status', 'Struttura aggiornata.');
+        return redirect()->route('host.properties.index')->with('status', 'Dati, descrizione e foto della struttura aggiornati.');
     }
 }

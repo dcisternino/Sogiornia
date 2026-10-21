@@ -4,7 +4,7 @@
 {{-- Storico dei soggiorni con link distinti e revoca anticipata. --}}
 @section('content')
 <div class="container py-5 workspace">
-    <a href="{{ route('host.properties.show', $property) }}">← {{ $property->name }}</a>
+    <a href="{{ route('host.rooms.index', $property) }}">← {{ $property->name }}</a>
     <div class="page-heading mt-4"><div><span class="eyebrow">LINK PERSONALI PER SOGGIORNO</span><h1>{{ $room->name }}</h1><p class="text-muted-custom">Scadenza automatica alla partenza. Orari italiani.</p></div>
         @if (auth()->user()->canWrite() && ! $property->archived_at && ! $room->archived_at)
             <a class="btn btn-primary" href="{{ route('host.stays.create', [$property, $room]) }}">+ Nuovo soggiorno</a>

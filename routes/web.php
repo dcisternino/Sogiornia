@@ -15,12 +15,14 @@ use App\Http\Controllers\GuestSectionImageController;
 use App\Http\Controllers\Host\BookingController;
 use App\Http\Controllers\Host\DashboardController as HostDashboardController;
 use App\Http\Controllers\Host\PropertyController;
+use App\Http\Controllers\Host\PropertyImageController;
 use App\Http\Controllers\Host\PropertyLifecycleController;
 use App\Http\Controllers\Host\RoomController;
 use App\Http\Controllers\Host\RoomImageController;
 use App\Http\Controllers\Host\RoomLifecycleController;
 use App\Http\Controllers\Host\SectionController;
 use App\Http\Controllers\Host\SectionImageController;
+use App\Http\Controllers\Host\SectionSettingController;
 use App\Http\Controllers\Host\StayController;
 use App\Http\Controllers\Host\StayRevocationController;
 use App\Http\Controllers\PageController;
@@ -106,12 +108,16 @@ Route::middleware(['auth', 'role:host', 'host.write'])
         Route::post('/host/stays', [BookingController::class, 'store'])->name('host.bookings.store');
         // Gestisce i dati principali delle strutture.
         Route::resource('/host/properties', PropertyController::class)->except(['destroy'])->names('host.properties');
+        // Mostra la foto della struttura esclusivamente all'host proprietario.
+        Route::get('/host/properties/{property}/image', [PropertyImageController::class, 'show'])->name('host.properties.image');
         // Gestisce i dati delle stanze e le sezioni abilitate.
-        Route::resource('/host/properties/{property}/rooms', RoomController::class)->except(['index', 'show', 'destroy'])->names('host.rooms');
+        Route::resource('/host/properties/{property}/rooms', RoomController::class)->except(['show', 'destroy'])->names('host.rooms');
         // Mostra la foto della stanza esclusivamente all'host proprietario.
         Route::get('/host/properties/{property}/rooms/{room}/image', [RoomImageController::class, 'show'])->name('host.rooms.image');
         // Gestisce i contenuti informativi arricchiti.
-        Route::resource('/host/properties/{property}/sections', SectionController::class)->except(['index', 'show'])->names('host.sections');
+        Route::resource('/host/properties/{property}/sections', SectionController::class)->except(['show'])->names('host.sections');
+        // Attiva o condivide una sezione senza cambiare le assegnazioni delle stanze.
+        Route::patch('/host/properties/{property}/sections/{section}/settings', [SectionSettingController::class, 'update'])->name('host.sections.settings');
         // Mostra l'anteprima privata di un'immagine all'host proprietario.
         Route::get('/host/properties/{property}/sections/{section}/image', [SectionImageController::class, 'show'])->name('host.sections.image');
         // Archivia, ripristina o sospende la struttura.

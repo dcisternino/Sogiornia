@@ -1,29 +1,28 @@
 @extends('layouts.app')
-
 @section('title', 'Le mie strutture')
 
-{{-- Catalogo delle strutture con accesso alla gestione di stanze e guide. --}}
+{{-- Elenco delle strutture e accesso distinto a dati, stanze e sezioni. --}}
 @section('content')
 <div class="container py-5 workspace">
-    <div class="page-heading">
-        <div><span class="eyebrow">STRUTTURE E STANZE</span><h1 class="mt-2">Le tue strutture</h1><p class="text-muted-custom">Scegli una struttura per gestire stanze, sezioni della guida e impostazioni.</p></div>
-        @if (auth()->user()->canWrite())<a class="btn btn-primary" href="{{ route('host.properties.create') }}">+ Nuova struttura</a>@endif
-    </div>
-    {{-- Spiegazione dei tre passaggi prima dell'elenco delle strutture. --}}
-    <div class="setup-tip mb-4"><strong>La tua guida, in tre passaggi</strong><p class="mb-0">1. Crea la struttura e il benvenuto. 2. Scrivi le sezioni informative. 3. Aggiungi le stanze e scegli foto e sezioni visibili. Il link ospite viene generato per ogni soggiorno dalla dashboard.</p></div>
-    <div class="row g-4">
-        @forelse ($properties as $property)
-            <div class="col-md-6 col-xl-4">
-                <article class="sg-card h-100 d-flex flex-column">
-                    <span class="eyebrow">{{ $property->city }}</span><h2 class="h3 mt-3">{{ $property->name }}</h2>
-                    @if ($property->archived_at)<span class="badge badge-soft mb-3">Archiviata</span>@endif
-                    <p class="text-muted-custom">{{ $property->address ?: 'Indirizzo non inserito' }}</p>
-                    <div class="d-flex gap-2 mb-4"><span class="badge badge-soft">{{ $property->rooms_count }} {{ $property->rooms_count === 1 ? 'stanza' : 'stanze' }}</span><span class="badge badge-soft">{{ $property->sections_count }} {{ $property->sections_count === 1 ? 'sezione' : 'sezioni' }}</span></div>
-                    <a class="btn btn-outline-secondary mt-auto" href="{{ route('host.properties.show', $property) }}">Gestisci stanze e guida <span aria-hidden="true">↗</span></a>
-                </article>
-            </div>
+    <div class="page-heading"><div><span class="eyebrow">IL TUO SPAZIO HOST</span><h1 class="mt-2">Le tue strutture</h1></div>@if(auth()->user()->canWrite())<a class="btn btn-primary" href="{{ route('host.properties.create') }}">+ Aggiungi struttura</a>@endif</div>
+    <x-property-summary :active-properties="$activeProperties" :rooms="$roomCount" :sections="$sectionCount" class="mb-4" />
+    <div class="d-grid gap-4">
+        @forelse($properties as $property)
+            <article class="sg-card property-row">
+                <img class="property-row-photo" src="{{ $property->profile?->image_path ? route('host.properties.image', $property) : asset('image/guest-welcome.webp') }}" alt="{{ $property->profile?->image_path ? 'Foto di '.$property->name : '' }}" loading="lazy">
+                <div class="property-row-info">
+                    <span class="eyebrow">{{ $property->city }}</span><h2 class="h3 mt-2">{{ $property->name }}</h2>
+                    <p class="text-muted-custom mb-3">{{ $property->profile?->description ?: 'Aggiungi una breve descrizione dalle impostazioni della struttura.' }}</p>
+                    <div class="d-flex flex-wrap gap-2"><span class="badge badge-soft">{{ $property->archived_at ? 'Archiviata' : 'Attiva' }}</span><span class="small text-muted-custom">{{ $property->rooms_count }} {{ $property->rooms_count === 1 ? 'stanza' : 'stanze' }} · {{ $property->sections_count }} {{ $property->sections_count === 1 ? 'sezione' : 'sezioni' }}</span></div>
+                </div>
+                <div class="property-row-actions">
+                    @if(auth()->user()->canWrite())<a class="btn btn-outline-secondary" href="{{ route('host.properties.edit', $property) }}">Modifica<span class="visually-hidden"> {{ $property->name }}</span></a>@endif
+                    <a class="btn btn-primary" href="{{ route('host.rooms.index', $property) }}">Gestisci stanze<span class="visually-hidden"> di {{ $property->name }}</span></a>
+                    <a class="btn btn-outline-secondary" href="{{ route('host.sections.index', $property) }}">Sezioni<span class="visually-hidden"> di {{ $property->name }}</span></a>
+                </div>
+            </article>
         @empty
-            <div class="col-12"><div class="sg-card empty-state"><span aria-hidden="true">⌂</span><h2 class="h3 mt-3">Diamo una casa alla tua guida.</h2><p class="text-muted-custom">Inizia dalla struttura, aggiungi le informazioni e prepara le stanze per i tuoi ospiti.</p>@if (auth()->user()->canWrite())<a class="btn btn-primary" href="{{ route('host.properties.create') }}">Crea la prima struttura</a>@endif</div></div>
+            <div class="sg-card empty-state"><h2 class="h4">Non hai ancora strutture</h2><p class="text-muted-custom mb-0">Aggiungi la prima struttura per iniziare a creare stanze e guide.</p></div>
         @endforelse
     </div>
     <div class="mt-4">{{ $properties->links() }}</div>

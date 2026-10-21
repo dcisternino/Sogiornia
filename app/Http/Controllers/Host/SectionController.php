@@ -17,6 +17,17 @@ use Illuminate\Support\Facades\Storage;
 /** Gestisce contenuti testuali riutilizzabili nelle guide della struttura. */
 class SectionController extends Controller
 {
+    /** Mostra contenuti e interruttori della sola struttura posseduta dall'host. */
+    public function index(Property $property): View
+    {
+        Gate::authorize('view', $property);
+
+        return view('pages.host.sections.index', [
+            'property' => $property,
+            'sections' => $property->sections()->with('settings')->orderBy('title')->orderBy('id')->paginate(20),
+        ]);
+    }
+
     public function create(Request $request, Property $property, SectionTemplates $templates): View
     {
         Gate::authorize('update', $property);
@@ -32,7 +43,7 @@ class SectionController extends Controller
         $section = $property->sections()->make($request->safe()->except(['image', 'remove_image']));
         $images->save($section, $request->file('image'), false);
 
-        return redirect()->route('host.properties.show', $property)->with('status', 'Sezione creata. Abilitala nelle stanze che devono mostrarla.');
+        return redirect()->route('host.sections.index', $property)->with('status', 'Sezione creata. Abilitala nelle stanze che devono mostrarla.');
     }
 
     public function edit(Property $property, int $section): View
@@ -52,7 +63,7 @@ class SectionController extends Controller
         $section->fill($request->safe()->except(['image', 'remove_image']));
         $images->save($section, $request->file('image'), $request->boolean('remove_image'));
 
-        return redirect()->route('host.properties.show', $property)->with('status', 'Sezione aggiornata in tutte le stanze che la utilizzano.');
+        return redirect()->route('host.sections.index', $property)->with('status', 'Sezione aggiornata in tutte le stanze che la utilizzano.');
     }
 
     public function destroy(Property $property, int $section): RedirectResponse
@@ -65,6 +76,6 @@ class SectionController extends Controller
             Storage::disk('local')->delete($path);
         }
 
-        return redirect()->route('host.properties.show', $property)->with('status', 'Sezione eliminata e rimossa dalle guide.');
+        return redirect()->route('host.sections.index', $property)->with('status', 'Sezione eliminata e rimossa dalle guide.');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Section;
 use App\Models\Stay;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -41,7 +42,7 @@ class GuestGuideController extends Controller
         }
 
         $stay = Stay::query()->where('guide_token', $token)
-            ->with(['room.property', 'room.photo', 'room.sections' => fn ($query) => $query->orderBy('title')->orderBy('id')])
+            ->with(['room.property', 'room.photo'])
             ->firstOrFail();
         abort_unless($stay->isAccessible(), 404);
         $room = $stay->room;
@@ -53,7 +54,7 @@ class GuestGuideController extends Controller
             'roomName' => $room->name,
             'roomImageUrl' => $room->photo ? route('guide.room-image', $token) : null,
             'token' => $token,
-            'sections' => $room->sections->where('property_id', $room->property_id)->mapWithKeys(fn ($section) => [
+            'sections' => Section::query()->visibleToRoom($room)->orderBy('title')->orderBy('id')->get()->mapWithKeys(fn ($section) => [
                 $section->slug => [
                     'title' => $section->title,
                     'content' => $section->content,

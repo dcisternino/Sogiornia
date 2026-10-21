@@ -1,5 +1,13 @@
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
+// Salva il singolo interruttore senza inviare gli altri moduli della pagina.
+document.addEventListener('change', (event) => {
+    const input = event.target;
+    if (input instanceof HTMLInputElement && input.matches('[data-submit-on-change]')) {
+        input.form?.requestSubmit();
+    }
+});
+
 // Chiude conferme e riepiloghi degli errori dopo cinque secondi, lasciando gli errori sui campi.
 document.querySelectorAll('[data-auto-dismiss]').forEach((notice) => {
     window.setTimeout(() => { notice.remove(); }, 5000);

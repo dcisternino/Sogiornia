@@ -47,6 +47,6 @@ class RoomLifecycleController extends Controller
             Storage::disk('local')->delete($path);
         }
 
-        return redirect()->route('host.properties.show', $property)->with('status', 'Stanza eliminata con i relativi soggiorni.');
+        return redirect()->route('host.rooms.index', $property)->with('status', 'Stanza eliminata con i relativi soggiorni.');
     }
 }

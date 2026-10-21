@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Room;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -24,7 +25,9 @@ class RoomImageStorage
         try {
             DB::transaction(function () use ($room, $sections, $newPath): void {
                 $room->save();
-                $room->sections()->sync($sections);
+                // Mantiene le assegnazioni specifiche precedenti durante la condivisione globale.
+                $sharedAssignments = $room->sections()->whereHas('settings', fn (Builder $query) => $query->where('is_shared', true))->pluck('sections.id')->all();
+                $room->sections()->sync(array_unique([...$sections, ...$sharedAssignments]));
                 if ($newPath) {
                     $room->photo()->updateOrCreate([], ['path' => $newPath]);
                 } else {

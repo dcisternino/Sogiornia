@@ -24,6 +24,9 @@ class PropertyRequest extends FormRequest
             'city' => ['required', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:255'],
             'welcome_message' => ['nullable', 'string', 'max:3000'],
+            'description' => ['nullable', 'string', 'max:500'],
+            'image' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120', 'dimensions:max_width=4000,max_height=4000'],
+            'remove_image' => ['sometimes', 'boolean', 'prohibited_with:image'],
         ];
     }
 }
