@@ -1,0 +1,62 @@
+/* Landing pubblica: colori caldi, anteprima della guida e offerta commerciale. */
+.eyebrow { font-size: .7rem; font-weight: 750; letter-spacing: .13em; color: var(--sg-primary-hover); }
+.brand-word { font-weight: 750; letter-spacing: -.055em; font-size: 1.65rem; color: var(--sg-text); }
+.brand-word span { color: var(--sg-primary); }
+.landing-hero { padding: 76px 0 86px; background: radial-gradient(ellipse at 85% 45%, #ece2d1 0, transparent 48%); }
+.hero-title { font-size: clamp(2.7rem, 4.5vw, 4.6rem); line-height: 1.06; letter-spacing: -.055em; font-weight: 600; }
+.hero-title em { font-family: Georgia, serif; font-weight: 400; color: var(--sg-primary-hover); }
+.hero-description { color: #665e56; max-width: 480px; font-size: 1.08rem; line-height: 1.8; }
+.status-dot { display: inline-block; width: 7px; height: 7px; margin-right: 7px; background: #6c8064; border-radius: 50%; }
+.hero-proof { border-top: 1px solid var(--sg-border); padding-top: 24px; }
+.hero-proof strong, .hero-proof span { display: block; }
+.hero-proof strong { font-size: .94rem; }
+.hero-proof span { color: #72685e; font-size: .77rem; margin-top: 4px; }
+.hero-scene { position: relative; min-height: 580px; display: flex; justify-content: center; align-items: center; }
+.scene-orbit { position: absolute; border: 1px solid #d6c8b6; border-radius: 50%; width: 500px; height: 500px; }
+.orbit-two { width: 390px; height: 590px; transform: rotate(38deg); }
+.scene-caption { position: absolute; top: 0; right: 8px; font-size: .62rem; line-height: 1.6; letter-spacing: .15em; color: #766b5b; }
+.guide-preview { position: relative; width: 330px; background: #fffefa; border: 7px solid #fff; border-radius: 26px; box-shadow: 0 26px 65px #493c2825; transform: rotate(-4deg); }
+.preview-top { display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; }
+.preview-top .brand-word { font-size: 1.14rem; }
+.preview-pill { font-size: .6rem; border-radius: 30px; background: #f0ebdf; padding: 5px 9px; color: #615447; }
+.preview-art { height: 175px; background: #dfc5a3; position: relative; overflow: hidden; }
+.sun { width: 65px; height: 65px; border-radius: 50%; background: #f6e4b1; position: absolute; right: 35px; top: 20px; }
+.arch { position: absolute; border-radius: 100px 100px 0 0; bottom: 0; }
+.arch-back { width: 130px; height: 150px; background: #b86e50; left: 30px; }
+.arch-front { width: 95px; height: 115px; background: #713f32; left: 48px; border: 16px solid #d9a682; border-bottom: 0; }
+.plant { position: absolute; right: 15px; bottom: -40px; font-size: 140px; color: #54674b; transform: rotate(12deg); }
+.preview-body { padding: 26px 20px; }
+.preview-body .eyebrow { font-size: .55rem; }
+.preview-body h2 { font-family: Georgia, serif; font-size: 1.65rem; margin: 12px 0; }
+.preview-body > p { font-size: .73rem; color: #76695b; }
+.preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 22px; }
+.preview-grid div { border: 1px solid #e7dfd2; padding: 12px; border-radius: 12px; font-size: .7rem; }
+.preview-grid span { display: block; font-size: 1.3rem; color: #9b563e; margin-bottom: 5px; }
+.preview-grid b { float: right; font-weight: 400; }
+.floating-note { position: absolute; bottom: 12px; right: 0; background: #fffefa; padding: 17px 22px; box-shadow: 0 8px 35px #493c2812; border: 1px solid #e5ddd1; border-radius: 14px; display: flex; align-items: center; gap: 12px; font-size: .8rem; transform: rotate(3deg); }
+.floating-note > span { background: #e5eadf; color: #3b583d; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; }
+.floating-note small { display: block; color: #766b5b; font-size: .65rem; margin-top: 4px; }
+.section-space { padding: 90px 0; scroll-margin-top: 90px; }
+.section-title { font-size: clamp(2rem, 3.1vw, 3rem); letter-spacing: -.045em; line-height: 1.15; }
+.benefits-section { background: #f0ece3; }
+.benefit-card { background: #faf8f3; border: 1px solid #e3ddd1; border-radius: 18px; padding: 32px; }
+.feature-symbol { font-size: 1.7rem; display: inline-grid; place-items: center; width: 54px; height: 54px; background: #ede1d2; border-radius: 15px; color: #8a4732; }
+.benefit-card p { font-size: .94rem; line-height: 1.8; margin: 18px 0 30px; }
+.feature-label { font-size: .61rem; font-weight: 700; letter-spacing: .1em; color: #756859; }
+.step-number { font-family: Georgia, serif; font-size: 2rem; color: var(--sg-primary-hover); border-bottom: 1px solid var(--sg-border); padding-bottom: 18px; }
+.pricing-panel { background: #243e36; color: #f9f5eb; padding: 60px; border-radius: 26px; }
+.pricing-panel h2 { color: #f9f5eb; }
+.pricing-panel .eyebrow { color: #d4b993; }
+.pricing-description { color: #d7dfd3; max-width: 510px; line-height: 1.8; }
+.pricing-features li { margin: 13px 0; font-size: .95rem; }
+.pricing-features span { margin-right: 10px; color: #ddbd89; }
+.price-card { background: #fffdf7; color: var(--sg-text); padding: 30px; border-radius: 18px; }
+.price-card .badge { white-space: normal; font-size: .63rem; }
+.price-amount { font-size: 5rem; letter-spacing: -.065em; font-weight: 600; line-height: 1.1; }
+.price-amount > span { font-size: 2rem; vertical-align: top; display: inline-block; padding-top: 8px; }
+.price-amount small { letter-spacing: normal; font-size: .95rem; font-weight: 400; margin-left: 8px; }
+.faq-item { border-bottom: 1px solid var(--sg-border); padding: 20px 0; }
+.faq-item summary { cursor: pointer; font-weight: 600; }
+.faq-item p { margin: 18px 0 0; color: #70665c; line-height: 1.8; }
+@media (max-width: 991.98px) { .landing-hero { padding: 44px 0; } .hero-scene { min-height: 560px; } .scene-caption { right: 10%; } .floating-note { right: 8%; } .pricing-panel { padding: 35px; } .section-space { padding: 60px 0; } }
+@media (max-width: 575.98px) { .hero-proof { gap: 20px !important; } .hero-proof strong { font-size: .8rem; } .hero-proof span { font-size: .68rem; } .hero-scene { min-height: 540px; } .guide-preview { width: 290px; } .scene-orbit { width: 330px; height: 440px; } .orbit-two { width: 290px; height: 450px; } .scene-caption { right: 0; top: 8px; } .floating-note { right: 0; bottom: 0; } .pricing-panel { padding: 26px; } }

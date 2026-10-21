@@ -1,19 +1,11 @@
-<!DOCTYPE html>
-<html lang="it">
+@extends('layouts.base')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>@yield('title', 'Guest') | Sogiornia</title>
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body>
-    <main>
+{{-- Guida essenziale senza navigazione verso le aree di gestione. --}}
+@section('body')
+    <main id="main-content" class="guest-guide" tabindex="-1">
         @yield('content')
     </main>
-</body>
-
-</html>
+    <footer class="text-center pb-4 small text-muted-custom">
+        Accoglienza curata con <a href="{{ route('welcome') }}">Sogiornia</a>
+    </footer>
+@endsection

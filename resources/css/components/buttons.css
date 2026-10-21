@@ -1,15 +1,5 @@
-.sg-btn-primary {
-    background-color: var(--sg-primary);
-    color: #FFFFFF;
-    border: 1px solid var(--sg-primary);
-    border-radius: 10px;
-    padding: 10px 20px;
-    font-weight: 500;
-    transition: 0.2s ease;
-}
-
-.sg-btn-primary:hover {
-    background-color: var(--sg-primary-hover);
-    border-color: var(--sg-primary-hover);
-    color: #FFFFFF;
-}
+/* Pulsanti coerenti con il marchio e con gli stati Bootstrap. */
+.btn { border-radius: 9px; padding: 12px 22px; font-size: .88rem; font-weight: 600; }
+.btn-sm { padding: 7px 13px; font-size: .78rem; }
+.btn-primary, .sg-btn-primary { --bs-btn-bg: #96543d; --bs-btn-border-color: #96543d; --bs-btn-hover-bg: #773f2c; --bs-btn-hover-border-color: #773f2c; --bs-btn-active-bg: #773f2c; --bs-btn-active-border-color: #773f2c; --bs-btn-disabled-bg: #96543d; --bs-btn-disabled-border-color: #96543d; }
+.btn-outline-secondary { --bs-btn-color: #4e493e; --bs-btn-border-color: #c9bfae; --bs-btn-hover-bg: #e9e2d6; --bs-btn-hover-color: #302b28; --bs-btn-hover-border-color: #c9bfae; --bs-btn-active-bg: #e9e2d6; --bs-btn-active-color: #302b28; }

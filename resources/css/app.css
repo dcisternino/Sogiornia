@@ -1,30 +1,16 @@
-/* Bootstrap */
+/* Carica Bootstrap prima delle personalizzazioni del marchio. */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-/* ---------------------------------
-BASE
---------------------------------- */
-/* CSS Variabili - variabili colore*/
+/* Colori, struttura e tipografia condivisi. */
 @import './base/variables.css';
-
-/* CSS Globale - body, a*/
 @import './base/global.css';
-
-/* CSS Tipografia - font, h1:h6 */
 @import './base/typography.css';
 
-/* ---------------------------------
-COMPONENTI
---------------------------------- */
-/* Navbar */
+/* Componenti della navigazione, dei moduli e delle schede. */
 @import './components/navbar.css';
-
-/* Navbar */
 @import './components/buttons.css';
-
-/* Navbar */
 @import './components/cards.css';
-
-/* Navbar */
 @import './components/forms.css';
+
+/* Composizione della landing page e anteprima illustrativa della guida. */
+@import './components/landing.css';

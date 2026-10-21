@@ -1,38 +1,20 @@
 @extends('layouts.guest')
 
-@section('title', $section['title'])
+@section('title', $section['title'].' · '.$propertyName)
 
+{{-- Dettaglio di una sezione appartenente alla whitelist della guida corrente. --}}
 @section('content')
+<div class="container py-5 guide-container">
+    {{-- Collegamento di ritorno che conserva il contesto della stanza. --}}
+    <a class="back-link" href="{{ $token ? route('guide.index', ['token' => $token]) : route('guest-home') }}">← Torna alla guida</a>
 
-<div class="container py-5">
+    {{-- Titolo e contesto della struttura, senza dati di gestione. --}}
+    <article class="sg-card mt-4 p-4 p-md-5">
+        <span class="eyebrow">{{ $propertyName }}</span>
+        <h1 class="mt-3 mb-4">{{ $section['title'] }}</h1>
 
-    <a href="{{ route('guest-home') }}">
-        ← Torna alla guida
-    </a>
-
-    <div class="sg-card mt-4">
-
-        <h1>
-            {{ $section['icon'] }}
-            {{ $section['title'] }}
-        </h1>
-
-        @foreach ($section['content'] as $label => $value)
-
-        <div class="mb-3">
-
-            <strong>{{ $label }}</strong>
-
-            <p class="mb-0">
-                {{ $value }}
-            </p>
-
-        </div>
-
-        @endforeach
-
-    </div>
-
+        {{-- Testo escapato con conservazione degli a capo inseriti dall'host. --}}
+        <div class="preserve-lines section-content">{{ $section['content'] }}</div>
+    </article>
 </div>
-
 @endsection
