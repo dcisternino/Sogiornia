@@ -21,6 +21,6 @@ class OnboardingController extends Controller
             'room_id' => ['nullable', 'integer', Rule::exists(Room::class, 'id')->where(fn (Builder $query) => $query->where('property_id', $request->integer('property_id'))->whereNull('archived_at'))],
         ]);
 
-        return view('pages.host.setup', $onboarding->forHost($request->user(), isset($data['property_id']) ? (int) $data['property_id'] : null, isset($data['room_id']) ? (int) $data['room_id'] : null));
+        return view('pages.host.setup', $onboarding->forHost($request->user(), isset($data['property_id']) ? (int) $data['property_id'] : null, isset($data['room_id']) ? (int) $data['room_id'] : null, $request->session()->get('onboarding.word_templates', [])));
     }
 }

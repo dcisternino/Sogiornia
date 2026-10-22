@@ -4,10 +4,11 @@
 {{-- Messaggio pronto nella lingua dell'ospite, inviato solo tramite il canale scelto dall'host. --}}
 @section('content')
 <div class="container py-5 form-container workspace">
-    <a class="back-link" href="{{ route('host.stays.index', [$property, $room]) }}">← Soggiorni di {{ $room->name }}</a>
+    <a class="back-link" href="{{ $setupNavigation->back('host.stays.index', [$property, $room]) }}">@if($setupNavigation->active())← Torna alla configurazione guidata @else ← Soggiorni di {{ $room->name }} @endif</a>
     <h1 class="mt-4">Condividi la guida</h1>
     <p class="text-muted-custom">{{ $property->name }} · {{ $room->name }} · {{ $stay->reference }}</p>
-    <form method="GET" action="{{ route('host.stays.share', [$property, $room, $stay]) }}" class="sg-card mb-4">
+    <form method="GET" action="{{ $setupNavigation->url('host.stays.share', [$property, $room, $stay]) }}" class="sg-card mb-4">
+        <x-onboarding-context />
         <label class="form-label" for="share-language">Lingua dell'ospite</label><div class="d-flex flex-wrap gap-2"><select id="share-language" name="lang" class="form-select share-language">
             @foreach(config('guest.locales') as $code => $language)<option value="{{ $code }}" @selected($locale === $code)>{{ $language['name'] }}</option>@endforeach
         </select><button class="btn btn-outline-secondary" type="submit">Prepara messaggio</button></div>

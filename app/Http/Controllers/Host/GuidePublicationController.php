@@ -8,6 +8,7 @@ use App\Models\Property;
 use App\Services\GuidePublication;
 use App\Services\GuideReview;
 use App\Services\GuideSnapshot;
+use App\Services\OnboardingNavigation;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Gate;
 /** Consente all'host proprietario di revisionare, approvare e consultare le versioni della guida. */
 class GuidePublicationController extends Controller
 {
+    public function __construct(private OnboardingNavigation $navigation) {}
+
     public function show(Property $property, GuidePublication $publication, GuideSnapshot $snapshots, GuideReview $review): View
     {
         Gate::authorize('view', $property);
@@ -26,7 +29,7 @@ class GuidePublicationController extends Controller
         return view('pages.host.guides.review', [
             'property' => $property, 'workspace' => $workspace, 'draft' => $draft,
             'published' => $published, 'changes' => $review->changes($published?->payload, $draft),
-            'versions' => $property->guideVersions()->select('id', 'property_id', 'number', 'published_at', 'published_by')->with('publisher:id,name')->orderByDesc('number')->paginate(10),
+            'versions' => $property->guideVersions()->select('id', 'property_id', 'number', 'published_at', 'published_by')->with('publisher:id,name')->orderByDesc('number')->paginate(10)->withQueryString(),
         ]);
     }
 
@@ -36,7 +39,7 @@ class GuidePublicationController extends Controller
         $data = $request->validated();
         $version = $publication->publish($property, $request->user(), (int) $data['revision'], isset($data['base_version']) ? (int) $data['base_version'] : null);
 
-        return redirect()->route('host.guide.show', $property)->with('status', 'Guida pubblicata: versione '.$version->number.'. Gli ospiti vedono i contenuti approvati.');
+        return ($this->navigation->active() ? redirect($this->navigation->setupUrl($property)) : redirect()->route('host.guide.show', $property))->with('status', 'Guida pubblicata: versione '.$version->number.'. Gli ospiti vedono i contenuti approvati.');
     }
 
     public function version(Property $property, int $version): View

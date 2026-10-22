@@ -4,14 +4,14 @@
 {{-- Scelta della stanza e creazione del relativo link riservato. --}}
 @section('content')
 <div class="container py-5 form-container workspace">
-    <a class="back-link" href="{{ route('host.calendar.index') }}">← Soggiorni</a>
+    <a class="back-link" href="{{ $setupNavigation->back('host.calendar.index') }}">@if($setupNavigation->active())← Torna alla configurazione guidata @else ← Soggiorni @endif</a>
     <h1 class="mt-4">Prepara un nuovo soggiorno</h1>
     <p class="text-muted-custom">Scegli dove accogliere i tuoi ospiti. Creeremo un link distinto per questo soggiorno.</p>
     @if($properties->isEmpty())
-        <div class="sg-card empty-state"><h2 class="h4">Prima serve una stanza</h2><p>Crea una struttura e aggiungi una stanza, oppure ripristina quelle archiviate.</p><a class="btn btn-primary" href="{{ route('host.properties.index') }}">Vai alle strutture</a></div>
+        <div class="sg-card empty-state"><h2 class="h4">Prima serve una stanza</h2><p>Crea una struttura e aggiungi una stanza, oppure ripristina quelle archiviate.</p><a class="btn btn-primary" href="{{ $setupNavigation->url('host.properties.index') }}">Vai alle strutture</a></div>
     @else
-        <form class="sg-card mt-4" method="POST" action="{{ route('host.bookings.store') }}">
-            @csrf
+        <form class="sg-card mt-4" method="POST" action="{{ $setupNavigation->url('host.bookings.store') }}">
+            @csrf <x-onboarding-context />
             <div class="mb-4">
                 <label class="form-label" for="room_id">Struttura e stanza *</label>
                 <select id="room_id" name="room_id" class="form-select @error('room_id') is-invalid @enderror" required @error('room_id') aria-invalid="true" aria-describedby="room_id-feedback" @enderror>
@@ -25,7 +25,7 @@
                 @error('room_id')<div class="invalid-feedback" id="room_id-feedback">{{ $message }}</div>@enderror
             </div>
             <x-stay-fields :arrival-date="$defaults['arrival_date']" :departure-date="$defaults['departure_date']" />
-            <div class="form-actions"><button class="btn btn-primary" type="submit">Crea soggiorno e link</button><a href="{{ route('host.calendar.index') }}" class="btn btn-outline-secondary">Annulla</a></div>
+            <div class="form-actions"><button class="btn btn-primary" type="submit">Crea soggiorno e link</button><a href="{{ $setupNavigation->back('host.calendar.index') }}" class="btn btn-outline-secondary">@if($setupNavigation->active())← Torna alla configurazione guidata @else Annulla @endif</a></div>
         </form>
     @endif
 </div>

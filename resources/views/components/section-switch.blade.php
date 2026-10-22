@@ -1,7 +1,7 @@
 @props(['property', 'section', 'setting', 'label', 'checked'])
 {{-- Interruttore accessibile con salvataggio immediato e alternativa senza JavaScript. --}}
-<form {{ $attributes->class(['section-switch']) }} method="POST" action="{{ route('host.sections.settings', [$property, $section]) }}">
-    @csrf @method('PATCH')
+<form {{ $attributes->class(['section-switch']) }} method="POST" action="{{ $setupNavigation->url('host.sections.settings', [$property, $section]) }}">
+    @csrf <x-onboarding-context /> @method('PATCH')
     <input type="hidden" name="setting" value="{{ $setting }}"><input type="hidden" name="value" value="0">
     <div class="form-check form-switch mb-0">
         <input class="form-check-input" role="switch" type="checkbox" id="{{ $setting }}-{{ $section->id }}" name="value" value="1" @checked($checked) @disabled(!auth()->user()->canWrite()) data-submit-on-change>

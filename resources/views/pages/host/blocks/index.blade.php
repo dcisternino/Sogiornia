@@ -5,14 +5,14 @@
 @section('content')
 <div class="container py-5 workspace">
     <x-guide-draft-notice :property="$property" />
-    <a class="back-link" href="{{ route('host.sections.index', $property) }}">← Sezioni di {{ $property->name }}</a>
+    <a class="back-link" href="{{ $setupNavigation->back('host.sections.index', $property) }}">@if($setupNavigation->active())← Torna alla configurazione guidata @else ← Sezioni di {{ $property->name }} @endif</a>
     <div class="page-heading mt-4"><div><span class="eyebrow">Contenuti della sezione</span><h1 class="mt-2">{{ $section->title }}</h1><p class="text-muted-custom">Aggiungi contatti, luoghi o informazioni. Dopo la pubblicazione, gli ospiti li vedranno nell'ordine indicato.</p></div>
-        @if(auth()->user()->canWrite())<a class="btn btn-outline-secondary" href="{{ route('host.sections.edit', [$property, $section]) }}">Modifica titolo e introduzione</a>@endif
+        @if(auth()->user()->canWrite())<a class="btn btn-outline-secondary" href="{{ $setupNavigation->url('host.sections.edit', [$property, $section]) }}">Modifica titolo e introduzione</a>@endif
     </div>
     @if(auth()->user()->canWrite())
         <div class="sg-card mb-4"><h2 class="h5">Aggiungi un contenuto</h2><p class="small text-muted-custom">Ogni contenuto ha titolo, descrizione e traduzioni. Per organizzare più luoghi puoi inserire un titolo di gruppo.</p><div class="d-flex flex-wrap gap-2">
             @foreach(\App\Models\SectionBlock::TYPES as $type => $label)
-                <a class="btn btn-outline-secondary" href="{{ route('host.blocks.create', ['property' => $property, 'section' => $section, 'type' => $type]) }}">+ {{ $label }}</a>
+                <a class="btn btn-outline-secondary" href="{{ $setupNavigation->url('host.blocks.create', ['property' => $property, 'section' => $section, 'type' => $type]) }}">+ {{ $label }}</a>
             @endforeach
         </div></div>
     @endif
@@ -25,14 +25,14 @@
                     @if($block->phone)<p class="small mt-2 mb-0">Telefono: {{ $block->phone }}</p>@endif
                     @if($block->address)<p class="small mt-2 mb-0">{{ $block->address }}</p>@endif
                 </div>
-                @if($block->image_path)<img class="block-management-photo" src="{{ route('host.blocks.image', [$property, $section, $block]) }}" alt="{{ $block->image_alt ?: $block->title }}" loading="lazy">@endif</div>
+                @if($block->image_path)<img class="block-management-photo" src="{{ $setupNavigation->url('host.blocks.image', [$property, $section, $block]) }}" alt="{{ $block->image_alt ?: $block->title }}" loading="lazy">@endif</div>
                 @if(auth()->user()->canWrite())
                     <div class="d-flex flex-wrap gap-2 mt-3">
-                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('host.blocks.edit', [$property, $section, $block]) }}">Modifica<span class="visually-hidden"> {{ $block->title }}</span></a>
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ $setupNavigation->url('host.blocks.edit', [$property, $section, $block]) }}">Modifica<span class="visually-hidden"> {{ $block->title }}</span></a>
                         @foreach(['up' => '↑ Sposta su', 'down' => '↓ Sposta giù', 'toggle' => ($block->is_active ? 'Disattiva' : 'Attiva')] as $action => $label)
-                            <form method="POST" action="{{ route('host.blocks.order', [$property, $section, $block]) }}">@csrf @method('PATCH')<input type="hidden" name="action" value="{{ $action }}"><button class="btn btn-sm btn-outline-secondary" type="submit" aria-label="{{ $label }}: {{ $block->title }}" @disabled(($action === 'up' && $blocks->currentPage() === 1 && $loop->parent->first) || ($action === 'down' && !$blocks->hasMorePages() && $loop->parent->last))>{{ $label }}</button></form>
+                            <form method="POST" action="{{ $setupNavigation->url('host.blocks.order', [$property, $section, $block]) }}">@csrf <x-onboarding-context /> @method('PATCH')<input type="hidden" name="action" value="{{ $action }}"><button class="btn btn-sm btn-outline-secondary" type="submit" aria-label="{{ $label }}: {{ $block->title }}" @disabled(($action === 'up' && $blocks->currentPage() === 1 && $loop->parent->first) || ($action === 'down' && !$blocks->hasMorePages() && $loop->parent->last))>{{ $label }}</button></form>
                         @endforeach
-                        <form method="POST" action="{{ route('host.blocks.destroy', [$property, $section, $block]) }}" data-confirm="Eliminare questo contenuto dalla bozza? La versione pubblicata resta invariata."><input type="hidden" name="_method" value="DELETE">@csrf<button class="btn btn-sm btn-outline-danger" type="submit">Elimina<span class="visually-hidden"> {{ $block->title }}</span></button></form>
+                        <form method="POST" action="{{ $setupNavigation->url('host.blocks.destroy', [$property, $section, $block]) }}" data-confirm="Eliminare questo contenuto dalla bozza? La versione pubblicata resta invariata."><input type="hidden" name="_method" value="DELETE">@csrf <x-onboarding-context /><button class="btn btn-sm btn-outline-danger" type="submit">Elimina<span class="visually-hidden"> {{ $block->title }}</span></button></form>
                     </div>
                 @endif
             </article>

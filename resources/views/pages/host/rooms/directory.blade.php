@@ -9,7 +9,7 @@
     <x-property-directory-filter :properties="$properties" :selected-property="$selectedProperty" index-route="host.room-directory.index" create-route="host.rooms.create" create-label="Aggiungi stanza" />
     <div class="row g-4">
         @forelse($rooms as $room)<div class="col-md-6 col-xl-4"><x-room-card :property="$room->property" :room="$room" :show-property="true" /></div>
-        @empty<div class="col-12"><div class="sg-card empty-state"><h2 class="h4">Nessuna stanza da mostrare</h2><p class="text-muted-custom">Scegli un'altra struttura oppure aggiungi la prima stanza.</p>@if($properties->isEmpty())<a class="btn btn-outline-secondary" href="{{ route('host.properties.index') }}">Vai alle strutture</a>@endif</div></div>@endforelse
+        @empty<div class="col-12"><div class="sg-card empty-state"><h2 class="h4">Nessuna stanza da mostrare</h2><p class="text-muted-custom">Scegli un'altra struttura oppure aggiungi la prima stanza.</p>@if($properties->isEmpty())<a class="btn btn-outline-secondary" href="{{ $setupNavigation->url('host.properties.index') }}">Vai alle strutture</a>@endif</div></div>@endforelse
     </div>
     <div class="mt-4">{{ $rooms->links() }}</div>
 </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Host\StayRequest;
 use App\Models\Property;
 use App\Models\Stay;
+use App\Services\OnboardingNavigation;
 use App\Services\StayScheduler;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -16,6 +17,8 @@ use Illuminate\Validation\Rule;
 /** Crea link distinti per soggiorno e mostra lo storico della stanza. */
 class StayController extends Controller
 {
+    public function __construct(private OnboardingNavigation $navigation) {}
+
     public function index(Request $request, Property $property, int $room): View
     {
         Gate::authorize('view', $property);
@@ -49,7 +52,7 @@ class StayController extends Controller
         abort_if($property->archived_at !== null || $room->archived_at !== null, 422, 'Ripristina struttura e stanza prima di creare un soggiorno.');
         $scheduler->save($room, $request->stayData(), $request->boolean('overlap_confirmed'));
 
-        return redirect()->route('host.stays.index', [$property, $room])->with('status', 'Soggiorno creato. Il link sarà valido dall’arrivo alla partenza alle 10:00.');
+        return ($this->navigation->active() ? redirect($this->navigation->setupUrl($property, $room)) : redirect()->route('host.stays.index', [$property, $room]))->with('status', 'Soggiorno creato. Il link sarà valido dall’arrivo alla partenza alle 10:00.');
     }
 
     /** Modifica le date senza rigenerare il link e senza riattivare un accesso revocato. */
@@ -70,6 +73,6 @@ class StayController extends Controller
         $stay = $room->stays()->findOrFail($stay);
         $scheduler->save($room, $request->stayData(), $request->boolean('overlap_confirmed'), $stay);
 
-        return redirect()->route('host.stays.index', [$property, $room])->with('status', 'Soggiorno aggiornato. Il link resta lo stesso e segue subito le nuove date; eventuali revoche restano valide.');
+        return ($this->navigation->active() ? redirect($this->navigation->setupUrl($property, $room)) : redirect()->route('host.stays.index', [$property, $room]))->with('status', 'Soggiorno aggiornato. Il link resta lo stesso e segue subito le nuove date; eventuali revoche restano valide.');
     }
 }

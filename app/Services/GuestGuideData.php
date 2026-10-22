@@ -7,7 +7,7 @@ use App\Models\Room;
 /** Costruisce gli stessi contenuti e criteri di visibilità per guida ospite e anteprima privata. */
 class GuestGuideData
 {
-    public function __construct(private GuideSnapshot $snapshots, private PublishedGuideContent $published) {}
+    public function __construct(private GuideSnapshot $snapshots, private PublishedGuideContent $published, private OnboardingNavigation $navigation) {}
 
     /** @return array<string, mixed> */
     public function forRoom(Room $room, ?string $token): array
@@ -41,7 +41,7 @@ class GuestGuideData
 
             return [$section['slug'] => [
                 'title' => $title['value'], 'content' => $content['value'], 'blocks' => $blocks,
-                'url' => $preview ? route('host.preview.show', ['property' => $room->property_id, 'room' => $room, 'section' => $section['slug'], 'lang' => $locale]) : route('guide.show', ['token' => $token, 'section' => $section['slug'], 'lang' => $locale]),
+                'url' => $preview ? $this->navigation->url('host.preview.show', ['property' => $room->property_id, 'room' => $room, 'section' => $section['slug'], 'lang' => $locale]) : route('guide.show', ['token' => $token, 'section' => $section['slug'], 'lang' => $locale]),
                 'image_url' => $section['image_path'] ? ($preview ? route('host.sections.image', [$room->property_id, $section['id']]) : route('guide.image', ['token' => $token, 'section' => $section['slug']])) : null,
                 'image_alt' => $alt['value'], 'link_url' => $section['link_url'], 'link_label' => $label['value'], 'phone' => $section['phone'],
                 'is_fallback' => $title['fallback'] || $content['fallback'] || ($section['image_path'] && $alt['fallback']) || ($section['link_url'] && $label['fallback']),
@@ -54,8 +54,8 @@ class GuestGuideData
             'welcomeMessage' => $welcome['value'], 'roomName' => $roomData['name'],
             'roomImageUrl' => $roomData['image_path'] ? ($preview ? route('host.rooms.image', [$room->property_id, $room]) : route('guide.room-image', $token)) : null,
             'token' => $token, 'isDemo' => false, 'isPreview' => $preview,
-            'previewExitUrl' => route('host.rooms.index', $room->property_id),
-            'homeUrl' => $preview ? route('host.preview.index', ['property' => $room->property_id, 'room' => $room, 'lang' => $locale]) : route('guide.index', ['token' => $token, 'lang' => $locale]),
+            'previewExitUrl' => $preview ? $this->navigation->back('host.rooms.index', $room->property_id) : route('host.rooms.index', $room->property_id),
+            'homeUrl' => $preview ? $this->navigation->url('host.preview.index', ['property' => $room->property_id, 'room' => $room, 'lang' => $locale]) : route('guide.index', ['token' => $token, 'lang' => $locale]),
             'hasFallback' => $welcome['fallback'] || collect($sections)->contains('title_fallback', true),
             'sections' => $sections,
         ];

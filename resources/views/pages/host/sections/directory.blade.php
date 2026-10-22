@@ -10,7 +10,7 @@
     <p class="small text-muted-custom"><strong>Attiva</strong> include la sezione nella bozza nelle stanze abilitate. <strong>Condivisa</strong> la abilita in tutte le stanze della stessa struttura, anche quelle nuove.</p>
     <div class="d-grid gap-3">
         @forelse($sections as $section)<x-section-management-card :property="$section->property" :section="$section" :show-property="true" />
-        @empty<div class="sg-card empty-state"><h2 class="h4">Nessuna sezione da mostrare</h2><p class="text-muted-custom">Scegli un'altra struttura oppure crea una sezione e aggiungi i suoi contenuti.</p>@if($properties->isEmpty())<a class="btn btn-outline-secondary" href="{{ route('host.properties.index') }}">Vai alle strutture</a>@endif</div>@endforelse
+        @empty<div class="sg-card empty-state"><h2 class="h4">Nessuna sezione da mostrare</h2><p class="text-muted-custom">Scegli un'altra struttura oppure crea una sezione e aggiungi i suoi contenuti.</p>@if($properties->isEmpty())<a class="btn btn-outline-secondary" href="{{ $setupNavigation->url('host.properties.index') }}">Vai alle strutture</a>@endif</div>@endforelse
     </div>
     <div class="mt-4">{{ $sections->links() }}</div>
 </div>

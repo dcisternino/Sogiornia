@@ -21,7 +21,7 @@ class SectionBlockController extends Controller
         Gate::authorize('view', $property);
         $section = $property->sections()->findOrFail($section);
 
-        return view('pages.host.blocks.index', ['property' => $property, 'section' => $section, 'blocks' => $section->blocks()->paginate(30)]);
+        return view('pages.host.blocks.index', ['property' => $property, 'section' => $section, 'blocks' => $section->blocks()->paginate(30)->withQueryString()]);
     }
 
     public function create(Request $request, Property $property, int $section): View

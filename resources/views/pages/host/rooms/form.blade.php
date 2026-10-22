@@ -5,12 +5,12 @@
 @section('content')
 <div class="container py-5 form-container workspace">
     <x-guide-draft-notice :property="$property" />
-    <a class="back-link" href="{{ route('host.rooms.index', $property) }}">← Stanze di {{ $property->name }}</a>
+    <a class="back-link" href="{{ $setupNavigation->back('host.rooms.index', $property) }}">@if($setupNavigation->active())← Torna alla configurazione guidata @else ← Stanze di {{ $property->name }} @endif</a>
     <span class="eyebrow d-block mt-4">UNA GUIDA SU MISURA</span>
     <h1 class="mt-2">{{ $room->exists ? 'Modifica '.$room->name : 'Aggiungi una stanza' }}</h1>
     <p class="text-muted-custom">Dai un nome alla stanza, scegli una foto e abilita le informazioni che vedranno i suoi ospiti.</p>
-    <form class="sg-card editor-form" method="POST" enctype="multipart/form-data" action="{{ $room->exists ? route('host.rooms.update', [$property, $room]) : route('host.rooms.store', $property) }}">
-        @csrf
+    <form class="sg-card editor-form" method="POST" enctype="multipart/form-data" action="{{ $room->exists ? $setupNavigation->url('host.rooms.update', [$property, $room]) : $setupNavigation->url('host.rooms.store', $property) }}">
+        @csrf <x-onboarding-context />
         @if ($room->exists) @method('PUT') @endif
         {{-- Identificazione della stanza e nota riservata all'host. --}}
         <fieldset class="editor-section">
@@ -22,7 +22,7 @@
         <fieldset class="editor-section">
             <legend><span class="editor-number">2</span> La foto di benvenuto <small>facoltativa</small></legend>
             <p class="small text-muted-custom">Sostituisce l'illustrazione iniziale nel link del soggiorno. Consigliamo una foto orizzontale.</p>
-            <img class="room-photo-preview mb-3" id="room-photo-preview" src="{{ $room->exists && $room->photo ? route('host.rooms.image', [$property, $room]) : asset('image/guest-welcome.webp') }}" alt="Anteprima della copertina della stanza">
+            <img class="room-photo-preview mb-3" id="room-photo-preview" src="{{ $room->exists && $room->photo ? $setupNavigation->url('host.rooms.image', [$property, $room]) : asset('image/guest-welcome.webp') }}" alt="Anteprima della copertina della stanza">
             <label class="form-label" for="image">{{ $room->exists && $room->photo ? 'Sostituisci la foto' : 'Carica una foto' }}</label>
             <input type="file" name="image" id="image" accept="image/jpeg,image/png,image/webp" class="form-control @error('image') is-invalid @enderror" data-image-preview="room-photo-preview" aria-describedby="image-feedback" @error('image') aria-invalid="true" @enderror>
             <div id="image-feedback" class="{{ $errors->has('image') ? 'invalid-feedback' : 'form-text' }}">@error('image'){{ $message }}@else JPEG, PNG o WebP, massimo 5 MB e 4000 × 4000 pixel. Dopo un errore seleziona nuovamente il file.@enderror</div>
@@ -46,11 +46,11 @@
                     <div class="onboarding-note"><strong>Non ci sono ancora sezioni.</strong><p class="mb-0 mt-1">Salva la stanza, crea i contenuti dalla struttura e torna qui per selezionarli.</p></div>
                 @endforelse
             </div>
-            <p class="small text-muted-custom mt-3 mb-0">Le sezioni condivise si applicano automaticamente. Quelle disattivate restano nascoste anche se selezionate. Gestisci questi interruttori dalla <a href="{{ route('host.sections.index', $property) }}">pagina sezioni</a>.</p>
+            <p class="small text-muted-custom mt-3 mb-0">Le sezioni condivise si applicano automaticamente. Quelle disattivate restano nascoste anche se selezionate. Gestisci questi interruttori dalla <a href="{{ $setupNavigation->url('host.sections.index', $property) }}">pagina sezioni</a>.</p>
             @error('sections')<p class="text-danger small">{{ $message }}</p>@enderror
             @error('sections.*')<p class="text-danger small">{{ $message }}</p>@enderror
         </fieldset>
-        <div class="form-actions editor-actions"><button class="btn btn-primary" type="submit">{{ $room->exists ? 'Salva bozza' : 'Crea stanza in bozza' }}</button><a class="btn btn-outline-secondary" href="{{ route('host.rooms.index', $property) }}">Annulla</a></div>
+        <div class="form-actions editor-actions"><button class="btn btn-primary" type="submit">{{ $room->exists ? 'Salva bozza' : 'Crea stanza in bozza' }}</button><a class="btn btn-outline-secondary" href="{{ $setupNavigation->back('host.rooms.index', $property) }}">@if($setupNavigation->active())← Torna alla configurazione guidata @else Annulla @endif</a></div>
     </form>
 </div>
 @endsection

@@ -16,7 +16,7 @@
                 <x-guest-language-menu />
             </header>
             {{-- Anteprima privata: non genera né pubblica un link di soggiorno. --}}
-            @if($isPreview)<div class="guest-preview-note" role="status"><strong>{{ __('guest.preview_banner') }}</strong><p>{{ __('guest.preview_help') }}</p><a href="{{ $previewExitUrl }}">{{ __('guest.preview_exit') }} ↗</a></div>@endif
+            @if($isPreview)<div class="guest-preview-note" role="status"><strong>{{ __('guest.preview_banner') }}</strong><p>{{ __('guest.preview_help') }}</p><a href="{{ $previewExitUrl }}">{{ ($setupNavigation ?? null)?->active() ? 'Torna alla configurazione guidata' : __('guest.preview_exit') }} ↗</a></div>@endif
 
             @yield('content')
 

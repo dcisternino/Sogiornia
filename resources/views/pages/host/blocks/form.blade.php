@@ -5,11 +5,11 @@
 @section('content')
 <div class="container py-5 form-container workspace">
     <x-guide-draft-notice :property="$property" />
-    <a class="back-link" href="{{ route('host.blocks.index', [$property, $section]) }}">← {{ $section->title }}</a>
+    <a class="back-link" href="{{ $setupNavigation->back('host.blocks.index', [$property, $section]) }}">@if($setupNavigation->active())← Torna alla configurazione guidata @else ← {{ $section->title }} @endif</a>
     <h1 class="mt-4">{{ $block->exists ? 'Modifica contenuto' : 'Aggiungi contenuto' }}</h1>
     <p class="text-muted-custom">Scegli il tipo e compila i dati in italiano. Le traduzioni sono facoltative.</p>
-    <form class="sg-card editor-form mt-4" method="POST" enctype="multipart/form-data" action="{{ $block->exists ? route('host.blocks.update', [$property, $section, $block]) : route('host.blocks.store', [$property, $section]) }}" data-block-editor>
-        @csrf
+    <form class="sg-card editor-form mt-4" method="POST" enctype="multipart/form-data" action="{{ $block->exists ? $setupNavigation->url('host.blocks.update', [$property, $section, $block]) : $setupNavigation->url('host.blocks.store', [$property, $section]) }}" data-block-editor>
+        @csrf <x-onboarding-context />
         @if($block->exists) @method('PUT') @endif
         <div class="mb-3"><label class="form-label" for="type">Tipo di contenuto</label><select class="form-select @error('type') is-invalid @enderror" name="type" id="type" data-block-type required>
             @foreach(\App\Models\SectionBlock::TYPES as $value => $label)<option value="{{ $value }}" @selected(old('type', $block->type) === $value)>{{ $label }}</option>@endforeach
@@ -22,13 +22,13 @@
         <div data-block-fields="place"><x-input name="address" label="Indirizzo del luogo" :value="$block->address" maxlength="500" /></div>
         {{-- Foto private, mai esposte direttamente dalla cartella public. --}}
         <fieldset class="my-4"><legend class="h5">Foto (facoltativa)</legend>
-            @if($block->image_path)<img class="section-image mb-3" src="{{ route('host.blocks.image', [$property, $section, $block]) }}" alt="{{ $block->image_alt ?: $block->title }}"><div class="form-check mb-3"><input class="form-check-input" id="remove_image" name="remove_image" value="1" type="checkbox" @checked(old('remove_image'))><label class="form-check-label" for="remove_image">Rimuovi la foto attuale</label></div>@endif
+            @if($block->image_path)<img class="section-image mb-3" src="{{ $setupNavigation->url('host.blocks.image', [$property, $section, $block]) }}" alt="{{ $block->image_alt ?: $block->title }}"><div class="form-check mb-3"><input class="form-check-input" id="remove_image" name="remove_image" value="1" type="checkbox" @checked(old('remove_image'))><label class="form-check-label" for="remove_image">Rimuovi la foto attuale</label></div>@endif
             <label class="form-label" for="image">Carica foto</label><input class="form-control @error('image') is-invalid @enderror" name="image" id="image" type="file" accept="image/jpeg,image/png,image/webp">@error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
             <p class="small text-muted-custom mt-2">JPEG, PNG o WebP, massimo 5 MB e 4000 × 4000 pixel.</p><x-input name="image_alt" label="Descrizione della foto" :value="$block->image_alt" maxlength="255" />
         </fieldset>
         <x-guest-content-translations :record="$block" type="block" />
         <input type="hidden" name="is_active" value="0"><div class="form-check my-4"><input class="form-check-input" id="is_active" name="is_active" type="checkbox" value="1" @checked(old('is_active', $block->is_active))><label class="form-check-label" for="is_active">Mostra questo contenuto nella guida</label></div>
-        <div class="form-actions"><button class="btn btn-primary" type="submit">Salva bozza</button><a class="btn btn-outline-secondary" href="{{ route('host.blocks.index', [$property, $section]) }}">Annulla</a></div>
+        <div class="form-actions"><button class="btn btn-primary" type="submit">Salva bozza</button><a class="btn btn-outline-secondary" href="{{ $setupNavigation->back('host.blocks.index', [$property, $section]) }}">@if($setupNavigation->active())← Torna alla configurazione guidata @else Annulla @endif</a></div>
     </form>
 </div>
 @endsection

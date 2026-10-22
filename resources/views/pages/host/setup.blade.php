@@ -14,21 +14,20 @@
             <noscript><p class="small mt-2">Quando cambi struttura scegli “Prima stanza disponibile”, poi premi Mostra.</p></noscript>
         </form>
     @endif
-    <section class="sg-card mb-4"><h2 class="h5">{{ $completed }} di {{ count($steps) }} passaggi di preparazione completati</h2><div class="progress" role="progressbar" aria-label="Preparazione della guida" aria-valuenow="{{ $completed }}" aria-valuemin="0" aria-valuemax="{{ count($steps) }}"><div class="progress-bar" style="width: {{ $completed * 100 / count($steps) }}%"></div></div><p class="small text-muted-custom mt-3 mb-0">@if($room)Stai configurando {{ $property->name }} · {{ $room->name }}.@else Scegli o crea una struttura e una stanza per preparare la guida.@endif Le strutture e le stanze archiviate non sono incluse.</p></section>
-    @if($property && $room && !$guideEnabled)<div class="setup-tip mb-4"><strong>La guida è sospesa.</strong><p class="mb-0">Puoi preparare i contenuti e guardarli in anteprima. Prima di condividere, riattiva la guida dalla <a href="{{ route('host.rooms.index', $property) }}">gestione stanze e struttura</a>.</p></div>@endif
+    {{-- Quattro requisiti necessari; Word facoltativo e invio esterno non falsano la percentuale. --}}
+    <section class="sg-card mb-4"><h2 class="h5">{{ $completed }} di {{ $total }} requisiti di preparazione completati</h2><div class="progress" role="progressbar" aria-label="Preparazione della guida" aria-valuenow="{{ $completed }}" aria-valuemin="0" aria-valuemax="{{ $total }}"><div class="progress-bar" style="width: {{ $completed * 100 / $total }}%"></div></div><p class="small text-muted-custom mt-3 mb-0">@if($room)Stai configurando {{ $property->name }} · {{ $room->name }}.@else Scegli o crea una struttura e una stanza per preparare la guida.@endif Il modello Word è facoltativo. La condivisione tramite WhatsApp o email non viene registrata come invio.</p></section>
+    @if($property && $room && !$guideEnabled)<div class="setup-tip mb-4"><strong>La guida è sospesa.</strong><p class="mb-0">Puoi preparare i contenuti e guardarli in anteprima. Prima di condividere, riattiva la guida dalla <a href="{{ route('host.rooms.index', [$property, 'from' => 'setup', 'setup_room_id' => $room->id]) }}">gestione stanze e struttura</a>.</p></div>@endif
+    @if($hasChanges && $hasPublishedRoom)<div class="setup-tip mb-4"><strong>Ci sono modifiche in bozza.</strong><p class="mb-0">Gli ospiti continuano a vedere l’ultima versione pubblicata. Rivedi e pubblica dal passaggio 4 per aggiornarla.</p></div>@endif
     <ol class="list-unstyled d-grid gap-3">
         @foreach($steps as $step)
-            <li class="sg-card setup-step"><div><span class="eyebrow">Passaggio {{ $loop->iteration }} · {{ $step['complete'] ? 'Completato' : 'Da completare' }}</span><h2 class="h4 mt-2">{{ $step['title'] }}</h2><p class="text-muted-custom mb-0">{{ $step['description'] }}</p></div><div class="d-flex flex-wrap gap-2">
-                @if($step['url'] && auth()->user()->canWrite())<a class="btn {{ $step['complete'] ? 'btn-outline-secondary' : 'btn-primary' }}" href="{{ $step['url'] }}">{{ $step['action'] }}</a>@elseif(!$step['url'])<span class="small text-muted-custom">Completa prima i passaggi precedenti.</span>@endif
-                @if($loop->iteration === 3 && $room)
-                    @if(auth()->user()->canWrite())<a class="btn btn-outline-secondary" href="{{ route('host.rooms.edit', [$property, $room]) }}">Scegli sezioni della stanza</a>@endif
-                    <a class="btn btn-outline-secondary" href="{{ route('host.preview.index', [$property, $room]) }}">Anteprima guida ↗</a>
-                @endif
+            {{-- Ogni passaggio espone le azioni disponibili senza bloccare il percorso manuale. --}}
+            <li class="sg-card setup-step"><div><span class="eyebrow">Passaggio {{ $loop->iteration }} · {{ $step['status'] ?? ($step['complete'] ? 'Completato' : 'Da completare') }}</span><h2 class="h4 mt-2">{{ $step['title'] }}</h2><p class="text-muted-custom mb-0">{{ $step['description'] }}</p></div><div class="d-flex flex-wrap gap-2">
+                @foreach($step['actions'] as $action)
+                    @if(!$action['write'] || auth()->user()->canWrite())<a class="btn {{ $loop->first && !$step['complete'] ? 'btn-primary' : 'btn-outline-secondary' }}" href="{{ $action['url'] }}">{{ $action['label'] }}</a>@endif
+                @endforeach
+                @if(empty($step['actions']))<span class="small text-muted-custom">{{ $loop->last ? 'Servono contenuti pubblicati, una guida abilitata e un soggiorno non revocato o terminato.' : 'Crea prima la struttura'.($loop->iteration > 4 ? ' e una stanza.' : '.') }}</span>@endif
             </div></li>
         @endforeach
-        <li class="sg-card setup-step"><div><span class="eyebrow">Passaggio 5</span><h2 class="h4 mt-2">Condividi la guida</h2><p class="text-muted-custom mb-0">Scegli la lingua, controlla il messaggio e apri WhatsApp o email. La condivisione non viene registrata come invio avvenuto.</p></div>
-            @if($stay && $guideEnabled && $hasContent && $hasPublishedRoom)<a class="btn btn-primary" href="{{ route('host.stays.share', [$property, $room, $stay]) }}">Prepara messaggio</a>@else<span class="small text-muted-custom">Servono una guida pubblicata, contenuti visibili, un soggiorno non revocato e non terminato e una guida abilitata.</span>@endif
-        </li>
     </ol>
 </div>
 @endsection

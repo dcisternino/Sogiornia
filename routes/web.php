@@ -18,6 +18,7 @@ use App\Http\Controllers\Host\BookingController;
 use App\Http\Controllers\Host\DashboardController as HostDashboardController;
 use App\Http\Controllers\Host\GuestPreviewController;
 use App\Http\Controllers\Host\GuidePublicationController;
+use App\Http\Controllers\Host\GuideTemplateController;
 use App\Http\Controllers\Host\OnboardingController;
 use App\Http\Controllers\Host\PropertyController;
 use App\Http\Controllers\Host\PropertyImageController;
@@ -40,6 +41,7 @@ use App\Http\Controllers\Host\StayShareController;
 use App\Http\Controllers\Host\TranslationSuggestionController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\ShareOnboardingNavigation;
 use App\Http\Middleware\ValidatePasswordReset;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -123,7 +125,7 @@ Route::middleware(['auth', 'role:admin'])->group(function (): void {
 });
 
 // Applica proprietà dei dati e modalità in sola lettura a tutta l'area host.
-Route::middleware(['auth', 'role:host', 'host.write', 'guide.draft'])
+Route::middleware(['auth', 'role:host', 'host.write', ShareOnboardingNavigation::class, 'guide.draft'])
     ->where(['property' => '[0-9]+', 'room' => '[0-9]+', 'section' => '[0-9]+', 'stay' => '[0-9]+'])
     ->group(function (): void {
         // Mostra il calendario dei soggiorni attivi, programmati e passati.
@@ -136,6 +138,10 @@ Route::middleware(['auth', 'role:host', 'host.write', 'guide.draft'])
         Route::get('/host/sections', [SectionDirectoryController::class, 'index'])->name('host.section-directory.index');
         // Accompagna l'host nei passaggi di configurazione basandosi sui dati esistenti.
         Route::get('/host/setup', [OnboardingController::class, 'index'])->name('host.setup.index');
+        // Spiega come compilare il modello Word della propria struttura.
+        Route::get('/host/properties/{property}/guide-template', [GuideTemplateController::class, 'show'])->name('host.guide-template.show');
+        // Scarica un modello Word privato con i dati principali della struttura.
+        Route::get('/host/properties/{property}/guide-template/download', [GuideTemplateController::class, 'download'])->middleware('guide.privacy')->name('host.guide-template.download');
         // Produce bozze tradotte senza salvarle, con limite di richieste per utente autenticato.
         Route::post('/host/translation-suggestions', [TranslationSuggestionController::class, 'store'])->middleware(['throttle:10,1', 'guide.privacy'])->name('host.translations.store');
         // Prepara un soggiorno scegliendo una stanza delle proprie strutture.

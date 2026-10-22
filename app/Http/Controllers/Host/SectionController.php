@@ -24,7 +24,7 @@ class SectionController extends Controller
 
         return view('pages.host.sections.index', [
             'property' => $property,
-            'sections' => $property->sections()->with('settings')->withCount('blocks')->orderBy('title')->orderBy('id')->paginate(20),
+            'sections' => $property->sections()->with('settings')->withCount('blocks')->orderBy('title')->orderBy('id')->paginate(20)->withQueryString(),
         ]);
     }
 
