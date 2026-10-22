@@ -23,7 +23,7 @@
             {{-- Firma discreta in fondo alla guida. --}}
             <footer class="guest-footer">
                 {{ __('guest.footer_help') }}<br>
-                <a href="{{ route('welcome') }}">{{ __('guest.footer_signature') }}</a>
+                <a>{{ __('guest.footer_signature') }}</a>
             </footer>
         </div>
     </main>
