@@ -42,6 +42,12 @@ class Property extends Model
         return $this->hasMany(Room::class);
     }
 
+    /** Istantanee pubblicate, distinte dai contenuti di lavoro modificabili. */
+    public function guideVersions(): HasMany
+    {
+        return $this->hasMany(GuideVersion::class);
+    }
+
     public function sections(): HasMany
     {
         return $this->hasMany(Section::class);

@@ -19,9 +19,9 @@ class SectionSettingController extends Controller
         $data = $request->validate(['setting' => ['required', Rule::in(['is_active', 'is_shared'])], 'value' => ['required', 'boolean']]);
         $section->settings()->updateOrCreate([], [$data['setting'] => $request->boolean('value')]);
         $message = $data['setting'] === 'is_active'
-            ? ($request->boolean('value') ? 'Sezione attivata: visibile nelle stanze abilitate, oppure in tutte se condivisa.' : 'Sezione disattivata: nascosta da tutte le guide. I contenuti sono conservati.')
+            ? ($request->boolean('value') ? 'Sezione attivata: inclusa nella bozza delle stanze abilitate, oppure in tutte se condivisa.' : 'Sezione disattivata: nascosta nella bozza. I contenuti sono conservati.')
             : ($request->boolean('value') ? 'Sezione condivisa con tutte le stanze, comprese quelle nuove. Deve essere attiva per apparire nelle guide.' : 'Condivisione rimossa: restano valide le assegnazioni alle singole stanze.');
 
-        return back()->with('status', $message);
+        return back()->with('status', 'Bozza aggiornata. Rivedi e pubblica per applicare la visibilità agli ospiti. '.$message);
     }
 }

@@ -42,7 +42,7 @@ class RoomImageStorage
         }
 
         if ($oldPath && $oldPath !== $newPath) {
-            Storage::disk('local')->delete($oldPath);
+            app(GuideMedia::class)->deleteUnused($room->property, [$oldPath]);
         }
         $room->unsetRelation('photo');
     }

@@ -4,8 +4,9 @@
 {{-- Elenco ordinato dei contenuti della sezione, con visibilità e azioni esplicite. --}}
 @section('content')
 <div class="container py-5 workspace">
+    <x-guide-draft-notice :property="$property" />
     <a class="back-link" href="{{ route('host.sections.index', $property) }}">← Sezioni di {{ $property->name }}</a>
-    <div class="page-heading mt-4"><div><span class="eyebrow">Contenuti della sezione</span><h1 class="mt-2">{{ $section->title }}</h1><p class="text-muted-custom">Aggiungi contatti, luoghi o informazioni. Gli ospiti li vedranno nell'ordine indicato.</p></div>
+    <div class="page-heading mt-4"><div><span class="eyebrow">Contenuti della sezione</span><h1 class="mt-2">{{ $section->title }}</h1><p class="text-muted-custom">Aggiungi contatti, luoghi o informazioni. Dopo la pubblicazione, gli ospiti li vedranno nell'ordine indicato.</p></div>
         @if(auth()->user()->canWrite())<a class="btn btn-outline-secondary" href="{{ route('host.sections.edit', [$property, $section]) }}">Modifica titolo e introduzione</a>@endif
     </div>
     @if(auth()->user()->canWrite())
@@ -31,7 +32,7 @@
                         @foreach(['up' => '↑ Sposta su', 'down' => '↓ Sposta giù', 'toggle' => ($block->is_active ? 'Disattiva' : 'Attiva')] as $action => $label)
                             <form method="POST" action="{{ route('host.blocks.order', [$property, $section, $block]) }}">@csrf @method('PATCH')<input type="hidden" name="action" value="{{ $action }}"><button class="btn btn-sm btn-outline-secondary" type="submit" aria-label="{{ $label }}: {{ $block->title }}" @disabled(($action === 'up' && $blocks->currentPage() === 1 && $loop->parent->first) || ($action === 'down' && !$blocks->hasMorePages() && $loop->parent->last))>{{ $label }}</button></form>
                         @endforeach
-                        <form method="POST" action="{{ route('host.blocks.destroy', [$property, $section, $block]) }}" data-confirm="Eliminare definitivamente questo contenuto dalla sezione?"><input type="hidden" name="_method" value="DELETE">@csrf<button class="btn btn-sm btn-outline-danger" type="submit">Elimina<span class="visually-hidden"> {{ $block->title }}</span></button></form>
+                        <form method="POST" action="{{ route('host.blocks.destroy', [$property, $section, $block]) }}" data-confirm="Eliminare questo contenuto dalla bozza? La versione pubblicata resta invariata."><input type="hidden" name="_method" value="DELETE">@csrf<button class="btn btn-sm btn-outline-danger" type="submit">Elimina<span class="visually-hidden"> {{ $block->title }}</span></button></form>
                     </div>
                 @endif
             </article>

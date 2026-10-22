@@ -34,7 +34,7 @@ class PropertyProfileStorage
             throw $exception;
         }
         if ($oldPath && $oldPath !== $newPath) {
-            Storage::disk('local')->delete($oldPath);
+            app(GuideMedia::class)->deleteUnused($property, [$oldPath]);
         }
         $property->unsetRelation('profile');
     }

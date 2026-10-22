@@ -44,7 +44,7 @@ class SectionBlockStorage
             throw $exception;
         }
         if ($oldPath && $oldPath !== $newPath) {
-            Storage::disk('local')->delete($oldPath);
+            app(GuideMedia::class)->deleteUnused($section->property, [$oldPath]);
         }
     }
 }

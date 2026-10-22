@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Property;
 use App\Models\RoomPhoto;
 use App\Models\SectionBlock;
+use App\Services\GuideMedia;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -48,6 +49,7 @@ class PropertyLifecycleController extends Controller
             $paths[] = $property->profile->image_path;
         }
         $paths = [...$paths, ...RoomPhoto::query()->whereHas('room', fn (Builder $query) => $query->whereBelongsTo($property))->pluck('path')->all()];
+        $paths = array_values(array_unique([...$paths, ...app(GuideMedia::class)->historicalPaths($property)]));
         $property->delete();
         Storage::disk('local')->delete($paths);
 

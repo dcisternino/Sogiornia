@@ -4,6 +4,7 @@
 {{-- Elenco generale delle stanze con le stesse azioni della pagina della struttura. --}}
 @section('content')
 <div class="container py-5 workspace">
+    <p class="small text-muted-custom">Le modifiche restano in bozza. Rivedi e pubblica la guida dalla relativa struttura.</p>
     <div class="page-heading"><div><span class="eyebrow">LE TUE STRUTTURE</span><h1 class="mt-2">Le tue stanze</h1><p class="text-muted-custom">Trova una stanza e configura foto, sezioni e soggiorni.</p></div></div>
     <x-property-directory-filter :properties="$properties" :selected-property="$selectedProperty" index-route="host.room-directory.index" create-route="host.rooms.create" create-label="Aggiungi stanza" />
     <div class="row g-4">

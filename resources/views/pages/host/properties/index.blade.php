@@ -18,6 +18,7 @@
                 <div class="property-row-actions">
                     @if(auth()->user()->canWrite())<a class="btn btn-outline-secondary" href="{{ route('host.properties.edit', $property) }}">Modifica<span class="visually-hidden"> {{ $property->name }}</span></a>@endif
                     <a class="btn btn-primary" href="{{ route('host.rooms.index', $property) }}">Gestisci stanze<span class="visually-hidden"> di {{ $property->name }}</span></a>
+                    <a class="btn btn-outline-secondary" href="{{ route('host.guide.show', $property) }}">Rivedi e pubblica</a>
                     <a class="btn btn-outline-secondary" href="{{ route('host.sections.index', $property) }}">Sezioni<span class="visually-hidden"> di {{ $property->name }}</span></a>
                 </div>
             </article>

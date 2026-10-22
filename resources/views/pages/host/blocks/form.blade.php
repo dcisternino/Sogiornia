@@ -4,6 +4,7 @@
 {{-- Editor del singolo contenuto, con campi pertinenti al tipo scelto. --}}
 @section('content')
 <div class="container py-5 form-container workspace">
+    <x-guide-draft-notice :property="$property" />
     <a class="back-link" href="{{ route('host.blocks.index', [$property, $section]) }}">← {{ $section->title }}</a>
     <h1 class="mt-4">{{ $block->exists ? 'Modifica contenuto' : 'Aggiungi contenuto' }}</h1>
     <p class="text-muted-custom">Scegli il tipo e compila i dati in italiano. Le traduzioni sono facoltative.</p>
@@ -27,7 +28,7 @@
         </fieldset>
         <x-guest-content-translations :record="$block" type="block" />
         <input type="hidden" name="is_active" value="0"><div class="form-check my-4"><input class="form-check-input" id="is_active" name="is_active" type="checkbox" value="1" @checked(old('is_active', $block->is_active))><label class="form-check-label" for="is_active">Mostra questo contenuto nella guida</label></div>
-        <div class="form-actions"><button class="btn btn-primary" type="submit">Salva contenuto</button><a class="btn btn-outline-secondary" href="{{ route('host.blocks.index', [$property, $section]) }}">Annulla</a></div>
+        <div class="form-actions"><button class="btn btn-primary" type="submit">Salva bozza</button><a class="btn btn-outline-secondary" href="{{ route('host.blocks.index', [$property, $section]) }}">Annulla</a></div>
     </form>
 </div>
 @endsection

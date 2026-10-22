@@ -43,6 +43,6 @@ class SectionBlockOrderController extends Controller
             }
         }, 3);
 
-        return back()->with('status', $data['action'] === 'toggle' ? 'Visibilità del contenuto aggiornata.' : 'Ordine dei contenuti aggiornato.');
+        return back()->with('status', $data['action'] === 'toggle' ? 'Visibilità in bozza aggiornata. Pubblica per applicarla agli ospiti.' : 'Ordine in bozza aggiornato. Pubblica per applicarlo agli ospiti.');
     }
 }

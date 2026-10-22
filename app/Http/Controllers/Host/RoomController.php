@@ -65,6 +65,6 @@ class RoomController extends Controller
         $room->fill($request->safe()->only(['name', 'description']));
         $images->save($room, $request->file('image'), $request->boolean('remove_image'), (array) $request->validated('sections', []));
 
-        return redirect()->route('host.rooms.index', $property)->with('status', 'Stanza e sezioni visibili aggiornate.');
+        return redirect()->route('host.rooms.index', $property)->with('status', 'Bozza della stanza salvata. Pubblica la guida per aggiornare foto e sezioni visibili.');
     }
 }

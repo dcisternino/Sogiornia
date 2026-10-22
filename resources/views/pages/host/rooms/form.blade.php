@@ -4,6 +4,7 @@
 {{-- Configurazione guidata della stanza, della copertina e dei contenuti visibili. --}}
 @section('content')
 <div class="container py-5 form-container workspace">
+    <x-guide-draft-notice :property="$property" />
     <a class="back-link" href="{{ route('host.rooms.index', $property) }}">← Stanze di {{ $property->name }}</a>
     <span class="eyebrow d-block mt-4">UNA GUIDA SU MISURA</span>
     <h1 class="mt-2">{{ $room->exists ? 'Modifica '.$room->name : 'Aggiungi una stanza' }}</h1>
@@ -49,7 +50,7 @@
             @error('sections')<p class="text-danger small">{{ $message }}</p>@enderror
             @error('sections.*')<p class="text-danger small">{{ $message }}</p>@enderror
         </fieldset>
-        <div class="form-actions editor-actions"><button class="btn btn-primary" type="submit">{{ $room->exists ? 'Salva le modifiche' : 'Crea la stanza' }}</button><a class="btn btn-outline-secondary" href="{{ route('host.rooms.index', $property) }}">Annulla</a></div>
+        <div class="form-actions editor-actions"><button class="btn btn-primary" type="submit">{{ $room->exists ? 'Salva bozza' : 'Crea stanza in bozza' }}</button><a class="btn btn-outline-secondary" href="{{ route('host.rooms.index', $property) }}">Annulla</a></div>
     </form>
 </div>
 @endsection

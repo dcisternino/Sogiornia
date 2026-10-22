@@ -14,7 +14,7 @@
             <noscript><p class="small mt-2">Quando cambi struttura scegli “Prima stanza disponibile”, poi premi Mostra.</p></noscript>
         </form>
     @endif
-    <section class="sg-card mb-4"><h2 class="h5">{{ $completed }} di 4 passaggi di preparazione completati</h2><div class="progress" role="progressbar" aria-label="Preparazione della guida" aria-valuenow="{{ $completed }}" aria-valuemin="0" aria-valuemax="4"><div class="progress-bar" style="width: {{ $completed * 25 }}%"></div></div><p class="small text-muted-custom mt-3 mb-0">@if($room)Stai configurando {{ $property->name }} · {{ $room->name }}.@else Scegli o crea una struttura e una stanza per preparare la guida.@endif Le strutture e le stanze archiviate non sono incluse.</p></section>
+    <section class="sg-card mb-4"><h2 class="h5">{{ $completed }} di {{ count($steps) }} passaggi di preparazione completati</h2><div class="progress" role="progressbar" aria-label="Preparazione della guida" aria-valuenow="{{ $completed }}" aria-valuemin="0" aria-valuemax="{{ count($steps) }}"><div class="progress-bar" style="width: {{ $completed * 100 / count($steps) }}%"></div></div><p class="small text-muted-custom mt-3 mb-0">@if($room)Stai configurando {{ $property->name }} · {{ $room->name }}.@else Scegli o crea una struttura e una stanza per preparare la guida.@endif Le strutture e le stanze archiviate non sono incluse.</p></section>
     @if($property && $room && !$guideEnabled)<div class="setup-tip mb-4"><strong>La guida è sospesa.</strong><p class="mb-0">Puoi preparare i contenuti e guardarli in anteprima. Prima di condividere, riattiva la guida dalla <a href="{{ route('host.rooms.index', $property) }}">gestione stanze e struttura</a>.</p></div>@endif
     <ol class="list-unstyled d-grid gap-3">
         @foreach($steps as $step)
@@ -27,7 +27,7 @@
             </div></li>
         @endforeach
         <li class="sg-card setup-step"><div><span class="eyebrow">Passaggio 5</span><h2 class="h4 mt-2">Condividi la guida</h2><p class="text-muted-custom mb-0">Scegli la lingua, controlla il messaggio e apri WhatsApp o email. La condivisione non viene registrata come invio avvenuto.</p></div>
-            @if($stay && $guideEnabled && $hasContent)<a class="btn btn-primary" href="{{ route('host.stays.share', [$property, $room, $stay]) }}">Prepara messaggio</a>@else<span class="small text-muted-custom">Servono contenuti visibili, un soggiorno non revocato e non terminato e una guida abilitata.</span>@endif
+            @if($stay && $guideEnabled && $hasContent && $hasPublishedRoom)<a class="btn btn-primary" href="{{ route('host.stays.share', [$property, $room, $stay]) }}">Prepara messaggio</a>@else<span class="small text-muted-custom">Servono una guida pubblicata, contenuti visibili, un soggiorno non revocato e non terminato e una guida abilitata.</span>@endif
         </li>
     </ol>
 </div>

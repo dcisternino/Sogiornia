@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Host\SectionRequest;
 use App\Models\Property;
 use App\Models\Section;
+use App\Services\GuideMedia;
 use App\Services\SectionImageStorage;
 use App\Services\SectionTemplates;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 
 /** Gestisce contenuti testuali riutilizzabili nelle guide della struttura. */
 class SectionController extends Controller
@@ -65,7 +65,7 @@ class SectionController extends Controller
         $section->content = $section->content ?? '';
         $images->save($section, $request->file('image'), $request->boolean('remove_image'), $request->validated('translations', []));
 
-        return redirect()->route('host.sections.index', $property)->with('status', 'Sezione aggiornata in tutte le stanze che la utilizzano.');
+        return redirect()->route('host.sections.index', $property)->with('status', 'Bozza della sezione salvata. Rivedi e pubblica la guida per aggiornare gli ospiti.');
     }
 
     public function destroy(Property $property, int $section): RedirectResponse
@@ -77,8 +77,8 @@ class SectionController extends Controller
             $paths[] = $section->image_path;
         }
         $section->delete();
-        Storage::disk('local')->delete($paths);
+        app(GuideMedia::class)->deleteUnused($property, $paths);
 
-        return redirect()->route('host.sections.index', $property)->with('status', 'Sezione eliminata e rimossa dalle guide.');
+        return redirect()->route('host.sections.index', $property)->with('status', 'Sezione rimossa dalla bozza. La versione pubblicata rimane disponibile fino alla prossima pubblicazione.');
     }
 }

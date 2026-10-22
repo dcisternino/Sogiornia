@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Host;
 
 use App\Http\Controllers\Controller;
 use App\Models\Property;
+use App\Services\PublishedGuideContent;
 use App\Services\StayShareMessage;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ class StayShareController extends Controller
         $room = $property->rooms()->findOrFail($room);
         $stay = $room->stays()->with('room.property')->findOrFail($stay);
         abort_if($stay->revoked_at || $stay->ends_at->isPast() || $property->archived_at || $room->archived_at || ! $property->guide_enabled || ! $room->guide_enabled, 409, 'Questo link è scaduto, revocato o sospeso e non può essere condiviso.');
+        app(PublishedGuideContent::class)->forRoom($room);
         $data = $request->validate(['lang' => ['sometimes', 'required', 'string', Rule::in(array_keys(config('guest.locales')))]]);
         $locale = $data['lang'] ?? 'it';
 

@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Host;
 
 use App\Http\Controllers\Controller;
 use App\Models\Property;
+use App\Services\GuideMedia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 /** Gestisce archiviazione reversibile, sospensione guida ed eliminazione della stanza. */
@@ -44,7 +44,7 @@ class RoomLifecycleController extends Controller
         $path = $room->photo?->path;
         $room->delete();
         if ($path) {
-            Storage::disk('local')->delete($path);
+            app(GuideMedia::class)->deleteUnused($property, [$path]);
         }
 
         return redirect()->route('host.rooms.index', $property)->with('status', 'Stanza eliminata con i relativi soggiorni.');

@@ -19,6 +19,7 @@ use App\Http\Controllers\GuestSectionImageController;
 use App\Http\Controllers\Host\BookingController;
 use App\Http\Controllers\Host\DashboardController as HostDashboardController;
 use App\Http\Controllers\Host\GuestPreviewController;
+use App\Http\Controllers\Host\GuidePublicationController;
 use App\Http\Controllers\Host\OnboardingController;
 use App\Http\Controllers\Host\PropertyController;
 use App\Http\Controllers\Host\PropertyImageController;
@@ -121,7 +122,7 @@ Route::middleware(['auth', 'role:admin'])->group(function (): void {
 });
 
 // Applica proprietà dei dati e modalità in sola lettura a tutta l'area host.
-Route::middleware(['auth', 'role:host', 'host.write'])
+Route::middleware(['auth', 'role:host', 'host.write', 'guide.draft'])
     ->where(['property' => '[0-9]+', 'room' => '[0-9]+', 'section' => '[0-9]+', 'stay' => '[0-9]+'])
     ->group(function (): void {
         // Mostra il calendario dei soggiorni attivi, programmati e passati.
@@ -142,6 +143,12 @@ Route::middleware(['auth', 'role:host', 'host.write'])
         Route::post('/host/stays', [BookingController::class, 'store'])->name('host.bookings.store');
         // Gestisce i dati principali delle strutture.
         Route::resource('/host/properties', PropertyController::class)->except(['destroy'])->names('host.properties');
+        // Rivede la bozza e lo storico delle pubblicazioni della struttura.
+        Route::get('/host/properties/{property}/guide', [GuidePublicationController::class, 'show'])->name('host.guide.show');
+        // Pubblica soltanto la revisione espressamente approvata dall'host.
+        Route::post('/host/properties/{property}/guide/publish', [GuidePublicationController::class, 'store'])->name('host.guide.publish');
+        // Consulta una versione immutabile appartenente alla struttura autorizzata.
+        Route::get('/host/properties/{property}/guide/versions/{version}', [GuidePublicationController::class, 'version'])->whereNumber('version')->name('host.guide.version');
         // Mostra la foto della struttura esclusivamente all'host proprietario.
         Route::get('/host/properties/{property}/image', [PropertyImageController::class, 'show'])->name('host.properties.image');
         // Gestisce i dati delle stanze e le sezioni abilitate.

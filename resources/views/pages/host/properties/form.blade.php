@@ -5,6 +5,7 @@
 {{-- Modulo condiviso per creazione e modifica della struttura. --}}
 @section('content')
 <div class="container py-5 form-container workspace">
+    @if($property->exists)<x-guide-draft-notice :property="$property" />@endif
     <a class="back-link" href="{{ route('host.properties.index') }}">← Torna alle strutture</a>
     <span class="eyebrow d-block mt-4">IL LUOGO DEL TUO BENVENUTO</span>
     <h1 class="mt-2 mb-4">{{ $property->exists ? 'Modifica struttura' : 'Crea la tua struttura' }}</h1>
@@ -29,7 +30,7 @@
         <x-input name="address" label="Indirizzo" :value="$property->address" maxlength="255" autocomplete="street-address" />
         <x-textarea name="welcome_message" label="Messaggio di benvenuto in italiano" :value="$property->welcome_message" maxlength="3000" help="Comparirà nella home della guida di ogni stanza e sarà usato quando manca una traduzione." />
         <x-guest-content-translations :record="$property" type="property" />
-        <div class="form-actions"><button class="btn btn-primary" type="submit">{{ $property->exists ? 'Salva modifiche' : 'Crea struttura' }}</button><a class="btn btn-outline-secondary" href="{{ route('host.properties.index') }}">Annulla</a></div>
+        <div class="form-actions"><button class="btn btn-primary" type="submit">{{ $property->exists ? 'Salva bozza' : 'Crea struttura' }}</button><a class="btn btn-outline-secondary" href="{{ route('host.properties.index') }}">Annulla</a></div>
     </form>
     {{-- Azioni occasionali della struttura separate dai dati principali. --}}
     @if($property->exists && auth()->user()->canWrite())<details class="sg-card advanced-settings mt-4"><summary>Stato della struttura e opzioni avanzate</summary><p class="small text-muted-custom mt-3">Archiviazione e sospensione interrompono le guide senza cancellarne i contenuti.</p><x-lifecycle :record="$property" :update-url="route('host.properties.lifecycle', $property)" :destroy-url="route('host.properties.destroy', $property)" /></details>@endif

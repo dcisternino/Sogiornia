@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Section;
 use App\Models\Stay;
+use App\Services\PublishedGuideContent;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /** Serve immagini soltanto con soggiorno valido e sezione abilitata per la stanza. */
 class GuestSectionImageController extends Controller
 {
+    public function __construct(private PublishedGuideContent $published) {}
+
     public function show(string $token, string $section): BinaryFileResponse
     {
         $stay = Stay::query()->where('guide_token', $token)->with('room.property')->firstOrFail();
         abort_unless($stay->isAccessible(), 404);
-        $section = Section::query()->visibleToRoom($stay->room)->where('slug', $section)->firstOrFail();
-        abort_unless($section->image_path && Storage::disk('local')->exists($section->image_path), 404);
+        $section = $this->published->forRoom($stay->room)['sections'][$section] ?? null;
+        abort_unless($section, 404);
+        abort_unless($section['image_path'] && Storage::disk('local')->exists($section['image_path']), 404);
 
-        return response()->file(Storage::disk('local')->path($section->image_path), [
-            'Content-Type' => Storage::disk('local')->mimeType($section->image_path),
+        return response()->file(Storage::disk('local')->path($section['image_path']), [
+            'Content-Type' => Storage::disk('local')->mimeType($section['image_path']),
             'X-Content-Type-Options' => 'nosniff',
         ]);
     }

@@ -60,6 +60,6 @@ class PropertyController extends Controller
         $property->fill($request->safe()->only(['name', 'city', 'address', 'welcome_message']));
         $profiles->save($property, $request->validated('description'), $request->file('image'), $request->boolean('remove_image'), $request->validated('translations', []));
 
-        return redirect()->route('host.properties.index')->with('status', 'Dati, descrizione e foto della struttura aggiornati.');
+        return redirect()->route('host.properties.index')->with('status', 'Bozza della struttura salvata. Rivedi e pubblica la guida per aggiornare gli ospiti.');
     }
 }

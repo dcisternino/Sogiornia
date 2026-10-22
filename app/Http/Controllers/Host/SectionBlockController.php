@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Host\SectionBlockRequest;
 use App\Models\Property;
 use App\Models\SectionBlock;
+use App\Services\GuideMedia;
 use App\Services\SectionBlockStorage;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 
 /** Gestisce i contenuti di una sezione senza consentire accesso ad altre strutture. */
 class SectionBlockController extends Controller
@@ -39,7 +39,7 @@ class SectionBlockController extends Controller
         $section = $property->sections()->findOrFail($section);
         $storage->save($section, new SectionBlock, $request->safe()->except(['image', 'remove_image', 'translations']), $request->file('image'), false, $request->validated('translations', []));
 
-        return redirect()->route('host.blocks.index', [$property, $section])->with('status', 'Contenuto aggiunto alla sezione. È visibile nelle guide se attivo e se la sezione è abilitata.');
+        return redirect()->route('host.blocks.index', [$property, $section])->with('status', 'Contenuto aggiunto alla bozza. Controlla la visibilità e pubblica la guida.');
     }
 
     public function edit(Property $property, int $section, int $block): View
@@ -56,7 +56,7 @@ class SectionBlockController extends Controller
         $block = $section->blocks()->findOrFail($block);
         $storage->save($section, $block, $request->safe()->except(['image', 'remove_image', 'translations']), $request->file('image'), $request->boolean('remove_image'), $request->validated('translations', []));
 
-        return redirect()->route('host.blocks.index', [$property, $section])->with('status', 'Contenuto aggiornato in tutte le guide che utilizzano questa sezione.');
+        return redirect()->route('host.blocks.index', [$property, $section])->with('status', 'Bozza del contenuto salvata. Pubblica la guida per renderla visibile agli ospiti.');
     }
 
     public function destroy(Property $property, int $section, int $block): RedirectResponse
@@ -67,9 +67,9 @@ class SectionBlockController extends Controller
         $path = $block->image_path;
         $block->delete();
         if ($path) {
-            Storage::disk('local')->delete($path);
+            app(GuideMedia::class)->deleteUnused($property, [$path]);
         }
 
-        return redirect()->route('host.blocks.index', [$property, $section])->with('status', 'Contenuto eliminato dalla sezione e dalle guide.');
+        return redirect()->route('host.blocks.index', [$property, $section])->with('status', 'Contenuto eliminato dalla bozza. Pubblica la guida per aggiornare gli ospiti.');
     }
 }

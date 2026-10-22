@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureHostCanWrite;
 use App\Http\Middleware\EnsureUserHasRole;
+use App\Http\Middleware\PreservePublishedGuide;
 use App\Http\Middleware\ProtectGuestGuide;
 use App\Http\Middleware\SetGuestLocale;
 use Illuminate\Foundation\Application;
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => EnsureUserHasRole::class,
             'host.write' => EnsureHostCanWrite::class,
+            'guide.draft' => PreservePublishedGuide::class,
             'guide.privacy' => ProtectGuestGuide::class,
             'guest.locale' => SetGuestLocale::class,
         ]);
