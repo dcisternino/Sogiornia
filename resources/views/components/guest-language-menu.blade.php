@@ -1,13 +1,15 @@
-{{-- Selettore predisposto: soltanto l'italiano è attualmente disponibile. --}}
+{{-- Selettore delle lingue della guida; conserva pagina e token del soggiorno. --}}
+@php
+    $locales = config('guest.locales');
+    $current = app()->getLocale();
+@endphp
 <div {{ $attributes->class(['dropdown guest-language']) }}>
-    <button class="guest-guide-badge dropdown-toggle border-0" type="button" id="guest-language-button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Lingua della guida: italiano">
-        <span class="flag-it" aria-hidden="true"></span> IT
+    <button class="guest-guide-badge dropdown-toggle border-0" type="button" id="guest-language-button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{ __('guest.language_label', ['language' => $locales[$current]['name']]) }}">
+        <x-guest-language-flag :locale="$current" /> {{ $locales[$current]['code'] }}
     </button>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="guest-language-button">
-        <li><span class="dropdown-item-text fw-semibold"><span class="flag-it me-2" aria-hidden="true"></span>Italiano · IT <span aria-hidden="true">✓</span></span></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><button class="dropdown-item" type="button" disabled lang="en">English · EN <small>Prossimamente</small></button></li>
-        <li><button class="dropdown-item" type="button" disabled lang="es">Español · ES <small>Prossimamente</small></button></li>
-        <li><button class="dropdown-item" type="button" disabled lang="de">Deutsch · DE <small>Prossimamente</small></button></li>
+        @foreach($locales as $locale => $language)
+            <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['lang' => $locale]) }}" lang="{{ $locale }}" hreflang="{{ $locale }}" @if($locale === $current) aria-current="true" @endif><span class="d-inline-flex align-items-center gap-2"><x-guest-language-flag :locale="$locale" />{{ $language['name'] }} · {{ $language['code'] }}</span>@if($locale === $current)<span aria-hidden="true">✓</span>@endif</a></li>
+        @endforeach
     </ul>
 </div>

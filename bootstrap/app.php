@@ -3,6 +3,7 @@
 use App\Http\Middleware\EnsureHostCanWrite;
 use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Middleware\ProtectGuestGuide;
+use App\Http\Middleware\SetGuestLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => EnsureUserHasRole::class,
             'host.write' => EnsureHostCanWrite::class,
             'guide.privacy' => ProtectGuestGuide::class,
+            'guest.locale' => SetGuestLocale::class,
         ]);
         $middleware->redirectGuestsTo(fn () => route('login'));
         $middleware->redirectUsersTo(fn () => route('dashboard'));

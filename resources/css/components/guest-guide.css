@@ -109,14 +109,14 @@
     .guest-section-card { min-height: 136px; padding: 23px 21px 20px; }
 }
 
-/* Bandiera italiana leggibile su ogni dispositivo e lingue future chiaramente indicate. */
+/* Selettore della lingua e bandiere locali, senza richieste a servizi esterni. */
 .guest-language { flex-shrink: 0; }
 .guest-language .guest-guide-badge { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
-.flag-it { display: inline-block; width: 18px; height: 12px; border-radius: 2px; border: 1px solid #0001; background: linear-gradient(to right, #15945b 0 33.33%, #fff 33.33% 66.66%, #d84141 66.66%); vertical-align: middle; }
+.guest-language-flag { display: inline-block; width: 21px; height: 14px; flex-shrink: 0; border-radius: 2px; box-shadow: 0 0 0 1px #0001; overflow: hidden; vertical-align: middle; }
 .guest-language .dropdown-menu { min-width: 235px; font-size: .8rem; border-color: #e7d9c8; border-radius: 14px; padding-block: 10px; box-shadow: 0 8px 24px #3d2b1a12; }
 .guest-language .dropdown-item { display: flex; justify-content: space-between; gap: 15px; padding-block: 9px; }
-.guest-language .dropdown-item:disabled { color: #796f64; }
-.guest-language .dropdown-item small { font-size: .65rem; color: #8f8172; }
+.guest-language .dropdown-item[aria-current="true"] { color: #71442f; background: #f6eee3; font-weight: 600; }
+.guest-original-note { color: #75695d; background: #f6f0e6; border-left: 2px solid #b88365; padding: 10px 12px; border-radius: 0 8px 8px 0; font-size: .75rem; line-height: 1.7; margin-bottom: 22px; }
 @media (max-width: 359.98px) {
     .guest-experience { padding-inline: 8px; }
     .guest-content { padding-inline: 19px; }

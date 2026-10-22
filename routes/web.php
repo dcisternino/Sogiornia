@@ -32,18 +32,18 @@ use Illuminate\Support\Facades\Route;
 // Presenta il servizio e l'offerta commerciale.
 Route::get('/', [PageController::class, 'welcome'])->name('welcome');
 // Mostra una guida dimostrativa senza credenziali reali.
-Route::get('/guest-home', [GuestGuideController::class, 'index'])->name('guest-home');
+Route::get('/guest-home', [GuestGuideController::class, 'index'])->middleware('guest.locale')->name('guest-home');
 // Mostra una sezione dimostrativa consentita.
-Route::get('/guest/sections/{section}', [GuestGuideController::class, 'show'])->name('guest.section');
+Route::get('/guest/sections/{section}', [GuestGuideController::class, 'show'])->middleware('guest.locale')->name('guest.section');
 
 // Protegge la riservatezza del link del soggiorno e delle relative immagini.
 Route::middleware('guide.privacy')->where(['token' => '[A-Za-z0-9]{64}'])->group(function (): void {
     // Mostra la guida solo durante il periodo del soggiorno.
-    Route::get('/g/{token}', [GuestGuideController::class, 'index'])->name('guide.index');
+    Route::get('/g/{token}', [GuestGuideController::class, 'index'])->middleware('guest.locale')->name('guide.index');
     // Mostra la copertina della stanza soltanto con soggiorno valido.
     Route::get('/g/{token}/room-image', [GuestRoomImageController::class, 'show'])->name('guide.room-image');
     // Mostra una sezione abilitata nella stanza.
-    Route::get('/g/{token}/sections/{section}', [GuestGuideController::class, 'show'])->name('guide.show');
+    Route::get('/g/{token}/sections/{section}', [GuestGuideController::class, 'show'])->middleware('guest.locale')->name('guide.show');
     // Serve l'immagine privata dopo gli stessi controlli della guida.
     Route::get('/g/{token}/sections/{section}/image', [GuestSectionImageController::class, 'show'])->name('guide.image');
 });
