@@ -19,6 +19,7 @@ class StayFilterRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'month' => ['nullable', 'string', 'date_format:Y-m', 'regex:/^(19|20|21)[0-9]{2}-(0[1-9]|1[0-2])$/'],
             'period' => ['nullable', Rule::in(['active', 'scheduled', 'past', 'all'])],
             'property_id' => ['nullable', 'integer', Rule::exists(Property::class, 'id')->where('user_id', $this->user()->id)],
             'room_id' => ['nullable', 'integer', Rule::exists(Room::class, 'id')->where(function (Builder $query): void {
@@ -30,5 +31,10 @@ class StayFilterRequest extends FormRequest
             'from_date' => ['nullable', 'date_format:Y-m-d'],
             'to_date' => ['nullable', 'date_format:Y-m-d', Rule::when($this->filled('from_date'), ['after_or_equal:from_date'])],
         ];
+    }
+
+    public function messages(): array
+    {
+        return ['month.regex' => 'Scegli un mese compreso tra gennaio 1900 e dicembre 2199.'];
     }
 }

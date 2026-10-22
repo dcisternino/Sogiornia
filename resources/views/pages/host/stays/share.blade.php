@@ -21,6 +21,5 @@
         <p class="small text-muted-custom mt-3 mb-0">Scegli il destinatario e conferma l'invio in WhatsApp o nel programma email. Le modifiche al messaggio restano solo in questa pagina.</p>
         <noscript><p class="mt-3">Senza JavaScript i pulsanti usano il messaggio originale. Per inviare un testo modificato, selezionalo e copialo manualmente.</p></noscript>
     </section>
-    <a class="d-inline-block mt-4" href="{{ route('host.setup.index', ['property_id' => $property->id, 'room_id' => $room->id]) }}">Apri configurazione guidata ↗</a>
 </div>
 @endsection

@@ -58,6 +58,8 @@ return [
         'room_id' => 'stanza',
         'property_id' => 'struttura',
         'from_date' => 'data iniziale',
+        'month' => 'mese del calendario',
+        'stay_id' => 'soggiorno',
         'to_date' => 'data finale',
         'overlap_confirmed' => 'conferma della sovrapposizione',
         'translations' => 'traduzioni',

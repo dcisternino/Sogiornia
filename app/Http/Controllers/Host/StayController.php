@@ -5,23 +5,32 @@ namespace App\Http\Controllers\Host;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Host\StayRequest;
 use App\Models\Property;
+use App\Models\Stay;
 use App\Services\StayScheduler;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 /** Crea link distinti per soggiorno e mostra lo storico della stanza. */
 class StayController extends Controller
 {
-    public function index(Property $property, int $room): View
+    public function index(Request $request, Property $property, int $room): View
     {
         Gate::authorize('view', $property);
         $room = $property->rooms()->findOrFail($room);
+        $data = $request->validate(['stay_id' => ['nullable', 'integer', Rule::exists(Stay::class, 'id')->where('room_id', $room->id)]]);
+        $stays = $room->stays();
+        if (! empty($data['stay_id'])) {
+            $stays->whereKey($data['stay_id']);
+        }
 
         return view('pages.host.stays.index', [
             'property' => $property,
             'room' => $room,
-            'stays' => $room->stays()->with('room.property')->orderByDesc('starts_at')->orderByDesc('id')->paginate(15),
+            'selectedStay' => $data['stay_id'] ?? null,
+            'stays' => $stays->with('room.property')->orderByDesc('starts_at')->orderByDesc('id')->paginate(15)->withQueryString(),
         ]);
     }
 

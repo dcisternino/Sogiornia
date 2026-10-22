@@ -4,7 +4,6 @@
 {{-- Elenco delle strutture e accesso distinto a dati, stanze e sezioni. --}}
 @section('content')
 <div class="container py-5 workspace">
-    <x-setup-shortcut />
     <div class="page-heading"><div><span class="eyebrow">IL TUO SPAZIO HOST</span><h1 class="mt-2">Le tue strutture</h1></div>@if(auth()->user()->canWrite())<a class="btn btn-primary" href="{{ route('host.properties.create') }}">+ Aggiungi struttura</a>@endif</div>
     <x-property-summary :active-properties="$activeProperties" :rooms="$roomCount" :sections="$sectionCount" class="mb-4" />
     <div class="d-grid gap-4">

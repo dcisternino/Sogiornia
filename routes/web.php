@@ -21,14 +21,17 @@ use App\Http\Controllers\Host\PropertyController;
 use App\Http\Controllers\Host\PropertyImageController;
 use App\Http\Controllers\Host\PropertyLifecycleController;
 use App\Http\Controllers\Host\RoomController;
+use App\Http\Controllers\Host\RoomDirectoryController;
 use App\Http\Controllers\Host\RoomImageController;
 use App\Http\Controllers\Host\RoomLifecycleController;
 use App\Http\Controllers\Host\SectionBlockController;
 use App\Http\Controllers\Host\SectionBlockImageController;
 use App\Http\Controllers\Host\SectionBlockOrderController;
 use App\Http\Controllers\Host\SectionController;
+use App\Http\Controllers\Host\SectionDirectoryController;
 use App\Http\Controllers\Host\SectionImageController;
 use App\Http\Controllers\Host\SectionSettingController;
+use App\Http\Controllers\Host\StayCalendarController;
 use App\Http\Controllers\Host\StayController;
 use App\Http\Controllers\Host\StayRevocationController;
 use App\Http\Controllers\Host\StayShareController;
@@ -112,6 +115,12 @@ Route::middleware(['auth', 'role:host', 'host.write'])
     ->group(function (): void {
         // Mostra il calendario dei soggiorni attivi, programmati e passati.
         Route::get('/host-home', HostDashboardController::class)->name('host-home');
+        // Riunisce calendario mensile, riepiloghi e tabella delle prenotazioni.
+        Route::get('/host/stays', [StayCalendarController::class, 'index'])->name('host.calendar.index');
+        // Mostra tutte le stanze possedute, filtrabili per struttura.
+        Route::get('/host/rooms', [RoomDirectoryController::class, 'index'])->name('host.room-directory.index');
+        // Mostra tutte le sezioni possedute, senza mescolare le configurazioni delle strutture.
+        Route::get('/host/sections', [SectionDirectoryController::class, 'index'])->name('host.section-directory.index');
         // Accompagna l'host nei passaggi di configurazione basandosi sui dati esistenti.
         Route::get('/host/setup', [OnboardingController::class, 'index'])->name('host.setup.index');
         // Produce bozze tradotte senza salvarle, con limite di richieste per utente autenticato.

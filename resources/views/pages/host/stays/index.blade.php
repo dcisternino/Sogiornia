@@ -4,13 +4,13 @@
 {{-- Storico dei soggiorni con link distinti e revoca anticipata. --}}
 @section('content')
 <div class="container py-5 workspace">
-    <x-setup-shortcut :property="$property" :room="$room" />
     <a href="{{ route('host.rooms.index', $property) }}">← {{ $property->name }}</a>
     <div class="page-heading mt-4"><div><span class="eyebrow">LINK PERSONALI PER SOGGIORNO</span><h1>{{ $room->name }}</h1><p class="text-muted-custom">Scadenza automatica alla partenza. Orari italiani.</p></div>
         @if (auth()->user()->canWrite() && ! $property->archived_at && ! $room->archived_at)
             <a class="btn btn-primary" href="{{ route('host.stays.create', [$property, $room]) }}">+ Nuovo soggiorno</a>
         @endif
     </div>
+    @if($selectedStay)<p><a href="{{ route('host.stays.index', [$property, $room]) }}">← Mostra tutti i soggiorni della stanza</a></p>@endif
     {{-- Istruzioni pratiche per condividere il link senza confonderlo con la configurazione della stanza. --}}
     <div class="setup-tip mb-4"><strong>Un link diverso per ogni soggiorno</strong><p class="mb-0">Il link si apre dall'arrivo e scade automaticamente alla partenza. Puoi copiarlo e condividerlo con gli ospiti. @if(auth()->user()->canWrite())Per cambiare foto o sezioni usa <a href="{{ route('host.rooms.edit', [$property, $room]) }}">la configurazione della stanza</a>.@endif</p></div>
     @foreach ($stays as $stay)

@@ -4,7 +4,7 @@
 {{-- Scelta della stanza e creazione del relativo link riservato. --}}
 @section('content')
 <div class="container py-5 form-container workspace">
-    <a class="back-link" href="{{ route('host-home') }}">← Dashboard</a>
+    <a class="back-link" href="{{ route('host.calendar.index') }}">← Soggiorni</a>
     <h1 class="mt-4">Prepara un nuovo soggiorno</h1>
     <p class="text-muted-custom">Scegli dove accogliere i tuoi ospiti. Creeremo un link distinto per questo soggiorno.</p>
     @if($properties->isEmpty())
@@ -18,14 +18,14 @@
                     <option value="">Scegli la stanza</option>
                     @foreach($properties as $property)
                         <optgroup label="{{ $property->name }}">
-                            @foreach($property->rooms as $room)<option value="{{ $room->id }}" @selected((string) old('room_id') === (string) $room->id)>{{ $room->name }}{{ !$property->guide_enabled || !$room->guide_enabled ? ' — guida sospesa' : '' }}</option>@endforeach
+                            @foreach($property->rooms as $room)<option value="{{ $room->id }}" @selected((string) old('room_id', $defaults['room_id'] ?? '') === (string) $room->id)>{{ $room->name }}{{ !$property->guide_enabled || !$room->guide_enabled ? ' — guida sospesa' : '' }}</option>@endforeach
                         </optgroup>
                     @endforeach
                 </select>
                 @error('room_id')<div class="invalid-feedback" id="room_id-feedback">{{ $message }}</div>@enderror
             </div>
-            <x-stay-fields />
-            <div class="form-actions"><button class="btn btn-primary" type="submit">Crea soggiorno e link</button><a href="{{ route('host-home') }}" class="btn btn-outline-secondary">Annulla</a></div>
+            <x-stay-fields :arrival-date="$defaults['arrival_date']" :departure-date="$defaults['departure_date']" />
+            <div class="form-actions"><button class="btn btn-primary" type="submit">Crea soggiorno e link</button><a href="{{ route('host.calendar.index') }}" class="btn btn-outline-secondary">Annulla</a></div>
         </form>
     @endif
 </div>
