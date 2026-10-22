@@ -5,6 +5,7 @@
 @section('content')
 <div class="container py-5 workspace">
     <a class="back-link" href="{{ route('admin.hosts.index') }}">← Tutti gli host</a>
+    <a class="d-inline-block ms-3" href="{{ route('admin.monitoring.index', ['host_id' => $host->id]) }}">Consumi e limiti di traduzione ↗</a>
     <div class="page-heading mt-4"><div><span class="eyebrow">PROFILO HOST #{{ $host->id }}</span><h1 class="mt-2">{{ $host->name }}</h1><p class="text-muted-custom text-break">{{ $host->email }}</p></div><span class="badge {{ $host->hasActiveAccess() ? 'status-active' : 'status-inactive' }}">{{ $host->hasActiveAccess() ? 'Attivo' : 'Disattivo · sola lettura' }}</span></div>
     <div class="row g-3 mb-4">
         <div class="col-6 col-lg-3"><x-metric-card label="Strutture" :value="$host->properties_count" /></div>

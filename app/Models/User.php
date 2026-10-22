@@ -31,6 +31,17 @@ class User extends Authenticatable
         return $this->hasMany(Property::class);
     }
 
+    /** Soglia facoltativa e consumi delle traduzioni assistite. */
+    public function translationLimit(): HasOne
+    {
+        return $this->hasOne(HostTranslationLimit::class);
+    }
+
+    public function translationUsages(): HasMany
+    {
+        return $this->hasMany(TranslationUsage::class);
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === self::ROLE_ADMIN;

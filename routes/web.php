@@ -5,6 +5,9 @@ use App\Http\Controllers\Admin\HostAccessController;
 use App\Http\Controllers\Admin\HostController;
 use App\Http\Controllers\Admin\HostInvitationController;
 use App\Http\Controllers\Admin\HostStatusController;
+use App\Http\Controllers\Admin\HostTranslationLimitController;
+use App\Http\Controllers\Admin\TranslationMonitoringController;
+use App\Http\Controllers\Admin\TranslationSettingController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
@@ -93,6 +96,14 @@ Route::middleware('auth')->group(function (): void {
 Route::middleware(['auth', 'role:admin'])->group(function (): void {
     // Riepiloga gli host attivi, disattivi e prossimi alla scadenza.
     Route::get('/admin-home', AdminDashboardController::class)->name('admin-home');
+    // Riepiloga consumi locali, storico e soglie di traduzione visibili soltanto all'admin.
+    Route::get('/admin/monitoring', [TranslationMonitoringController::class, 'index'])->name('admin.monitoring.index');
+    // Modifica interruttore e limiti globali senza azzerare i consumi del mese.
+    Route::patch('/admin/monitoring/settings', [TranslationSettingController::class, 'update'])->name('admin.monitoring.settings');
+    // Mostra le eccezioni del singolo host rispetto al budget predefinito.
+    Route::get('/admin/monitoring/hosts/{host}/edit', [HostTranslationLimitController::class, 'edit'])->whereNumber('host')->name('admin.monitoring.hosts.edit');
+    // Sospende le sole traduzioni o imposta una soglia specifica per l'host.
+    Route::patch('/admin/monitoring/hosts/{host}', [HostTranslationLimitController::class, 'update'])->whereNumber('host')->name('admin.monitoring.hosts.update');
     // Elenca gli host con filtri sullo stato operativo.
     Route::get('/admin/hosts', [HostController::class, 'index'])->name('admin.hosts.index');
     // Mostra il modulo di invito.

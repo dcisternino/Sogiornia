@@ -23,6 +23,7 @@
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin-home', 'host-home') ? 'active' : '' }}" @if(request()->routeIs('admin-home', 'host-home')) aria-current="page" @endif href="{{ route(auth()->user()->isAdmin() ? 'admin-home' : 'host-home') }}">Dashboard</a></li>
                 @if (auth()->user()->isAdmin())
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.hosts.*') ? 'active' : '' }}" @if(request()->routeIs('admin.hosts.*')) aria-current="page" @endif href="{{ route('admin.hosts.index') }}">Host</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.monitoring.*') ? 'active' : '' }}" @if(request()->routeIs('admin.monitoring.*')) aria-current="page" @endif href="{{ route('admin.monitoring.index') }}">Monitoraggio</a></li>
                 @else
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('host.calendar.*', 'host.bookings.*', 'host.stays.*') ? 'active' : '' }}" @if(request()->routeIs('host.calendar.*', 'host.bookings.*', 'host.stays.*')) aria-current="page" @endif href="{{ route('host.calendar.index') }}">Soggiorni</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('host.properties.*') ? 'active' : '' }}" @if(request()->routeIs('host.properties.*')) aria-current="page" @endif href="{{ route('host.properties.index') }}">Strutture</a></li>

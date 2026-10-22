@@ -12,6 +12,6 @@ class TranslationSuggestionController extends Controller
 {
     public function store(TranslationSuggestionRequest $request, GoogleTranslation $translation): JsonResponse
     {
-        return response()->json(['fields' => $translation->suggest($request->validated('fields'), $request->validated('locale'))]);
+        return response()->json(['fields' => $translation->suggest($request->user(), $request->validated('fields'), $request->validated('locale'), $request->validated('type'))]);
     }
 }
