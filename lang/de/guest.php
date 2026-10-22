@@ -2,6 +2,9 @@
 
 // Testi dell’interfaccia ospite e contenuti dimostrativi; i testi dell’host restano originali.
 return [
+    'preview_banner' => 'Private Vorschau für Gastgeber',
+    'preview_help' => 'Zeigt den eingerichteten Gästeführer ohne aktiven Aufenthalt. Dieser Link ist nicht zum Teilen mit Gästen bestimmt.',
+    'preview_exit' => 'Zurück zu den Zimmern',
     'meta_description' => 'Sogiornia: dein Reiseführer für einen Aufenthalt, bei dem du dich wie zu Hause fühlst.',
     'skip_content' => 'Zum Inhalt springen',
     'guide_home' => 'Sogiornia — zu deinem Gästeführer',
@@ -19,7 +22,7 @@ return [
     'back_to_guide' => 'Zurück zum Gästeführer',
     'open_link' => 'Link öffnen',
     'call' => ':phone anrufen',
-    'original_content' => 'Die Inhalte deines Gastgebers werden in ihrer Originalsprache angezeigt.',
+    'original_content' => 'Einige Inhalte werden auf Italienisch angezeigt, da noch keine Übersetzung vorliegt.',
     'demo' => [
         'property' => 'Casa Marina · Demo',
         'welcome' => 'Ein Vorgeschmack auf den Gästeführer, den du für deine Gäste erstellen kannst.',

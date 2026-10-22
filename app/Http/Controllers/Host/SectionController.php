@@ -40,8 +40,8 @@ class SectionController extends Controller
 
     public function store(SectionRequest $request, Property $property, SectionImageStorage $images): RedirectResponse
     {
-        $section = $property->sections()->make($request->safe()->except(['image', 'remove_image']));
-        $images->save($section, $request->file('image'), false);
+        $section = $property->sections()->make($request->safe()->except(['image', 'remove_image', 'translations']));
+        $images->save($section, $request->file('image'), false, $request->validated('translations', []));
 
         return redirect()->route('host.sections.index', $property)->with('status', 'Sezione creata. Abilitala nelle stanze che devono mostrarla.');
     }
@@ -52,7 +52,7 @@ class SectionController extends Controller
 
         return view('pages.host.sections.form', [
             'property' => $property,
-            'section' => $property->sections()->findOrFail($section),
+            'section' => $property->sections()->with('translations')->findOrFail($section),
             'templates' => [],
         ]);
     }
@@ -60,8 +60,8 @@ class SectionController extends Controller
     public function update(SectionRequest $request, Property $property, int $section, SectionImageStorage $images): RedirectResponse
     {
         $section = $property->sections()->findOrFail($section);
-        $section->fill($request->safe()->except(['image', 'remove_image']));
-        $images->save($section, $request->file('image'), $request->boolean('remove_image'));
+        $section->fill($request->safe()->except(['image', 'remove_image', 'translations']));
+        $images->save($section, $request->file('image'), $request->boolean('remove_image'), $request->validated('translations', []));
 
         return redirect()->route('host.sections.index', $property)->with('status', 'Sezione aggiornata in tutte le stanze che la utilizzano.');
     }

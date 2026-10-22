@@ -2,6 +2,9 @@
 
 // Testi dell’interfaccia ospite e contenuti dimostrativi; i testi dell’host restano originali.
 return [
+    'preview_banner' => 'Private host preview',
+    'preview_help' => 'Shows the configured guide without an active stay. This is not a link to share with guests.',
+    'preview_exit' => 'Back to rooms',
     'meta_description' => 'Sogiornia: your guide to feeling at home during your stay.',
     'skip_content' => 'Skip to content',
     'guide_home' => 'Sogiornia — go to your guide',
@@ -19,7 +22,7 @@ return [
     'back_to_guide' => 'Back to the guide',
     'open_link' => 'Open link',
     'call' => 'Call :phone',
-    'original_content' => 'Content provided by your host is shown in its original language.',
+    'original_content' => 'Some content is shown in Italian because a translation is not yet available.',
     'demo' => [
         'property' => 'Casa Marina · Demo',
         'welcome' => 'A preview of the guide you can create for your guests.',

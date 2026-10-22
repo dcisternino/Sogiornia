@@ -20,7 +20,7 @@
     <form class="sg-card editor-form mt-4" method="POST" enctype="multipart/form-data" action="{{ $section->exists ? route('host.sections.update', [$property, $section]) : route('host.sections.store', $property) }}">
         @csrf
         @if ($section->exists) @method('PUT') @endif
-        <x-input name="title" label="Titolo della sezione" :value="$section->title" maxlength="255" :required="true" />
+        <x-input name="title" label="Titolo della sezione in italiano" :value="$section->title" maxlength="255" :required="true" />
         <x-textarea name="content" label="Informazioni per gli ospiti" :value="$section->content" maxlength="20000" :rows="9" :required="true" help="Testo semplice, anche su più righe. HTML non supportato." />
 
         {{-- Immagini non pubbliche, disponibili solo attraverso una guida valida. --}}
@@ -44,6 +44,7 @@
             <x-input name="link_label" label="Testo del collegamento" :value="$section->link_label" maxlength="255" placeholder="Es. Apri la mappa" />
             <x-input name="phone" label="Numero telefonico" type="tel" :value="$section->phone" maxlength="40" placeholder="+39 ..." />
         </fieldset>
+        <x-guest-content-translations :record="$section" type="section" />
         <p class="small text-muted-custom">Le modifiche valgono per tutte le stanze in cui questa sezione è abilitata.</p>
         {{-- Identificativo facoltativo, separato dai contenuti destinati agli ospiti. --}}
         <details class="advanced-settings my-4" @if($errors->has('slug')) open @endif><summary>Impostazioni avanzate del collegamento</summary><div class="mt-3"><x-input name="slug" label="Identificativo nel link" :value="$section->slug" maxlength="100" pattern="[a-z0-9]+(-[a-z0-9]+)*" help="Puoi lasciarlo vuoto: lo generiamo dal titolo. Modificarlo cambia il link di questa sezione." /></div></details>

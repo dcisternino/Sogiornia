@@ -14,6 +14,7 @@ use App\Http\Controllers\GuestRoomImageController;
 use App\Http\Controllers\GuestSectionImageController;
 use App\Http\Controllers\Host\BookingController;
 use App\Http\Controllers\Host\DashboardController as HostDashboardController;
+use App\Http\Controllers\Host\GuestPreviewController;
 use App\Http\Controllers\Host\PropertyController;
 use App\Http\Controllers\Host\PropertyImageController;
 use App\Http\Controllers\Host\PropertyLifecycleController;
@@ -112,6 +113,10 @@ Route::middleware(['auth', 'role:host', 'host.write'])
         Route::get('/host/properties/{property}/image', [PropertyImageController::class, 'show'])->name('host.properties.image');
         // Gestisce i dati delle stanze e le sezioni abilitate.
         Route::resource('/host/properties/{property}/rooms', RoomController::class)->except(['show', 'destroy'])->names('host.rooms');
+        // Mostra la guida in anteprima soltanto all'host proprietario, anche senza soggiorno.
+        Route::get('/host/properties/{property}/rooms/{room}/preview', [GuestPreviewController::class, 'index'])->middleware(['guest.locale', 'guide.privacy'])->name('host.preview.index');
+        // Mostra una sezione effettivamente abilitata nell'anteprima privata della stanza.
+        Route::get('/host/properties/{property}/rooms/{room}/preview/sections/{section}', [GuestPreviewController::class, 'show'])->middleware(['guest.locale', 'guide.privacy'])->where('section', '[a-z0-9]+(?:-[a-z0-9]+)*')->name('host.preview.show');
         // Mostra la foto della stanza esclusivamente all'host proprietario.
         Route::get('/host/properties/{property}/rooms/{room}/image', [RoomImageController::class, 'show'])->name('host.rooms.image');
         // Gestisce i contenuti informativi arricchiti.
@@ -134,6 +139,10 @@ Route::middleware(['auth', 'role:host', 'host.write'])
         Route::get('/host/properties/{property}/rooms/{room}/stays/create', [StayController::class, 'create'])->name('host.stays.create');
         // Crea un soggiorno con un link sempre nuovo.
         Route::post('/host/properties/{property}/rooms/{room}/stays', [StayController::class, 'store'])->name('host.stays.store');
+        // Mostra il modulo di modifica di un soggiorno della stanza posseduta.
+        Route::get('/host/properties/{property}/rooms/{room}/stays/{stay}/edit', [StayController::class, 'edit'])->name('host.stays.edit');
+        // Aggiorna date e riferimento mantenendo token e revoca del soggiorno.
+        Route::put('/host/properties/{property}/rooms/{room}/stays/{stay}', [StayController::class, 'update'])->name('host.stays.update');
         // Revoca anticipatamente l'accesso di un soggiorno.
         Route::patch('/host/properties/{property}/rooms/{room}/stays/{stay}/revoke', [StayRevocationController::class, 'update'])->name('host.stays.revoke');
     });

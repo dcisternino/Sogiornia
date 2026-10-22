@@ -39,6 +39,12 @@ class SectionRequest extends FormRequest
             'link_url' => ['nullable', 'url:http,https', 'max:2048'],
             'link_label' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:40', 'regex:/^\\+?[0-9][0-9 ()-]{2,39}$/'],
+            'translations' => ['sometimes', 'array:en,es,de'],
+            'translations.*' => ['array:title,content,image_alt,link_label'],
+            'translations.*.title' => ['nullable', 'string', 'max:255'],
+            'translations.*.content' => ['nullable', 'string', 'max:20000'],
+            'translations.*.image_alt' => ['nullable', 'string', 'max:255'],
+            'translations.*.link_label' => ['nullable', 'string', 'max:255'],
         ];
     }
 

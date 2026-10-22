@@ -35,7 +35,7 @@ class PropertyController extends Controller
     public function store(PropertyRequest $request, PropertyProfileStorage $profiles): RedirectResponse
     {
         $property = $request->user()->properties()->make($request->safe()->only(['name', 'city', 'address', 'welcome_message']));
-        $profiles->save($property, $request->validated('description'), $request->file('image'), false);
+        $profiles->save($property, $request->validated('description'), $request->file('image'), false, $request->validated('translations', []));
 
         return redirect()->route('host.properties.index')->with('status', 'Struttura creata. Ora puoi gestire stanze e sezioni dai pulsanti della struttura.');
     }
@@ -50,6 +50,7 @@ class PropertyController extends Controller
     public function edit(Property $property): View
     {
         Gate::authorize('update', $property);
+        $property->load('translations');
 
         return view('pages.host.properties.form', compact('property'));
     }
@@ -57,7 +58,7 @@ class PropertyController extends Controller
     public function update(PropertyRequest $request, Property $property, PropertyProfileStorage $profiles): RedirectResponse
     {
         $property->fill($request->safe()->only(['name', 'city', 'address', 'welcome_message']));
-        $profiles->save($property, $request->validated('description'), $request->file('image'), $request->boolean('remove_image'));
+        $profiles->save($property, $request->validated('description'), $request->file('image'), $request->boolean('remove_image'), $request->validated('translations', []));
 
         return redirect()->route('host.properties.index')->with('status', 'Dati, descrizione e foto della struttura aggiornati.');
     }

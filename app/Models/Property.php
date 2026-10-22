@@ -26,6 +26,12 @@ class Property extends Model
         return $this->hasOne(PropertyProfile::class);
     }
 
+    /** Benvenuti tradotti con ritorno al testo italiano quando un campo manca. */
+    public function translations(): HasMany
+    {
+        return $this->hasMany(PropertyTranslation::class);
+    }
+
     protected function casts(): array
     {
         return ['archived_at' => 'datetime', 'guide_enabled' => 'boolean'];

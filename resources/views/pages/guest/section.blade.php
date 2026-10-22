@@ -6,13 +6,13 @@
 @section('content')
     <div class="guest-content guest-detail">
         {{-- Ritorno alla guida con lo stesso link riservato del soggiorno. --}}
-        <a class="guest-back-link" href="{{ $token ? route('guide.index', ['token' => $token, 'lang' => app()->getLocale()]) : route('guest-home', ['lang' => app()->getLocale()]) }}">← {{ __('guest.back_to_guide') }}</a>
+        <a class="guest-back-link" href="{{ $homeUrl }}">← {{ __('guest.back_to_guide') }}</a>
 
         <article>
             {{-- Titolo e contesto della struttura. --}}
             <p class="guest-kicker">{{ $propertyName }}</p>
             <h1>{{ $section['title'] }}</h1>
-            @if($token && app()->getLocale() !== 'it')<p class="guest-original-note" role="note">{{ __('guest.original_content') }}</p>@endif
+            @if($section['is_fallback'] ?? false)<p class="guest-original-note" role="note">{{ __('guest.original_content') }}</p>@endif
 
             {{-- Testo escapato e immagine protetta dalla validità del soggiorno. --}}
             <div class="preserve-lines section-content">{{ $section['content'] }}</div>

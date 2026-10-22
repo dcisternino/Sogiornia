@@ -22,6 +22,7 @@ class StayRequest extends FormRequest
             'arrival_date' => ['required', 'date_format:Y-m-d'],
             'departure_date' => ['required', 'date_format:Y-m-d', 'after:arrival_date'],
             'arrival_time' => ['required', 'date_format:H:i'],
+            'overlap_confirmed' => ['sometimes', 'boolean'],
         ];
     }
 

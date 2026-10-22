@@ -10,11 +10,13 @@
         <div class="guest-shell">
             {{-- Identità Sogiornia e indicazione della guida corrente. --}}
             <header class="guest-topbar">
-                <a class="guest-brand" href="{{ $token ? route('guide.index', ['token' => $token, 'lang' => app()->getLocale()]) : route('guest-home', ['lang' => app()->getLocale()]) }}" aria-label="{{ __('guest.guide_home') }}">
+                <a class="guest-brand" href="{{ $homeUrl }}" aria-label="{{ __('guest.guide_home') }}">
                     <img src="{{ asset('image/sogiornia-logo.png') }}" alt="Sogiornia" width="2172" height="724" decoding="async">
                 </a>
                 <x-guest-language-menu />
             </header>
+            {{-- Anteprima privata: non genera né pubblica un link di soggiorno. --}}
+            @if($isPreview)<div class="guest-preview-note" role="status"><strong>{{ __('guest.preview_banner') }}</strong><p>{{ __('guest.preview_help') }}</p><a href="{{ $previewExitUrl }}">{{ __('guest.preview_exit') }} ↗</a></div>@endif
 
             @yield('content')
 

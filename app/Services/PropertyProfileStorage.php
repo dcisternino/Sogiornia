@@ -12,7 +12,9 @@ use Throwable;
 /** Salva dati e copertina della struttura, rimuovendo i file sostituiti. */
 class PropertyProfileStorage
 {
-    public function save(Property $property, ?string $description, ?UploadedFile $image, bool $remove): void
+    public function __construct(private GuestTranslationStorage $translations) {}
+
+    public function save(Property $property, ?string $description, ?UploadedFile $image, bool $remove, array $translations = []): void
     {
         $oldPath = $property->exists ? $property->profile?->image_path : null;
         $newPath = $image ? $image->store('property-images', 'local') : ($remove ? null : $oldPath);
@@ -20,9 +22,10 @@ class PropertyProfileStorage
             throw ValidationException::withMessages(['image' => 'Foto non salvata. Seleziona nuovamente il file e riprova.']);
         }
         try {
-            DB::transaction(function () use ($property, $description, $newPath): void {
+            DB::transaction(function () use ($property, $description, $newPath, $translations): void {
                 $property->save();
                 $property->profile()->updateOrCreate([], ['description' => $description, 'image_path' => $newPath]);
+                $this->translations->save($property, $translations);
             });
         } catch (Throwable $exception) {
             if ($newPath && $newPath !== $oldPath) {

@@ -128,3 +128,7 @@
 @media (prefers-reduced-motion: reduce) {
     .guest-section-card { transition: none; }
 }
+/* Evidenzia l'anteprima autenticata senza confonderla con un accesso ospite. */
+.guest-preview-note { margin: 0 20px 18px; padding: 14px 16px; border: 1px solid #c4d4c2; border-radius: 12px; color: #3d593f; background: #eef3e9; font-size: .75rem; line-height: 1.6; }
+.guest-preview-note p { margin: 6px 0; }
+.guest-preview-note a { font-weight: 600; }

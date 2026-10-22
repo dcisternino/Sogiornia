@@ -23,14 +23,14 @@
             @if (filled($welcomeMessage))
                 <p class="guest-welcome-message preserve-lines">{{ $welcomeMessage }}</p>
             @endif
-            @unless ($token)<p class="guest-demo-note">{{ __('guest.demo_note') }}</p>@endunless
-            @if($token && app()->getLocale() !== 'it')<p class="guest-original-note" role="note">{{ __('guest.original_content') }}</p>@endif
+            @if($isDemo)<p class="guest-demo-note">{{ __('guest.demo_note') }}</p>@endif
+            @if($hasFallback)<p class="guest-original-note" role="note">{{ __('guest.original_content') }}</p>@endif
         </header>
 
         {{-- Schede delle sole sezioni consentite, in due colonne anche su telefono. --}}
         <section class="guest-sections" aria-label="{{ __('guest.stay_information') }}">
             @forelse ($sections as $slug => $section)
-                <a href="{{ $token ? route('guide.show', ['token' => $token, 'section' => $slug, 'lang' => app()->getLocale()]) : route('guest.section', ['section' => $slug, 'lang' => app()->getLocale()]) }}" class="guest-section-card">
+                <a href="{{ $section['url'] }}" class="guest-section-card">
                     <x-guest-section-icon :slug="$slug" />
                     <h2>{{ $section['title'] }}</h2>
                     <span class="guest-section-arrow" aria-hidden="true">↗</span>

@@ -16,6 +16,7 @@
         <article class="sg-card mb-4">
             <div class="d-flex justify-content-between flex-wrap gap-2"><h2 class="h4">{{ $stay->reference }}</h2><span class="badge badge-soft">{{ $stay->statusLabel() }}</span></div>
             <p class="text-muted-custom">{{ $stay->starts_at->timezone('Europe/Rome')->format('d/m/Y H:i') }} → {{ $stay->ends_at->timezone('Europe/Rome')->format('d/m/Y H:i') }}</p>
+            @if(auth()->user()->canWrite() && !$property->archived_at && !$room->archived_at)<a class="btn btn-sm btn-outline-secondary mb-3" href="{{ route('host.stays.edit', [$property, $room, $stay]) }}">Modifica soggiorno<span class="visually-hidden"> {{ $stay->reference }}</span></a>@endif
             @if (! $stay->revoked_at && $stay->ends_at->isFuture())
                 <label class="form-label" for="stay-link-{{ $stay->id }}">Link del soggiorno</label>
                 <div class="input-group">

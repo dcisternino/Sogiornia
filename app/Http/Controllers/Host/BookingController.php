@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Host;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Host\BookingRequest;
 use App\Models\Room;
+use App\Services\StayScheduler;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,11 +23,11 @@ class BookingController extends Controller
         ]);
     }
 
-    public function store(BookingRequest $request): RedirectResponse
+    public function store(BookingRequest $request, StayScheduler $scheduler): RedirectResponse
     {
         $room = Room::query()->whereNull('archived_at')->whereHas('property', fn (Builder $query) => $query->whereBelongsTo($request->user())->whereNull('archived_at'))
             ->findOrFail($request->validated('room_id'));
-        $room->stays()->create($request->stayData());
+        $scheduler->save($room, $request->stayData(), $request->boolean('overlap_confirmed'));
 
         return redirect()->route('host.stays.index', [$room->property_id, $room])->with('status', 'Soggiorno creato: il link è disponibile nella scheda della stanza.');
     }

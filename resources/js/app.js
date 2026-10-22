@@ -1,5 +1,21 @@
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
+// Limita le stanze del filtro alla struttura scelta e azzera selezioni incompatibili.
+document.querySelectorAll('[data-filter-rooms]').forEach((propertySelect) => {
+    const roomSelect = document.getElementById(propertySelect.dataset.filterRooms);
+    if (!(roomSelect instanceof HTMLSelectElement)) return;
+    const refresh = () => {
+        [...roomSelect.options].forEach((option) => {
+            const excluded = Boolean(propertySelect.value && option.dataset.propertyId && option.dataset.propertyId !== propertySelect.value);
+            option.hidden = excluded;
+            option.disabled = excluded;
+            if (excluded && option.selected) roomSelect.value = '';
+        });
+    };
+    propertySelect.addEventListener('change', refresh);
+    refresh();
+});
+
 // Salva il singolo interruttore senza inviare gli altri moduli della pagina.
 document.addEventListener('change', (event) => {
     const input = event.target;

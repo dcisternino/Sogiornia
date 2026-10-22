@@ -27,7 +27,8 @@
         </fieldset>
         <x-input name="city" label="Città" :value="$property->city" maxlength="255" :required="true" autocomplete="address-level2" />
         <x-input name="address" label="Indirizzo" :value="$property->address" maxlength="255" autocomplete="street-address" />
-        <x-textarea name="welcome_message" label="Messaggio di benvenuto" :value="$property->welcome_message" maxlength="3000" help="Comparirà nella home della guida di ogni stanza." />
+        <x-textarea name="welcome_message" label="Messaggio di benvenuto in italiano" :value="$property->welcome_message" maxlength="3000" help="Comparirà nella home della guida di ogni stanza e sarà usato quando manca una traduzione." />
+        <x-guest-content-translations :record="$property" type="property" />
         <div class="form-actions"><button class="btn btn-primary" type="submit">{{ $property->exists ? 'Salva modifiche' : 'Crea struttura' }}</button><a class="btn btn-outline-secondary" href="{{ route('host.properties.index') }}">Annulla</a></div>
     </form>
     {{-- Azioni occasionali della struttura separate dai dati principali. --}}

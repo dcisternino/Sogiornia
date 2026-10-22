@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /** Conserva un contenuto informativo riutilizzabile nelle stanze della struttura. */
@@ -26,6 +27,12 @@ class Section extends Model
     public function settings(): HasOne
     {
         return $this->hasOne(SectionSetting::class);
+    }
+
+    /** Traduzioni facoltative dei contenuti della sezione. */
+    public function translations(): HasMany
+    {
+        return $this->hasMany(SectionTranslation::class);
     }
 
     public function isActive(): bool
