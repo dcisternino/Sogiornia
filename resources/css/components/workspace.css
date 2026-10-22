@@ -105,3 +105,8 @@
 
 /* Anteprime dei contenuti nell'elenco di gestione della sezione. */
 .block-management-photo { width: 100px; height: 80px; border-radius: 12px; object-fit: cover; }
+
+/* Percorso di configurazione e condivisione su desktop e telefono. */
+.setup-step { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem; }
+.setup-step > div:first-child { flex: 1 1 320px; }
+.share-language { width: auto; min-width: 160px; }

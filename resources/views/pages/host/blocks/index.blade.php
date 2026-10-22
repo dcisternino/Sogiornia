@@ -4,6 +4,7 @@
 {{-- Elenco ordinato dei contenuti della sezione, con visibilità e azioni esplicite. --}}
 @section('content')
 <div class="container py-5 workspace">
+    <x-setup-shortcut :property="$property" />
     <a class="back-link" href="{{ route('host.sections.index', $property) }}">← Sezioni di {{ $property->name }}</a>
     <div class="page-heading mt-4"><div><span class="eyebrow">Contenuti della sezione</span><h1 class="mt-2">{{ $section->title }}</h1><p class="text-muted-custom">Aggiungi contatti, luoghi o informazioni. Gli ospiti li vedranno nell'ordine indicato.</p></div>
         @if(auth()->user()->canWrite())<a class="btn btn-outline-secondary" href="{{ route('host.sections.edit', [$property, $section]) }}">Modifica titolo e introduzione</a>@endif

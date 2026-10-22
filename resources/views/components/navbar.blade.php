@@ -24,7 +24,7 @@
                 @if (auth()->user()->isAdmin())
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.hosts.*') ? 'active' : '' }}" @if(request()->routeIs('admin.hosts.*')) aria-current="page" @endif href="{{ route('admin.hosts.index') }}">Host</a></li>
                 @else
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('host.properties.*', 'host.rooms.*', 'host.sections.*') ? 'active' : '' }}" @if(request()->routeIs('host.properties.*', 'host.rooms.*', 'host.sections.*')) aria-current="page" @endif href="{{ route('host.properties.index') }}">Strutture</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('host.properties.*', 'host.rooms.*', 'host.sections.*', 'host.blocks.*', 'host.setup.*') ? 'active' : '' }}" @if(request()->routeIs('host.properties.*', 'host.rooms.*', 'host.sections.*', 'host.blocks.*', 'host.setup.*')) aria-current="page" @endif href="{{ route('host.properties.index') }}">Strutture</a></li>
                 @endif
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('profile.*') ? 'active' : '' }}" @if(request()->routeIs('profile.*')) aria-current="page" @endif href="{{ route('profile.edit') }}">Profilo</a></li>
                 <li class="nav-item">

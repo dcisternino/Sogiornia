@@ -2,6 +2,11 @@
 
 return [
 
+    // Chiave server per le traduzioni assistite dei testi della guida ospite.
+    'google_translation' => [
+        'key' => env('GOOGLE_TRANSLATE_API_KEY'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Third Party Services

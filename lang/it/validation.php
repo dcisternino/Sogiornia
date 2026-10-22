@@ -25,7 +25,7 @@ return [
     'in' => 'Il valore di :attribute non corrisponde a quello richiesto.',
     'boolean' => 'Il campo :attribute deve essere vero o falso.',
     'regex' => 'Il campo :attribute può contenere solo lettere minuscole, numeri e trattini tra le parole.',
-    'min' => ['string' => 'Il campo :attribute deve contenere almeno :min caratteri.'],
+    'min' => ['string' => 'Il campo :attribute deve contenere almeno :min caratteri.', 'array' => 'Inserisci almeno :min testo da tradurre.'],
     'max' => [
         'string' => 'Il campo :attribute non può superare :max caratteri.',
         'array' => 'Il campo :attribute non può contenere più di :max elementi.',
@@ -71,6 +71,8 @@ return [
         'link_url' => 'indirizzo web',
         'phone' => 'numero telefonico',
         'type' => 'tipo di contenuto',
+        'locale' => 'lingua',
+        'fields' => 'testi da tradurre',
         'group_title' => 'titolo di gruppo',
         'is_active' => 'visibilità',
         'link_label' => 'testo del pulsante',

@@ -4,6 +4,7 @@
 {{-- Storico dei soggiorni con link distinti e revoca anticipata. --}}
 @section('content')
 <div class="container py-5 workspace">
+    <x-setup-shortcut :property="$property" :room="$room" />
     <a href="{{ route('host.rooms.index', $property) }}">← {{ $property->name }}</a>
     <div class="page-heading mt-4"><div><span class="eyebrow">LINK PERSONALI PER SOGGIORNO</span><h1>{{ $room->name }}</h1><p class="text-muted-custom">Scadenza automatica alla partenza. Orari italiani.</p></div>
         @if (auth()->user()->canWrite() && ! $property->archived_at && ! $room->archived_at)
@@ -24,6 +25,7 @@
                     <button class="btn btn-outline-secondary" type="button" data-copy-target="stay-link-{{ $stay->id }}">Copia</button>
                 </div>
                 <p class="small text-muted-custom mt-2">Il link funziona solo durante il periodo indicato. Chi lo possiede può consultare la guida.</p>
+                @if(!$property->archived_at && !$room->archived_at && $property->guide_enabled && $room->guide_enabled)<a class="btn btn-outline-secondary mb-3" href="{{ route('host.stays.share', [$property, $room, $stay]) }}">Condividi via WhatsApp o email</a>@endif
                 @if ($stay->isAccessible())<a href="{{ route('guide.index', $stay->guide_token) }}" target="_blank" rel="noopener noreferrer">Apri guida ↗</a>@endif
                 @if (auth()->user()->canWrite())
                     <form class="mt-3" method="POST" action="{{ route('host.stays.revoke', [$property, $room, $stay]) }}" data-confirm="Revocare definitivamente questo link? Sarà necessario un nuovo soggiorno per generare un altro accesso.">

@@ -16,6 +16,7 @@ use App\Http\Controllers\GuestSectionImageController;
 use App\Http\Controllers\Host\BookingController;
 use App\Http\Controllers\Host\DashboardController as HostDashboardController;
 use App\Http\Controllers\Host\GuestPreviewController;
+use App\Http\Controllers\Host\OnboardingController;
 use App\Http\Controllers\Host\PropertyController;
 use App\Http\Controllers\Host\PropertyImageController;
 use App\Http\Controllers\Host\PropertyLifecycleController;
@@ -30,6 +31,8 @@ use App\Http\Controllers\Host\SectionImageController;
 use App\Http\Controllers\Host\SectionSettingController;
 use App\Http\Controllers\Host\StayController;
 use App\Http\Controllers\Host\StayRevocationController;
+use App\Http\Controllers\Host\StayShareController;
+use App\Http\Controllers\Host\TranslationSuggestionController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -109,6 +112,10 @@ Route::middleware(['auth', 'role:host', 'host.write'])
     ->group(function (): void {
         // Mostra il calendario dei soggiorni attivi, programmati e passati.
         Route::get('/host-home', HostDashboardController::class)->name('host-home');
+        // Accompagna l'host nei passaggi di configurazione basandosi sui dati esistenti.
+        Route::get('/host/setup', [OnboardingController::class, 'index'])->name('host.setup.index');
+        // Produce bozze tradotte senza salvarle, con limite di richieste per utente autenticato.
+        Route::post('/host/translation-suggestions', [TranslationSuggestionController::class, 'store'])->middleware(['throttle:10,1', 'guide.privacy'])->name('host.translations.store');
         // Prepara un soggiorno scegliendo una stanza delle proprie strutture.
         Route::get('/host/stays/create', [BookingController::class, 'create'])->name('host.bookings.create');
         // Associa il nuovo soggiorno a una stanza autorizzata.
@@ -147,6 +154,8 @@ Route::middleware(['auth', 'role:host', 'host.write'])
         Route::delete('/host/properties/{property}/rooms/{room}', [RoomLifecycleController::class, 'destroy'])->name('host.rooms.destroy');
         // Elenca i soggiorni della stanza.
         Route::get('/host/properties/{property}/rooms/{room}/stays', [StayController::class, 'index'])->name('host.stays.index');
+        // Prepara la condivisione volontaria del link, senza inviare messaggi dal server.
+        Route::get('/host/properties/{property}/rooms/{room}/stays/{stay}/share', [StayShareController::class, 'show'])->middleware('guide.privacy')->name('host.stays.share');
         // Mostra il modulo del nuovo soggiorno.
         Route::get('/host/properties/{property}/rooms/{room}/stays/create', [StayController::class, 'create'])->name('host.stays.create');
         // Crea un soggiorno con un link sempre nuovo.

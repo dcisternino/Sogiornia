@@ -5,9 +5,11 @@
 @section('content')
 <div class="container py-5 workspace">
     <div class="page-heading">
-        <div><span class="eyebrow">IL TUO SPAZIO HOST</span><h1 class="mt-2">Tutto pronto per accogliere.</h1><p class="text-muted-custom">Ciao {{ auth()->user()->name }}, qui trovi i soggiorni e i loro link di accesso.</p></div>
+        <div><span class="eyebrow">IL TUO SPAZIO HOST</span><h1 class="mt-2">{{ $properties->isEmpty() ? 'Prepariamo la tua prima guida.' : 'Il tuo spazio per accogliere.' }}</h1><p class="text-muted-custom">Ciao {{ auth()->user()->name }}, qui trovi i soggiorni e i loro link di accesso.</p></div>
         @if(auth()->user()->canWrite())<a class="btn btn-primary" href="{{ route('host.bookings.create') }}">+ Nuovo soggiorno</a>@endif
     </div>
+    {{-- Accesso sempre disponibile al percorso, anche per configurare altre strutture. --}}
+    <div class="setup-tip mb-4"><strong>{{ $properties->isEmpty() ? 'Benvenuto! Prepariamo la tua prima guida.' : 'Vuoi preparare una guida o controllare cosa manca?' }}</strong><p class="mb-0">Struttura, stanza, contenuti e soggiorno: <a href="{{ route('host.setup.index') }}">apri la configurazione guidata</a> e riprendi dai dati già salvati.</p></div>
     {{-- Indicatori navigabili per periodo del soggiorno. --}}
     <div class="row g-3 mb-4">
         @foreach(['active' => 'Soggiorni attivi', 'scheduled' => 'Programmati', 'past' => 'Passati'] as $key => $label)
