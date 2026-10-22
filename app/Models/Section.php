@@ -23,6 +23,12 @@ class Section extends Model
         return $this->belongsTo(Property::class);
     }
 
+    /** Contenuti ordinati del contenitore, inclusi quelli temporaneamente nascosti. */
+    public function blocks(): HasMany
+    {
+        return $this->hasMany(SectionBlock::class)->orderBy('position')->orderBy('id');
+    }
+
     /** Le sezioni precedenti alla nuova tabella restano attive e non condivise. */
     public function settings(): HasOne
     {

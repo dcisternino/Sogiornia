@@ -32,7 +32,7 @@ class SectionRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:100', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('sections')->where('property_id', $property->id)->ignore($sectionId)],
-            'content' => ['required', 'string', 'max:20000'],
+            'content' => ['nullable', 'string', 'max:20000'],
             'image' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120', 'dimensions:max_width=4000,max_height=4000'],
             'remove_image' => ['sometimes', 'boolean'],
             'image_alt' => ['nullable', 'string', 'max:255'],

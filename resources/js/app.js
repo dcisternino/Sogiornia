@@ -74,3 +74,15 @@ document.addEventListener('click', async (event) => {
         button.textContent = 'Selezionato';
     }
 });
+
+// Mostra i campi utili per il tipo di contenuto senza perdere i valori già inseriti.
+document.querySelectorAll('[data-block-editor]').forEach((editor) => {
+    const select = editor.querySelector('[data-block-type]');
+    const refresh = () => {
+        editor.querySelectorAll('[data-block-fields]').forEach((group) => {
+            group.hidden = !group.dataset.blockFields.split(' ').includes(select.value) && !group.querySelector('.is-invalid');
+        });
+    };
+    select.addEventListener('change', refresh);
+    refresh();
+});

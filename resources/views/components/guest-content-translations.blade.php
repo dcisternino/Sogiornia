@@ -4,6 +4,14 @@
     $fields = $type === 'property'
         ? ['welcome_message' => ['label' => 'Messaggio di benvenuto', 'max' => 3000, 'rows' => 4]]
         : ['title' => ['label' => 'Titolo', 'max' => 255], 'content' => ['label' => 'Testo della sezione', 'max' => 20000, 'rows' => 7], 'image_alt' => ['label' => 'Descrizione immagine', 'max' => 255], 'link_label' => ['label' => 'Testo del collegamento', 'max' => 255]];
+    if ($type === 'section') {
+        unset($fields['image_alt'], $fields['link_label']);
+        $fields['content']['label'] = 'Introduzione della sezione';
+    }
+    if ($type === 'block') {
+        $fields['content']['label'] = 'Descrizione';
+        $fields['group_title'] = ['label' => 'Titolo di gruppo', 'max' => 255];
+    }
 @endphp
 <fieldset {{ $attributes->class(['editor-section mt-4']) }}>
     <legend>Traduzioni per gli ospiti <small>facoltative</small></legend>

@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GuestBlockImageController;
 use App\Http\Controllers\GuestGuideController;
 use App\Http\Controllers\GuestRoomImageController;
 use App\Http\Controllers\GuestSectionImageController;
@@ -21,6 +22,9 @@ use App\Http\Controllers\Host\PropertyLifecycleController;
 use App\Http\Controllers\Host\RoomController;
 use App\Http\Controllers\Host\RoomImageController;
 use App\Http\Controllers\Host\RoomLifecycleController;
+use App\Http\Controllers\Host\SectionBlockController;
+use App\Http\Controllers\Host\SectionBlockImageController;
+use App\Http\Controllers\Host\SectionBlockOrderController;
 use App\Http\Controllers\Host\SectionController;
 use App\Http\Controllers\Host\SectionImageController;
 use App\Http\Controllers\Host\SectionSettingController;
@@ -47,6 +51,8 @@ Route::middleware('guide.privacy')->where(['token' => '[A-Za-z0-9]{64}'])->group
     Route::get('/g/{token}/sections/{section}', [GuestGuideController::class, 'show'])->middleware('guest.locale')->name('guide.show');
     // Serve l'immagine privata dopo gli stessi controlli della guida.
     Route::get('/g/{token}/sections/{section}/image', [GuestSectionImageController::class, 'show'])->name('guide.image');
+    // Mostra la foto di un contenuto attivo soltanto con soggiorno e sezione accessibili.
+    Route::get('/g/{token}/sections/{section}/blocks/{block}/image', [GuestBlockImageController::class, 'show'])->whereNumber('block')->name('guide.blocks.image');
 });
 
 // Gestisce accesso, inviti e recupero password senza una registrazione pubblica.
@@ -121,6 +127,12 @@ Route::middleware(['auth', 'role:host', 'host.write'])
         Route::get('/host/properties/{property}/rooms/{room}/image', [RoomImageController::class, 'show'])->name('host.rooms.image');
         // Gestisce i contenuti informativi arricchiti.
         Route::resource('/host/properties/{property}/sections', SectionController::class)->except(['show'])->names('host.sections');
+        // Gestisce i singoli contenuti del contenitore con controlli sulla struttura e sulla sezione.
+        Route::resource('/host/properties/{property}/sections/{section}/blocks', SectionBlockController::class)->except(['show'])->whereNumber('block')->names('host.blocks');
+        // Ordina o nasconde un contenuto senza cancellarlo.
+        Route::patch('/host/properties/{property}/sections/{section}/blocks/{block}/order', [SectionBlockOrderController::class, 'update'])->whereNumber('block')->name('host.blocks.order');
+        // Serve le immagini private dei contenuti al solo proprietario.
+        Route::get('/host/properties/{property}/sections/{section}/blocks/{block}/image', [SectionBlockImageController::class, 'show'])->whereNumber('block')->name('host.blocks.image');
         // Attiva o condivide una sezione senza cambiare le assegnazioni delle stanze.
         Route::patch('/host/properties/{property}/sections/{section}/settings', [SectionSettingController::class, 'update'])->name('host.sections.settings');
         // Mostra l'anteprima privata di un'immagine all'host proprietario.

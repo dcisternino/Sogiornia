@@ -70,5 +70,10 @@ return [
         'image_alt' => 'descrizione immagine',
         'link_url' => 'indirizzo web',
         'phone' => 'numero telefonico',
+        'type' => 'tipo di contenuto',
+        'group_title' => 'titolo di gruppo',
+        'is_active' => 'visibilità',
+        'link_label' => 'testo del pulsante',
+        'translations.*.group_title' => 'titolo di gruppo tradotto',
     ],
 ];

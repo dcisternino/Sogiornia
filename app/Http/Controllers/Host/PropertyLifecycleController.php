@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Host;
 use App\Http\Controllers\Controller;
 use App\Models\Property;
 use App\Models\RoomPhoto;
+use App\Models\SectionBlock;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -42,6 +43,7 @@ class PropertyLifecycleController extends Controller
         Gate::authorize('update', $property);
         $request->validate(['confirmation' => ['required', 'string', Rule::in([$property->name])]]);
         $paths = $property->sections()->whereNotNull('image_path')->pluck('image_path')->all();
+        $paths = [...$paths, ...SectionBlock::query()->whereHas('section', fn (Builder $query) => $query->whereBelongsTo($property))->whereNotNull('image_path')->pluck('image_path')->all()];
         if ($property->profile?->image_path) {
             $paths[] = $property->profile->image_path;
         }

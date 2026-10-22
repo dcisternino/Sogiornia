@@ -24,7 +24,7 @@ class SectionController extends Controller
 
         return view('pages.host.sections.index', [
             'property' => $property,
-            'sections' => $property->sections()->with('settings')->orderBy('title')->orderBy('id')->paginate(20),
+            'sections' => $property->sections()->with('settings')->withCount('blocks')->orderBy('title')->orderBy('id')->paginate(20),
         ]);
     }
 
@@ -41,9 +41,10 @@ class SectionController extends Controller
     public function store(SectionRequest $request, Property $property, SectionImageStorage $images): RedirectResponse
     {
         $section = $property->sections()->make($request->safe()->except(['image', 'remove_image', 'translations']));
+        $section->content = $section->content ?? '';
         $images->save($section, $request->file('image'), false, $request->validated('translations', []));
 
-        return redirect()->route('host.sections.index', $property)->with('status', 'Sezione creata. Abilitala nelle stanze che devono mostrarla.');
+        return redirect()->route('host.blocks.index', [$property, $section])->with('status', 'Sezione creata. Aggiungi i contenuti e abilita la sezione nelle stanze che devono mostrarla.');
     }
 
     public function edit(Property $property, int $section): View
@@ -61,6 +62,7 @@ class SectionController extends Controller
     {
         $section = $property->sections()->findOrFail($section);
         $section->fill($request->safe()->except(['image', 'remove_image', 'translations']));
+        $section->content = $section->content ?? '';
         $images->save($section, $request->file('image'), $request->boolean('remove_image'), $request->validated('translations', []));
 
         return redirect()->route('host.sections.index', $property)->with('status', 'Sezione aggiornata in tutte le stanze che la utilizzano.');
@@ -70,11 +72,12 @@ class SectionController extends Controller
     {
         Gate::authorize('update', $property);
         $section = $property->sections()->findOrFail($section);
-        $path = $section->image_path;
-        $section->delete();
-        if ($path) {
-            Storage::disk('local')->delete($path);
+        $paths = $section->blocks()->whereNotNull('image_path')->pluck('image_path')->all();
+        if ($section->image_path) {
+            $paths[] = $section->image_path;
         }
+        $section->delete();
+        Storage::disk('local')->delete($paths);
 
         return redirect()->route('host.sections.index', $property)->with('status', 'Sezione eliminata e rimossa dalle guide.');
     }

@@ -102,3 +102,6 @@
 .translation-editor { border: 1px solid #e6ddd0; border-radius: 12px; padding: 14px 16px; background: #fffcf7; }
 .translation-editor summary { cursor: pointer; color: #72513c; font-weight: 600; }
 .stay-filters { padding: 20px; background: #faf7f2; border-radius: 12px; border: 1px solid #eee5d8; }
+
+/* Anteprime dei contenuti nell'elenco di gestione della sezione. */
+.block-management-photo { width: 100px; height: 80px; border-radius: 12px; object-fit: cover; }
