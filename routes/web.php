@@ -8,8 +8,6 @@ use App\Http\Controllers\Admin\HostStatusController;
 use App\Http\Controllers\Admin\HostTranslationLimitController;
 use App\Http\Controllers\Admin\TranslationMonitoringController;
 use App\Http\Controllers\Admin\TranslationSettingController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestBlockImageController;
@@ -42,7 +40,10 @@ use App\Http\Controllers\Host\StayShareController;
 use App\Http\Controllers\Host\TranslationSuggestionController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\ValidatePasswordReset;
 use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use Laravel\Fortify\Http\Controllers\NewPasswordController;
 
 // Presenta il servizio e l'offerta commerciale.
 Route::get('/', [PageController::class, 'welcome'])->name('welcome');
@@ -65,7 +66,7 @@ Route::middleware('guide.privacy')->where(['token' => '[A-Za-z0-9]{64}'])->group
     Route::get('/g/{token}/sections/{section}/blocks/{block}/image', [GuestBlockImageController::class, 'show'])->whereNumber('block')->name('guide.blocks.image');
 });
 
-// Gestisce accesso, inviti e recupero password senza una registrazione pubblica.
+// Collega i controller Fortify alle pagine esistenti senza registrazione pubblica.
 Route::middleware('guest')->group(function (): void {
     // Mostra il modulo di accesso.
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
@@ -78,7 +79,7 @@ Route::middleware('guest')->group(function (): void {
     // Mostra la scelta password per inviti e recupero, senza diffondere il token.
     Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->middleware('guide.privacy')->name('password.reset');
     // Consuma il token monouso e aggiorna la password.
-    Route::post('/reset-password', [NewPasswordController::class, 'store'])->middleware('throttle:6,1')->name('password.update');
+    Route::post('/reset-password', [NewPasswordController::class, 'store'])->middleware(['guide.privacy', 'throttle:6,1', ValidatePasswordReset::class])->name('password.update');
 });
 
 // Riserva profilo e navigazione agli utenti autenticati.
